@@ -21,8 +21,8 @@ function App() {
       // if (window.location.pathname !== '/login') {
       //   window.location.href = '/login'
       // }
-      if (!['/login', '/forgot-password'].includes(window.location.pathname)) {
-        window.location.href = '/login'
+      if (!['/', '/forgot-password'].includes(window.location.pathname)) {
+        window.location.href = '/'
       }
     }
 
