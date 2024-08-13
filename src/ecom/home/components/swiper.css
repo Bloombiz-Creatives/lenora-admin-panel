@@ -27,20 +27,14 @@
     text-align: center;
     transition: .3s opacity;
     transform: translate3d(0, 0, 0);
-    z-index: 10;
+    /* z-index: 10; */
     left: 0;
     right: 0;
     bottom: -20px; 
     top: auto; 
   }
   
-  /* .swiper-pagination-bullets {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    bottom: -20px; 
-  } */
+
   
   .swiper-pagination-bullet {
     border-radius: 10px;
@@ -57,3 +51,8 @@
     height: 8px;
   }
   
+
+  .swiper-button-prev,
+.swiper-button-next {
+  color: #525b39; 
+}
