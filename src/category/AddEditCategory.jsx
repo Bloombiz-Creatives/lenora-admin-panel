@@ -38,6 +38,7 @@ const AddEditCategory = ({ mode, id }) => {
 
                 });
                 setPreviewImage(categoryToEdit.image);
+                setPreviewIcon(categoryToEdit.icon);
             }
         }
     }, [mode, id, category?.category]);
@@ -106,7 +107,7 @@ const AddEditCategory = ({ mode, id }) => {
                     formData.append("image", data.image);
                 }
 
-                if (data.image instanceof File) {
+                if (data.icon instanceof File) {
                     formData.append("icon", data.icon);
                 }
 
