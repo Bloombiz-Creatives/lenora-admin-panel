@@ -50,13 +50,10 @@ const NotificationModal = ({ open, onClose }) => {
                         <p></p>
                     )} */}
 
-                    {/* <p className='italic text-red-600 hover:text-gray-500'>
+                    <p className='italic text-red-600 hover:text-gray-500 cursor-pointer'>
                         Clear All
-                    </p> */}
+                    </p>
 
-                    <Button variant="contained" color="primary" >
-                        Clear All
-                    </Button>
                 </div>
                 <Divider sx={{ padding: 1 }} />
 

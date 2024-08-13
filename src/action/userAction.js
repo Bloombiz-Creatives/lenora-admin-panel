@@ -1,5 +1,6 @@
-import { forgetPassFail, forgetPassRequest, forgetPassSuccess, otpVerifyFail, otpVerifySuccess, resetPasswordFail, resetPasswordSuccess } from "../slice/userSlice";
-import { globalPostService } from "../utils/globalApiServices";
+import { forgetPassFail, forgetPassRequest, forgetPassSuccess, logoutFail, logoutSuccess, otpVerifyFail, otpVerifySuccess, resetPasswordFail, resetPasswordSuccess } from "../slice/userSlice";
+import axiosInstance from "../utils/apiIntercepter";
+import { globalGetService, globalPostService } from "../utils/globalApiServices";
 
 export const ForgetPass = (email) => {
     return async (dispatch) => {
@@ -48,3 +49,23 @@ export const ForgetPass = (email) => {
       }
     }
   }
+
+
+  export const logoutAdmin = () => {
+    return async (dispatch) => {
+      try {
+        const response = await globalGetService('/logout');
+        if (response.data.success) {
+          delete axiosInstance.defaults.headers.common['Authorization'];
+          localStorage.removeItem('accessToken');
+          dispatch(logoutSuccess());
+          return response.data.message;
+        } else {
+          throw new Error('Logout failed');
+        }
+      } catch (error) {
+        dispatch(logoutFail(error.message));
+        throw error;
+      }
+    };
+  };
