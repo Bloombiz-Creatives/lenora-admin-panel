@@ -1,9 +1,8 @@
+import Brands from "../brand/Brands"
 
 const Brand = () => {
     return (
-        <div>
-               
-        </div>
+        <Brands/>
     )
 }
 
