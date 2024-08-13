@@ -1,4 +1,4 @@
-import { forgetPassFail, forgetPassRequest, forgetPassSuccess } from "../slice/userSlice";
+import { forgetPassFail, forgetPassRequest, forgetPassSuccess, otpVerifyFail, otpVerifySuccess, resetPasswordFail, resetPasswordSuccess } from "../slice/userSlice";
 import { globalPostService } from "../utils/globalApiServices";
 
 export const ForgetPass = (email) => {
@@ -17,6 +17,34 @@ export const ForgetPass = (email) => {
         };
         dispatch(forgetPassFail(errorResponse));
         return null;
+      }
+    }
+  }
+
+
+  export const verifyOtp = ({ email, resetPasswordOTP }) => {
+    return async (dispatch) => {
+      try {
+        const response = await globalPostService('/verify_otp', { email, resetPasswordOTP });
+        dispatch(otpVerifySuccess(response.data));
+        return response.data;
+      } catch (error) {
+        dispatch(otpVerifyFail());
+        throw error;
+      }
+    }
+  }
+
+
+  export const resetPassword = ({ email, resetPasswordOTP, password, confirmPassword }) => {
+    return async (dispatch) => {
+      try {
+        const response = await globalPostService('password_reset', { email, resetPasswordOTP, password, confirmPassword });
+        dispatch(resetPasswordSuccess(response.data));
+        return response.data
+      } catch (error) {
+        dispatch(resetPasswordFail(error));
+        throw error;
       }
     }
   }

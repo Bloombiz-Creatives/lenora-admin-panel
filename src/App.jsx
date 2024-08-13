@@ -8,6 +8,8 @@ import Login from './pages/Login/Login'
 import { useEffect } from 'react';
 import { auth } from './pages/Login/protected';
 import ForgotPassword from './pages/Login/ForgotPassword';
+import VerifyOtp from './pages/Login/VerifyOtp';
+import ResetPassword from './pages/Login/ResetPassword';
 
 function App() {
 
@@ -29,6 +31,8 @@ function App() {
     <Router>
       <Routes>
       <Route path='/forgot-password' element={<ForgotPassword />} />
+      <Route path="/verify-otp" element={<VerifyOtp />} />
+      <Route path='/reset-password' element={<ResetPassword />} />
       <Route path='/' exact element={<Login/>} />
       <Route
           path="/dashboard/*"
