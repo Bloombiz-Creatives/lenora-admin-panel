@@ -86,7 +86,7 @@ export default function Sidebar() {
 
     const menuItems = [
         {
-            text: 'Ecommerce', route: '/dashboard', icon1: cat1, icon2: cat1,
+            text: 'Website', route: '/dashboard', icon1: cat1, icon2: cat1,
             subItems: [
                 { text: 'Home ', route: '/dashboard' },
                 { text: ' Shope  ', route: '/dashboard/shope' },

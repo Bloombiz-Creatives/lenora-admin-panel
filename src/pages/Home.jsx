@@ -1,8 +1,9 @@
+import HomeContents from "../ecom/home/contents/HomeContents"
 
 const Home = () => {
   return (
     <div>
-      Home
+      <HomeContents/>
     </div>
   )
 }
