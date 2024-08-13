@@ -1,5 +1,7 @@
 // import { useEffect } from 'react';
-import { Modal, Button, List, ListItem, Typography, Divider } from '@mui/material';
+import { Modal, List, ListItem, Typography, Divider } from '@mui/material';
+import { Button } from '@mui/material';
+
 // import { clearNotifications, fetchNotify, readNotify } from '../action/notifyController';
 // import { useDispatch, useSelector } from 'react-redux';
 // import { useSnackbar } from 'notistack';
@@ -47,6 +49,10 @@ const NotificationModal = ({ open, onClose }) => {
                     ) : (
                         <p></p>
                     )} */}
+
+                    {/* <p className='italic text-red-600 hover:text-gray-500'>
+                        Clear All
+                    </p> */}
 
                     <Button variant="contained" color="primary" >
                         Clear All
@@ -96,7 +102,6 @@ const NotificationModal = ({ open, onClose }) => {
                 )} */}
 
                 <p className='flex justify-center items-center text-gray-500 h-[250px] italic'>Empty</p>
-
 
             </div>
         </Modal>

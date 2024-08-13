@@ -7,6 +7,7 @@ import Footer from './shared/Footer'
 import Login from './pages/Login/Login'
 import { useEffect } from 'react';
 import { auth } from './pages/Login/protected';
+import ForgotPassword from './pages/Login/ForgotPassword';
 
 function App() {
 
@@ -18,9 +19,6 @@ function App() {
         window.location.href = '/dashboard'
       }
     } else {
-      // if (window.location.pathname !== '/login') {
-      //   window.location.href = '/login'
-      // }
       if (!['/', '/forgot-password'].includes(window.location.pathname)) {
         window.location.href = '/'
       }
@@ -30,6 +28,7 @@ function App() {
   return (
     <Router>
       <Routes>
+      <Route path='/forgot-password' element={<ForgotPassword />} />
       <Route path='/' exact element={<Login/>} />
       <Route
           path="/dashboard/*"
@@ -45,9 +44,7 @@ function App() {
                 <Box sx={{ padding: 1 }}>
                   <Routes>
                   <Route path="/" element={<Footer />} />
-                  {/* <Route path="/category" element={<Footer />} />
-                  <Route path="/brand" element={<Footer />} /> */}
-
+             
                   </Routes>
                 </Box>
               </Box>
@@ -60,3 +57,5 @@ function App() {
 }
 
 export default App
+
+

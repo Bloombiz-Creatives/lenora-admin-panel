@@ -2,13 +2,18 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.jsx'
 import './index.css';
-// import { Provider } from 'react-redux'
+import { Provider } from 'react-redux';
+import store from './redux/store.js'
+import { SnackbarProvider } from 'notistack';
+
 
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    {/* <Provider> */}
+    <Provider store={store}>
+    <SnackbarProvider autoHideDuration={2000} preventDuplicate dense    >
     <App />
-    {/* </Provider> */}
+    </SnackbarProvider>
+    </Provider>
   </StrictMode>,
 )

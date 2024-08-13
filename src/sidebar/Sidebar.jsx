@@ -1,5 +1,5 @@
 import React from 'react';
-import { styled } from '@mui/material/styles';
+import { styled } from '@mui/material';
 import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -12,7 +12,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Accordion, AccordionDetails, AccordionSummary, Paper } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import logo from '../../public/lenora2-01.png';
+import logo from '/lenora2-01.png';
 import cat1 from '../assets/cat1.svg';
 
 const drawerWidth = 250;
@@ -105,7 +105,7 @@ export default function Sidebar() {
                         <MenuIcon onClick={() => setOpen(!open)} className='cursor-pointer ' />
                         {open ? (
                             <div onClick={() => navigate('/')} className='flex justify-end cursor-pointer'>
-                                <h2 className='font-bold text-[30px] p-5 w-[220px] cursor-pointer'>
+                                <h2 className='font-bold text-[30px] p-8 w-[220px] cursor-pointer'>
                                     <div className='flex text-[25px]'>
                                         <img src={logo} alt='Lenora' className='object-contain'/>
                                     </div>
@@ -236,3 +236,4 @@ export default function Sidebar() {
         </Box>
     );
 }
+
