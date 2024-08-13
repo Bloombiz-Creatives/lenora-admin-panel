@@ -33,7 +33,7 @@ const ResetPassword = () => {
             const response = await dispatch(resetPassword({ email, resetPasswordOTP, password, confirmPassword }));
             if (response && response.success) {
                 enqueueSnackbar('Password reset successfully!', { variant: 'success' });
-                navigate('/login');
+                navigate('/');
             } else {
                 enqueueSnackbar('Failed to reset password. Please try again.', { variant: 'error' });
             }
