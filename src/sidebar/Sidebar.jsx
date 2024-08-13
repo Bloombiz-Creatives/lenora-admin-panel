@@ -86,14 +86,14 @@ export default function Sidebar() {
 
     const menuItems = [
         {
-            text: 'Ecommerce', route: '/', icon1: cat1, icon2: cat1,
+            text: 'Ecommerce', route: '/dashboard', icon1: cat1, icon2: cat1,
             subItems: [
-                { text: 'Home ', route: '/' },
-                { text: ' Shope  ', route: '/ecom/shope' },
+                { text: 'Home ', route: '/dashboard' },
+                { text: ' Shope  ', route: '/dashboard/shope' },
             ],
         },
-        { text: 'Brands', route: '/brands', icon1: cat1, icon2: cat1 },
-        { text: 'Categories', route: '/categories', icon1: cat1, icon2: cat1 },
+        { text: 'Brands', route: '/dashboard/brands', icon1: cat1, icon2: cat1 },
+        { text: 'Categories', route: '/dashboard/categories', icon1: cat1, icon2: cat1 },   
     ];
 
     return (
@@ -104,7 +104,7 @@ export default function Sidebar() {
                     <div className="flex items-center justify-between w-full px-3">
                         <MenuIcon onClick={() => setOpen(!open)} className='cursor-pointer ' />
                         {open ? (
-                            <div onClick={() => navigate('/')} className='flex justify-end cursor-pointer'>
+                            <div onClick={() => navigate('/dashboard')} className='flex justify-end cursor-pointer'>
                                 <h2 className='font-bold text-[30px] p-8 w-[220px] cursor-pointer'>
                                     <div className='flex text-[25px]'>
                                         <img src={logo} alt='Lenora' className='object-contain'/>
