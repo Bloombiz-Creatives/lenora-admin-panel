@@ -35,7 +35,7 @@ const DropzoneImage = ({ onChange, image, id }) => {
 DropzoneImage.propTypes = {
   onChange: PropTypes.func.isRequired,
   image: PropTypes.string,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.string,
 };
 
 export default DropzoneImage;

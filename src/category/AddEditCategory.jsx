@@ -199,6 +199,7 @@ const AddEditCategory = ({ mode, id }) => {
                                 <DropzoneImage
                                     onChange={handleFileInputChange}
                                     image={previewImage}
+                                    id={data?._di}
                                 />
                                 {error.image && <Typography color="error">{error.image}</Typography>}
                             </div>
@@ -207,6 +208,7 @@ const AddEditCategory = ({ mode, id }) => {
                                 <DropzoneImage
                                     onChange={handleFileInputChange1}
                                     image={previewIcon}
+                                    id={data?._di}
                                 />
                                 {error.icon && <Typography color="error">{error.icon}</Typography>}
                             </div>

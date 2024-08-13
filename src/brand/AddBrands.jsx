@@ -97,7 +97,7 @@ const AddBrands = ({ mode }) => {
             />
             <div className='block w-full mt-4'>
               <p>Image</p>
-              <DropzoneImage onChange={handleFileInputChange} image={previewImage} />
+              <DropzoneImage onChange={handleFileInputChange} image={previewImage} id={data._id}/>
               {error.image && <Typography color="error">{error.image}</Typography>}
             </div>
           </Box>
