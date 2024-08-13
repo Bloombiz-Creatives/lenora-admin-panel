@@ -77,7 +77,7 @@ const Navbar = () => {
                     onMouseLeave={() => setHover(false)}
                     onClick={handleLogout}
                 >
-                    Logout <LogoutIcon style={{ height: 18, width: 18 }} />
+                    Logout <LogoutIcon style={{ height: 18, width: 18, marginLeft:3 }} />
                 </button>
             </div>
 
