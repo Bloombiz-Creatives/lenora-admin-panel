@@ -66,7 +66,7 @@ const Hero = () => {
                     >
                         {datas.map((da, index) => (
                             <SwiperSlide key={index}>
-                                <img src={da.image} alt={`Slide ${index + 1}`} className="w-full h-auto object-cover" />
+                                <img src={da.image} alt={`Slide ${index + 1}`} className="w-full h-auto object-cover rounded-[5px]" />
                             </SwiperSlide>
                         ))}
                     </Swiper>
