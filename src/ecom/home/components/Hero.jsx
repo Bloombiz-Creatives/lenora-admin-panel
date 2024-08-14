@@ -1,28 +1,52 @@
-import Card from "../../../components/card/Card";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import './swiper.css'
+import './swiper.css'; // Ensure this file exists and is correctly imported
 import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper/modules';
+import Card from "../../../components/card/Card";
 import EditHero from "../addAndEdit/EditHero";
+import { fetchHomeHero } from "../../../action/websiteAction";
 
 const Hero = () => {
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchHomeHero());
+    }, [dispatch]);
+
+    const hero = useSelector((state) => state.websiteState.hero);
+    const heroData = hero?.hero ?? [];
+    // const heroId = heroData.length > 0 ? heroData._id : null;
+    const heroId = heroData._id || null;
+    console.log(heroId,'iiiddd');
+    
+
+  
+
     const datas = [
-        { image: 'https://gifting.bloombizsuite.com/images/banner1.jpg' },
-        { image: 'https://gifting.bloombizsuite.com/images/banner2.jpg' },
-        { image: 'https://gifting.bloombizsuite.com/images/banner3.jpg' },
-    ];
+        {
+            image:heroData?.image1
+        },
+        {
+            image:heroData?.image2
+        },
+         {
+            image:heroData?.image3
+        },
+    ]
 
     return (
         <div>
-            <Card extra={`my-5 px-5 py-4 mx-5`}>
+            <Card extra="my-5 px-5 py-4 mx-5">
                 <div className="flex justify-between">
                     <div>
                         <h3 className="text-[23px] font-normal">Hero</h3>
                     </div>
                     <div className="flex gap-3">
-                        <EditHero mode="edit" />
+                        <EditHero mode="edit" id={heroId} />
                     </div>
                 </div>
 
@@ -39,17 +63,14 @@ const Hero = () => {
                         }}
                         modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay]}
                         className="mySwiper"
-
-
                     >
-                        {datas && datas.map((da, index) => (
+                        {datas.map((da, index) => (
                             <SwiperSlide key={index}>
                                 <img src={da.image} alt={`Slide ${index + 1}`} className="w-full h-auto object-cover" />
                             </SwiperSlide>
                         ))}
                     </Swiper>
                 </div>
-
             </Card>
         </div>
     );
