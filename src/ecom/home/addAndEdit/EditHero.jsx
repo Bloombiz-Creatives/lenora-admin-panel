@@ -33,7 +33,6 @@ const EditHero = ({ mode, id }) => {
 
     useEffect(() => {
         if (heroData){
-            console.log(heroData,'here');
             setPreviewImage1(heroData?.image1);
             setPreviewImage2(heroData?.image2);
             setPreviewImage3(heroData?.image3); 

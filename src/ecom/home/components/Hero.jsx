@@ -21,7 +21,6 @@ const Hero = () => {
     const heroData = hero?.hero ?? [];
     // const heroId = heroData.length > 0 ? heroData._id : null;
     const heroId = heroData._id || null;
-    console.log(heroId,'iiiddd');
     
 
   

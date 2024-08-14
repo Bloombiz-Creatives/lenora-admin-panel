@@ -1,18 +1,32 @@
 
+import { useEffect } from "react"
 import Card from "../../../components/card/Card"
 import EditSubHero from "../addAndEdit/EditSubHero"
+import { useDispatch, useSelector } from "react-redux"
+import { fetchSubHero } from "../../../action/websiteAction"
 
 const SubHero = () => {
 
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(fetchSubHero())
+    },[dispatch])
+
+    const {subhero} = useSelector((state) => state.websiteState);
+    const subHeroData = subhero?.subhero ?? [];
+    const subHeroId = subHeroData._id || null;
+
+
     const datas = [
         {
-            image: 'https://gifting.bloombizsuite.com/images/promo/home/banner.jpg'
+            image: subHeroData?.image1
         },
         {
-            image: 'https://gifting.bloombizsuite.com/images/promo/home/banner2.jpg'
+            image: subHeroData?.image2
         },
         {
-            image: 'https://gifting.bloombizsuite.com/images/promo/home/banner3.jpg'
+            image: subHeroData?.image3
         },
     ]
 
@@ -24,7 +38,7 @@ const SubHero = () => {
                         <h3 className="text-[23px] font-normal">SubHero</h3>
                     </div>
                     <div className="flex gap-3">
-                        <EditSubHero mode="edit" />
+                        <EditSubHero mode="edit" id={subHeroId} />
                     </div>
                 </div>
 
