@@ -144,8 +144,8 @@ export default function Sidebar() {
                                         onMouseLeave={() => setIconHovered(null)}
                                         sx={{ backgroundColor: isSelected ? '#525b39' : 'transparent', padding: '0px 16px', borderRadius: '15px' }}
                                     >
-                                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : 'auto', justifyContent: 'center' }}>
-                                            <img src={iconHovered === index ? item.icon1 : item.icon2} alt={item.text} />
+                                        <ListItemIcon sx={{ minWidth: 0, mr: open ? 3 : -8, justifyContent: 'center' }}>
+                                            <img src={iconHovered === index ? item.icon1 : item.icon2} alt={item.text} />   
                                         </ListItemIcon>
                                         <ListItemText primary={item.text} sx={{ opacity: open ? 1 : 0, color: 'white' }} />
                                     </AccordionSummary>
