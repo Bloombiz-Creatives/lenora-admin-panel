@@ -47,13 +47,12 @@ const Navbar = () => {
 
 
     return (
-        <nav className="flex px-8 py-2 bg-white shadow-md w-full justify-end">
+        <nav className="flex px-8 py-2 bg-white shadow-md w-full  justify-end">
             <div className="flex gap-10 ">
                 <IconButton
-                    className='rounded-lg bg-[#312e81] p-1'
+                    className='rounded-lg  p-1'
                     onClick={handleOpenModal}
                     color="inherit"
-                // disabled={loading}
                 >
                     <Badge badgeContent={unreadCount} color="error">
                         <NotificationsNoneIcon className="text-[#525b39] cursor-pointer" />

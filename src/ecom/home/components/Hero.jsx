@@ -26,7 +26,7 @@ const Hero = () => {
                     </div>
                 </div>
 
-                <div className="mt-6">
+                <div className="mt-7 w-full">
                     <Swiper
                         cssMode={true}
                         navigation={true}
@@ -44,7 +44,7 @@ const Hero = () => {
                     >
                         {datas && datas.map((da, index) => (
                             <SwiperSlide key={index}>
-                                <img src={da.image} alt="" className="w-full" />
+                                <img src={da.image} alt={`Slide ${index + 1}`} className="w-full h-auto object-cover" />
                             </SwiperSlide>
                         ))}
                     </Swiper>
