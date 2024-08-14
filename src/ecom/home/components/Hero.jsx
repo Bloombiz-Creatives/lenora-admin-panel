@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import './swiper.css'; // Ensure this file exists and is correctly imported
+import './swiper.css'; 
 import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper/modules';
 import Card from "../../../components/card/Card";
 import EditHero from "../addAndEdit/EditHero";
@@ -19,7 +19,6 @@ const Hero = () => {
 
     const hero = useSelector((state) => state.websiteState.hero);
     const heroData = hero?.hero ?? [];
-    // const heroId = heroData.length > 0 ? heroData._id : null;
     const heroId = heroData._id || null;
     
 
