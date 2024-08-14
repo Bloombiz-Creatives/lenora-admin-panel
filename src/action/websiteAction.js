@@ -1,4 +1,4 @@
-import { homeHeroEditFail, homeHeroEditRequest, homeHeroEditSuccess, homeHeroGetFail, homeHeroGetRequest, homeHeroGetSuccess, promoEditFail, promoEditRequest, promoEditSuccess, promoGetFail, promoGetRequest, promoGetSuccess, subEditFail, subEditRequest, subEditSuccess, subGetFail, subGetRequest, subGetSuccess } from "../slice/websiteSlice";
+import { homeHeroEditFail, homeHeroEditRequest, homeHeroEditSuccess, homeHeroGetFail, homeHeroGetRequest, homeHeroGetSuccess, pgcntntEditFail, pgcntntEditRequets, pgcntntEditSuccess, pgcntntGetFail, pgcntntGetRequets, pgcntntGetSuccess, promoEditFail, promoEditRequest, promoEditSuccess, promoGetFail, promoGetRequest, promoGetSuccess, subEditFail, subEditRequest, subEditSuccess, subGetFail, subGetRequest, subGetSuccess } from "../slice/websiteSlice";
 import { globalGetService, globalPutService } from "../utils/globalApiServices";
 
 //Home-hero-banner
@@ -83,3 +83,29 @@ export const editPromo = (id, formData) => {
         }
     };
 };
+
+//page-contents
+export const fetchHomePageContent = () => {
+    return async (dispatch) => {
+        try {
+            dispatch(pgcntntGetRequets());
+            const response = await globalGetService('/pagecontent');
+            dispatch(pgcntntGetSuccess(response.data))
+        } catch (error) {
+            dispatch(pgcntntGetFail(error))
+        }
+    }
+}
+
+export const editHomePageContent = (id, formData) => {
+    return async (dispatch) => {
+        try {
+            dispatch(pgcntntEditRequets());
+            const response = await globalPutService(`/pagecontent/${id}`, formData);
+            dispatch(pgcntntEditSuccess(response.data))
+            dispatch(fetchHomePageContent())
+        } catch (error) {
+            dispatch(pgcntntEditFail(error))
+        }
+    }
+}

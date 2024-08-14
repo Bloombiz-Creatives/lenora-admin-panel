@@ -130,6 +130,48 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
+        pgcntntGetRequets(state, action){
+            return{
+                ...state,
+                loading:true,
+                errorr:null
+            }
+        },
+        pgcntntGetSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                pageContent:action.payload,
+                error:null
+            }
+        },
+        pgcntntGetFail(state,action){
+            return{
+                ...state,
+                error:action.payload
+            }
+        },
+        pgcntntEditRequets(state, action){
+            return{
+                ...state,
+                loading:true,
+                errorr:null
+            }
+        },
+        pgcntntEditSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                pageContent:action.payload,
+                error:null
+            }
+        },
+        pgcntntEditFail(state,action){
+            return{
+                ...state,
+                error:action.payload
+            }
+        },
 
     }
 })
@@ -154,5 +196,11 @@ export const {
     promoEditRequest,
     promoEditSuccess,
     promoEditFail,
+    pgcntntGetRequets,
+    pgcntntGetSuccess,
+    pgcntntGetFail,
+    pgcntntEditRequets,
+    pgcntntEditSuccess,
+    pgcntntEditFail,
 } = actions;
 export default reducer;
