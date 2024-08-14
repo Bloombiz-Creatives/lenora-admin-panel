@@ -89,6 +89,48 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
+        promoGetRequest(state, action) {
+            return {
+                ...state,
+                loading: true
+            }
+        },
+        promoGetSuccess(state, action) {
+            return {
+                ...state,
+                loading: false,
+                promo: action.payload,
+                error: null
+            }
+        },
+        promoGetFail(state, action) {
+            return {
+                ...state,
+                error: action.payload
+            }
+        },
+        promoEditRequest(state, action) {
+            return {
+                ...state,
+                loading: true
+            }
+        },
+        promoEditSuccess(state, action) {
+            return {
+                ...state,
+                loading: false,
+                promo: action.payload,
+                message: action.payload,
+                error: null
+            }
+        },
+        promoEditFail(state, action) {
+            return {
+                ...state,
+                error: action.payload
+            }
+        },
+
     }
 })
 
@@ -106,5 +148,11 @@ export const {
     subEditRequest,
     subEditSuccess,
     subEditFail,
+    promoGetRequest,
+    promoGetSuccess,
+    promoGetFail,
+    promoEditRequest,
+    promoEditSuccess,
+    promoEditFail,
 } = actions;
 export default reducer;

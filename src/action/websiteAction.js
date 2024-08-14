@@ -1,4 +1,4 @@
-import { homeHeroEditFail, homeHeroEditRequest, homeHeroEditSuccess, homeHeroGetFail, homeHeroGetRequest, homeHeroGetSuccess, subEditFail, subEditRequest, subEditSuccess, subGetFail, subGetRequest, subGetSuccess } from "../slice/websiteSlice";
+import { homeHeroEditFail, homeHeroEditRequest, homeHeroEditSuccess, homeHeroGetFail, homeHeroGetRequest, homeHeroGetSuccess, promoEditFail, promoEditRequest, promoEditSuccess, promoGetFail, promoGetRequest, promoGetSuccess, subEditFail, subEditRequest, subEditSuccess, subGetFail, subGetRequest, subGetSuccess } from "../slice/websiteSlice";
 import { globalGetService, globalPutService } from "../utils/globalApiServices";
 
 //Home-hero-banner
@@ -52,6 +52,34 @@ export const editSubHero = (id, formData) => {
             dispatch(fetchSubHero())
         } catch (error) {
             dispatch(subEditFail(error));
+        }
+    };
+};
+
+//promo
+export const fetchPromo = () => {
+    return async (dispatch) => {
+        try {
+            dispatch(promoGetRequest());
+            const response = await globalGetService('/promo');
+            dispatch(promoGetSuccess(response.data));
+            return response.data
+        } catch (error) {
+            dispatch(promoGetFail(error));
+        }
+    }
+}
+
+
+export const editPromo = (id, formData) => {
+    return async (dispatch) => {
+        try {
+            dispatch(promoEditRequest());
+            const response = await globalPutService(`/promo/${id}`, formData);
+            dispatch(promoEditSuccess(response.data));
+            dispatch(fetchSubHero())
+        } catch (error) {
+            dispatch(promoEditFail(error));
         }
     };
 };

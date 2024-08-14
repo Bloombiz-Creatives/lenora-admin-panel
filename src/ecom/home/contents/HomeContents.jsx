@@ -1,4 +1,5 @@
 import Hero from "../components/Hero"
+import Promo from "../components/Promo"
 import SubHero from "../components/subHero"
 
 const HomeContents = () => {
@@ -6,6 +7,7 @@ const HomeContents = () => {
     <div>
       <Hero/>
       <SubHero/>
+      <Promo/>
     </div>
   )
 }
