@@ -45,7 +45,7 @@
 } 
 
 
-@media (min-width: 375px) {
+ @media (min-width: 375px) {
     .swiper {
         max-width: 400px;
     }
@@ -65,37 +65,55 @@
     }
 } 
 
-@media (min-width: 1266px) {
+@media (min-width: 1024px) {
     .swiper {
-        max-width: 1000px;
+        max-width: 900px;
     }
 
     .swiper-slide img {
-        max-width: 1000px;
+        max-width: 900px;
     }
 } 
 
-@media (min-width: 1440px) {
+@media (min-width: 1266px) {
     .swiper {
-        max-width: 1100px;
+        min-width: 1000px;
+        object-fit: cover;
     }
 
     .swiper-slide img {
-        max-width: 1100px;
+        min-width: 1000px;
+    }
+} 
+
+
+@media (min-width: 1440px) {
+    .swiper {
+        max-width: 1250px;
+
+    }
+
+    .swiper-slide img {
+        max-width: 1250px;
+
     }
 } 
 
 @media (min-width: 2560px) {
     .swiper {
-        max-width: 2150px;
+        /* max-width: 2150px; */
+        max-width: 2350px;
+
     }
 
     .swiper-slide img {
-        max-width: 2150px;
+        /* max-width: 2150px; */
+        max-width: 2350px;
+
         object-fit: cover; 
         object-position: center
     }
-} 
+}  
 
 
 .swiper-pagination {

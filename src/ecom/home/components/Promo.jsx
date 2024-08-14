@@ -39,7 +39,7 @@ const Promo = () => {
                 <div className="flex gap-8 justify-center items-center mt-5 w-full">
                     {datas && datas.map((da, index) => (
                         <div className="overflow-hidden rounded-[5px]" key={index}>
-                            <img src={da.image} alt="" className="w-full h-full rounded-[5px] object-fill lg:w-[500px] 2xl:w-[800px] transition-transform duration-300 hover:scale-110" />
+                            <img src={da.image} alt="" className="w-full h-full rounded-[5px] object-fill lg:w-[600px] 2xl:w-[1200px] transition-transform duration-300 hover:scale-110" />
                         </div>
                     ))}
                 </div>
