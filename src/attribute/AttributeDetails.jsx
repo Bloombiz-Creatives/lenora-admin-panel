@@ -1,42 +1,60 @@
-// import { useState, useEffect } from 'react';
+
+// import {  useEffect, useState } from 'react';
 // import { FaTrash } from 'react-icons/fa';
 // import Card from '../components/card/Card';
 // import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Grid, Typography } from '@mui/material';
 // import { useDispatch, useSelector } from 'react-redux';
-// import { fetchAttributes } from '../action/attributeAction';
+// import { deleteAttributeValue, fetchAttributes } from '../action/attributeAction';
 // import { useParams } from 'react-router-dom';
 // import EditValue from './EditValue';
+// import { useSnackbar } from 'notistack';
+// import ConfirmationModal from '../shared/ConfirmationModal';
 
 // const AttributeDetails = () => {
 //     const { id } = useParams();
 //     const dispatch = useDispatch();
+//     const [delOpen, setDelOpen] = useState(false);
+//     const [selectedItem, setSelectedItem] = useState(null);
+//     const { enqueueSnackbar } = useSnackbar();
+//     const [error, setError] = useState({});
+//     const [data, setData] = useState({
+//         value: "",
+//     });
+
+//     const delHandleClose = () => {
+//         setDelOpen(false);
+//     };
+
+    
+//     const handleDeleteClick = (itemId, index) => {
+//         setSelectedItem({ itemId, index }); 
+//         setDelOpen(true);
+//     };
+
+//     const onDelete = () => {
+//         if (selectedItem) {
+//             const { itemId, index } = selectedItem;
+//             dispatch(deleteAttributeValue(id, itemId, index))
+//                 .then(() => {
+//                     enqueueSnackbar("Attribute value deleted successfully!", { variant: "success" });
+//                 })
+//                 .catch((error) => {
+//                     enqueueSnackbar(`Failed to delete attribute value: ${error.message}`, { variant: "error" });
+//                 });
+//             setDelOpen(false);
+//         }
+//     };
+
 
 //     useEffect(() => {
 //         dispatch(fetchAttributes());
 //     }, [dispatch]);
 
 //     const { attribute } = useSelector((state) => state.attributeState);
-//     const [filteredAttributes, setFilteredAttributes] = useState([]);
 
-//     useEffect(() => {
-//         if (attribute?.attribute) {
-//             const filtered = attribute?.attribute?.filter(attr => attr._id === id);
-//             setFilteredAttributes(filtered);
-//         }
-//     }, [id, attribute]);
-
-//     const handleAddValue = (e) => {
-//         e.preventDefault();
-//     };
-
-//     const handleEditValue = (index, value) => {
-//         setEditIndex(index);
-//         setNewValue(value);
-//     };
-
-//     const [editIndex, setEditIndex] = useState(null);
-//     const [newValue, setNewValue] = useState('');
-
+//     const filteredAttributes = Array.isArray(attribute?.attribute) 
+//         ? attribute.attribute.filter(attr => attr._id === id)
+//         : [];
 
 //     return (
 //         <div>
@@ -63,12 +81,13 @@
 //                                                     <TableCell>{item}</TableCell>
 //                                                     <TableCell align='center'>
 //                                                         <IconButton size="small" style={{ color: '#3B82F6' }}>
-//                                                             <EditValue id={id}
+//                                                             <EditValue
+//                                                                 id={id}
 //                                                                 index={index}
 //                                                                 value={item}
 //                                                             />
 //                                                         </IconButton>
-//                                                         <IconButton size="small" style={{ color: '#EF4444' }}>
+//                                                         <IconButton size="small" style={{ color: '#EF4444' }} onClick={() => handleDeleteClick(filteredAttributes[0]._id, index)}>
 //                                                             <FaTrash />
 //                                                         </IconButton>
 //                                                     </TableCell>
@@ -87,10 +106,11 @@
 //                         </Grid>
 //                         <Grid item xs={12} md={4}>
 //                             <h2 className="text-xl font-semibold mb-2">Add New Attribute Value</h2>
-//                             <form onSubmit={handleAddValue}>
+//                             <form >
 //                                 <div className="mb-4">
 //                                     <label className="block text-sm font-medium text-gray-700">Attribute Name</label>
-//                                     <input type="text" value="Liter" readOnly className="mt-1 block w-full p-2 border rounded-md bg-gray-100" />
+//                                     <input type="text" value={filteredAttributes[0]?.name || ''}
+//                                         readOnly className="mt-1 block w-full p-2 border rounded-md bg-gray-100" />
 //                                 </div>
 //                                 <div className="mb-4">
 //                                     <label className="block text-sm font-medium text-gray-700">Attribute Value</label>
@@ -108,23 +128,58 @@
 //                     </Grid>
 //                 </div>
 //             </Card>
+//             <ConfirmationModal
+//                 delOpen={delOpen}
+//                 delHandleClose={delHandleClose}
+//                 onDelete={onDelete}
+//             />
 //         </div>
-//     )
+//     );
 // }
 
 // export default AttributeDetails;
-import { useState, useEffect } from 'react';
+
+
+import { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import Card from '../components/card/Card';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Grid, Typography } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAttributes } from '../action/attributeAction';
+import { deleteAttributeValue, fetchAttributes } from '../action/attributeAction';
 import { useParams } from 'react-router-dom';
 import EditValue from './EditValue';
+import { useSnackbar } from 'notistack';
+import ConfirmationModal from '../shared/ConfirmationModal';
 
 const AttributeDetails = () => {
     const { id } = useParams();
     const dispatch = useDispatch();
+    const [delOpen, setDelOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+    const { enqueueSnackbar } = useSnackbar();
+
+    const delHandleClose = () => {
+        setDelOpen(false);
+    };
+
+    const handleDeleteClick = (itemId, index) => {
+        setSelectedItem({ itemId, index });
+        setDelOpen(true);
+    };
+
+    const onDelete = () => {
+        if (selectedItem) {
+            const { index } = selectedItem;
+            dispatch(deleteAttributeValue(id, index)) // Only pass index, not itemId
+                .then(() => {
+                    enqueueSnackbar("Attribute value deleted successfully!", { variant: "success" });
+                })
+                .catch((error) => {
+                    enqueueSnackbar(`Failed to delete attribute value: ${error.message}`, { variant: "error" });
+                });
+            setDelOpen(false);
+        }
+    };
 
     useEffect(() => {
         dispatch(fetchAttributes());
@@ -132,8 +187,7 @@ const AttributeDetails = () => {
 
     const { attribute } = useSelector((state) => state.attributeState);
 
-    // Filtering the attributes directly from the state without storing in another state
-    const filteredAttributes = Array.isArray(attribute?.attribute) 
+    const filteredAttributes = Array.isArray(attribute?.attribute)
         ? attribute.attribute.filter(attr => attr._id === id)
         : [];
 
@@ -168,7 +222,7 @@ const AttributeDetails = () => {
                                                                 value={item}
                                                             />
                                                         </IconButton>
-                                                        <IconButton size="small" style={{ color: '#EF4444' }} >
+                                                        <IconButton size="small" style={{ color: '#EF4444' }} onClick={() => handleDeleteClick(filteredAttributes[0]._id, index)}>
                                                             <FaTrash />
                                                         </IconButton>
                                                     </TableCell>
@@ -187,7 +241,7 @@ const AttributeDetails = () => {
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <h2 className="text-xl font-semibold mb-2">Add New Attribute Value</h2>
-                            <form >
+                            <form>
                                 <div className="mb-4">
                                     <label className="block text-sm font-medium text-gray-700">Attribute Name</label>
                                     <input type="text" value={filteredAttributes[0]?.name || ''}
@@ -209,6 +263,11 @@ const AttributeDetails = () => {
                     </Grid>
                 </div>
             </Card>
+            <ConfirmationModal
+                delOpen={delOpen}
+                delHandleClose={delHandleClose}
+                onDelete={onDelete}
+            />
         </div>
     );
 }

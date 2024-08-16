@@ -60,3 +60,15 @@ export const updateAttributeValue = (id, index, newValue) => {
         }
     }
 };
+
+export const deleteAttributeValue = (id, index) => {
+    return async (dispatch) => {
+        try {
+            const response = await globalDeleteService(`/attributes/${id}/value`, { index });
+            dispatch(deleteSuccess(response.data));
+            dispatch(fetchAttributes());
+        } catch (error) {
+            dispatch(deleteFail(error));
+        }
+    };
+};
