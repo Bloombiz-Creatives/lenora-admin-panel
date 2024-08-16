@@ -27,7 +27,7 @@ export const updateCategory = (id, formData) => {
             dispatch(catEditFail(error))
         }
     }
-}
+} 
 
 export const fetchCategory = (query) => {
     return async (dispatch) => {

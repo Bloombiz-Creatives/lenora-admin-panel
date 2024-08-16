@@ -3,6 +3,7 @@ import userReducer from '../slice/userSlice';
 import categoryReducer from '../slice/categorySlice';
 import brandReducer from '../slice/brandSlice';
 import websiteReducer from '../slice/websiteSlice';
+import attributeReducer from '../slice/attributeSlice';
 
 
 
@@ -11,6 +12,7 @@ const reducer = combineReducers({
     categoryState:categoryReducer,
     brandState:brandReducer,
     websiteState:websiteReducer,
+    attributeState:attributeReducer,
 
 })
 
