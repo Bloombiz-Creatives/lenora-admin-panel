@@ -93,7 +93,12 @@ export default function Sidebar() {
             ],
         },
         { text: 'Brands', route: '/dashboard/brands', icon1: cat1, icon2: cat1 },
-        { text: 'Categories', route: '/dashboard/categories', icon1: cat1, icon2: cat1 },   
+        { text: 'Categories', route: '/dashboard/categories', icon1: cat1, icon2: cat1 }, 
+        { text: 'Attributes', route: '/dashboard/attributes', icon1: cat1, icon2: cat1 },
+        { text: 'Colors', route: '/dashboard/colors', icon1: cat1, icon2: cat1 },   
+        { text: 'Products', route: '/dashboard/products', icon1: cat1, icon2: cat1 },   
+
+
     ];
 
     return (

@@ -19,7 +19,7 @@ const AddEditCategory = ({ mode, id }) => {
     });
     const [previewImage, setPreviewImage] = useState(null);
     const [previewIcon, setPreviewIcon] = useState(null);
-    const [error, setError] = useState ({});
+    const [error, setError] = useState({});
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
 
@@ -196,6 +196,7 @@ const AddEditCategory = ({ mode, id }) => {
 
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>
+                            <p>Image</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange}
                                     image={previewImage}
@@ -205,6 +206,7 @@ const AddEditCategory = ({ mode, id }) => {
                             </div>
 
                             <div className='block w-full'>
+                                <p>Icon</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange1}
                                     image={previewIcon}

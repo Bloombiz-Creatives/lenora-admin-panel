@@ -79,12 +79,16 @@ import AddEditCategory from './AddEditCategory';
     const currentPage = categoryPagination?.currentPage || 1;
     const rowsPerPage = categoryPagination?.rowsPerPage || 10;
 
-    const handleDelete = (id) => {
-        dispatch(deleteCategory(id)).then(() => {
-            enqueueSnackbar("Category deleted successfully!", { variant: "success" });
-        });
+
+    const handleDelete = () => {
+        if (selectedId) {
+            dispatch(deleteCategory(selectedId)).then(() => {
+                enqueueSnackbar("Category deleted successfully!", { variant: "success" });
+            });
+        }
         handleClose();
     };
+    
 
     return (
         <div>
