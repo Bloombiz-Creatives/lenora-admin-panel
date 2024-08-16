@@ -1,5 +1,5 @@
-import { attributeFetchFail, attributeFetchRequest, attributeFetchSuccess, deleteFail, deleteSuccess, nameEditFail, nameEditSuccess, nameFail, nameSuccess } from "../slice/attributeSlice"
-import { globalDeleteService, globalGetService, globalPostService, globalPutService } from "../utils/globalApiServices";
+import { attributeFetchFail, attributeFetchRequest, attributeFetchSuccess, deleteFail, deleteSuccess, nameEditFail, nameEditSuccess, nameFail, nameSuccess, updateValueFail, updateValueSuccess } from "../slice/attributeSlice"
+import { globalDeleteService, globalGetService, globalPatchService, globalPostService, globalPutService } from "../utils/globalApiServices";
 
 export const fetchAttributes = (query) => {
     return async (dispatch) => {
@@ -48,3 +48,15 @@ export const editAttribute = (id, formData) => {
         }
     }
 }
+
+export const updateAttributeValue = (id, index, newValue) => {
+    return async (dispatch) =>{
+        try {
+            const response = await globalPatchService(`/attributes/${id}/value`, { index, newValue });
+            dispatch(updateValueSuccess(response.data));
+            dispatch(fetchAttributes())
+        } catch (error) {
+            dispatch(updateValueFail(error))
+        }
+    }
+};
