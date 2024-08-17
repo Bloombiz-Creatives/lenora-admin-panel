@@ -16,6 +16,7 @@ import Brand from './pages/Brand';
 import Shope from './pages/Shope';
 import Attribute from './pages/Attribute';
 import AttributeDetails from './attribute/AttributeDetails';
+import Color from './pages/Color';
 
 function App() {
   useEffect(() => {
@@ -54,6 +55,8 @@ function App() {
                     <Route path="brands" element={<Brand />} />
                     <Route path="attributes" element={<Attribute />} />
                     <Route path="attribute-details/:id" element={<AttributeDetails />} />
+                    <Route path="colors" element={<Color />} />
+
 
                   </Routes>
                 </Box>

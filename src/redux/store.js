@@ -4,6 +4,7 @@ import categoryReducer from '../slice/categorySlice';
 import brandReducer from '../slice/brandSlice';
 import websiteReducer from '../slice/websiteSlice';
 import attributeReducer from '../slice/attributeSlice';
+import colorReducer from '../slice/colorSlice';
 
 
 
@@ -13,6 +14,7 @@ const reducer = combineReducers({
     brandState:brandReducer,
     websiteState:websiteReducer,
     attributeState:attributeReducer,
+    colorState:colorReducer,
 
 })
 
