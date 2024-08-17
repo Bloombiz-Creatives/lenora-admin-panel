@@ -79,6 +79,19 @@ const attributeSlice = createSlice({
                 error:action.payload
             }
         },
+        valueSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                attribute:action.payload
+            }
+        },
+        valueFail(state, action){
+            return {
+                ...state,
+                error:action.payload
+            }
+        },
     }
 })
 
@@ -95,5 +108,7 @@ export const {
     nameEditFail,
     updateValueSuccess,
     updateValueFail,
+    valueSuccess,
+    valueFail,
 } = actions;
 export default reducer;
