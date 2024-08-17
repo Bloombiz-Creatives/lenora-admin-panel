@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FaTrash } from 'react-icons/fa';
 import Card from '../components/card/Card';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Grid, Typography, TextField, Box, Button } from '@mui/material';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Grid, Typography, TextField, Box, Button, TablePagination } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAttributeValue, deleteAttributeValue, fetchAttributes } from '../action/attributeAction';
 import { useParams } from 'react-router-dom';
@@ -15,15 +15,12 @@ const AttributeDetails = () => {
     const [delOpen, setDelOpen] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const { enqueueSnackbar } = useSnackbar();
-    const [data, setData] = useState({
-        value: ""
-    });
-
+    const [data, setData] = useState({ value: "" });
     const [error, setError] = useState({});
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
 
-    const delHandleClose = () => {
-        setDelOpen(false);
-    };
+    const delHandleClose = () => setDelOpen(false);
 
     const handleDeleteClick = (itemId, index) => {
         setSelectedItem({ itemId, index });
@@ -33,7 +30,7 @@ const AttributeDetails = () => {
     const onDelete = () => {
         if (selectedItem) {
             const { index } = selectedItem;
-            dispatch(deleteAttributeValue(id, index)) 
+            dispatch(deleteAttributeValue(id, index))
                 .then(() => {
                     enqueueSnackbar("Attribute value deleted successfully!", { variant: "success" });
                 })
@@ -54,22 +51,20 @@ const AttributeDetails = () => {
         ? attribute.attribute.filter(attr => attr._id === id)
         : [];
 
-
+    const paginatedValues = filteredAttributes.length > 0
+        ? filteredAttributes[0]?.value?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+        : [];
 
     const validateInput = () => {
-        let validationErrors = {
-            value: data.value ? "" : "Value is required",
-        };
+        let validationErrors = { value: data.value ? "" : "Value is required" };
         setError(validationErrors);
         return Object.values(validationErrors).every(value => !value);
     };
 
-
-
     const handleFormSubmit = async () => {
         if (validateInput()) {
             try {
-                await dispatch(addAttributeValue(id, data.value)); 
+                await dispatch(addAttributeValue(id, data.value));
                 enqueueSnackbar("Attribute added successfully!", { variant: "success" });
                 setData({ value: "" });
             } catch (error) {
@@ -78,12 +73,19 @@ const AttributeDetails = () => {
         }
     };
 
-
     const onFieldChange = (key, value) => {
         setData((prevData) => ({ ...prevData, [key]: value }));
         setError((prevError) => ({ ...prevError, [key]: "" }));
     };
 
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
 
     return (
         <div>
@@ -103,10 +105,10 @@ const AttributeDetails = () => {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {filteredAttributes.length > 0 ? (
-                                            filteredAttributes[0]?.value?.map((item, index) => (
+                                        {paginatedValues.length > 0 ? (
+                                            paginatedValues.map((item, index) => (
                                                 <TableRow key={index}>
-                                                    <TableCell>{index + 1}</TableCell>
+                                                    <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                                                     <TableCell>{item}</TableCell>
                                                     <TableCell align='center'>
                                                         <IconButton size="small" style={{ color: '#3B82F6' }}>
@@ -116,7 +118,7 @@ const AttributeDetails = () => {
                                                                 value={item}
                                                             />
                                                         </IconButton>
-                                                        <IconButton size="small" style={{ color: '#EF4444' }} onClick={() => handleDeleteClick(filteredAttributes[0]._id, index)}>
+                                                        <IconButton size="small" style={{ color: '#EF4444' }} onClick={() => handleDeleteClick(filteredAttributes[0]._id, page * rowsPerPage + index)}>
                                                             <FaTrash />
                                                         </IconButton>
                                                     </TableCell>
@@ -131,11 +133,19 @@ const AttributeDetails = () => {
                                         )}
                                     </TableBody>
                                 </Table>
+                                <TablePagination
+                                    rowsPerPageOptions={[5, 10, 25]}
+                                    component="div"
+                                    count={filteredAttributes[0]?.value?.length || 0}
+                                    rowsPerPage={rowsPerPage}
+                                    page={page}
+                                    onPageChange={handleChangePage}
+                                    onRowsPerPageChange={handleChangeRowsPerPage}
+                                />
                             </TableContainer>
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <h2 className="text-xl font-semibold mb-2">Add New Attribute Value</h2>
-
                             <div className="mb-4">
                                 <label className="block text-sm font-medium text-gray-700">Attribute Name</label>
                                 <input type="text" value={filteredAttributes[0]?.name || ''}
@@ -147,7 +157,7 @@ const AttributeDetails = () => {
                                 variant="outlined"
                                 id="value"
                                 type="text"
-                                value={data.value} 
+                                value={data.value}
                                 onChange={(e) => onFieldChange("value", e.target.value)}
                                 error={!!error.value}
                                 helperText={error.value}
@@ -162,7 +172,6 @@ const AttributeDetails = () => {
                                     Save
                                 </Button>
                             </Box>
-
                         </Grid>
                     </Grid>
                 </div>
