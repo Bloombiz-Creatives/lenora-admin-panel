@@ -111,7 +111,7 @@ const AttributeDetails = () => {
                                                     <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                                                     <TableCell>{item}</TableCell>
                                                     <TableCell align='center'>
-                                                        <IconButton size="small" style={{ color: '#3B82F6' }}>
+                                                        <IconButton size="small" style={{ color: '#525b39' }}>
                                                             <EditValue
                                                                 id={id}
                                                                 index={index}
