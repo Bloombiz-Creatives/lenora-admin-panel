@@ -49,6 +49,7 @@ const AllProducts = () => {
         }));
     };
 
+    
     const handleChangeTwo = (event, id) => {
         setCheckedStatesTwo(prevState => ({
             ...prevState,
