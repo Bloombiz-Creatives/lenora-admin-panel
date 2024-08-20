@@ -17,6 +17,7 @@ import Shope from './pages/Shope';
 import Attribute from './pages/Attribute';
 import AttributeDetails from './attribute/AttributeDetails';
 import Color from './pages/Color';
+import Products from './pages/Products';
 
 function App() {
   useEffect(() => {
@@ -56,6 +57,8 @@ function App() {
                     <Route path="attributes" element={<Attribute />} />
                     <Route path="attribute-details/:id" element={<AttributeDetails />} />
                     <Route path="colors" element={<Color />} />
+                    <Route path="products" element={<Products/>} />
+
 
 
                   </Routes>

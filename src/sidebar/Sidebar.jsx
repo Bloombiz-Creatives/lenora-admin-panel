@@ -96,7 +96,12 @@ export default function Sidebar() {
         { text: 'Categories', route: '/dashboard/categories', icon1: cat1, icon2: cat1 }, 
         { text: 'Attributes', route: '/dashboard/attributes', icon1: cat1, icon2: cat1 },
         { text: 'Colors', route: '/dashboard/colors', icon1: cat1, icon2: cat1 },   
-        { text: 'Products', route: '/dashboard/products', icon1: cat1, icon2: cat1 },   
+        { text: 'Products', route: '/dashboard/products', icon1: cat1, icon2: cat1 ,
+            subItems: [
+                { text: 'All Products ', route: '/dashboard/products' },
+                { text: ' Add Products ', route: '/dashboard/products/add' },
+            ],
+        },   
 
 
     ];
