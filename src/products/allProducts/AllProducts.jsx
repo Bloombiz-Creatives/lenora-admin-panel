@@ -2,12 +2,13 @@ import { Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, Ta
 import Card from "../../components/card/Card";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../action/productAction";
+import { deleteProduct, fetchProducts, toggleFeatured, toggleTodaysDeal } from "../../action/productAction";
 import Delete from "@mui/icons-material/Delete";
 import Edit from "@mui/icons-material/Edit";
 import { Switch } from '@mui/material';
 import { useSnackbar } from "notistack";
 import PaginationV1 from "../../shared/PaginationV1";
+import ConfirmationModal from "../../shared/ConfirmationModal";
 
 const AllProducts = () => {
 
@@ -15,7 +16,32 @@ const AllProducts = () => {
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState(query);
     const { enqueueSnackbar } = useSnackbar();
-  
+    const [delOpen, setDelOpen] = useState(false);
+    const [selectedItem, setSelectedItem] = useState(null);
+
+
+    const delHandleClose = () => {
+        setDelOpen(false);
+    };
+
+    const onDelete = () => {
+        if (selectedItem) {
+            dispatch(deleteProduct(selectedItem))
+                .then(() => {
+                    enqueueSnackbar("Product deleted successfully!", { variant: "success" });
+                })
+                .catch((error) => {
+                    enqueueSnackbar(`Failed to delete Product: ${error.message}`, { variant: "error" });
+                });
+            setDelOpen(false);
+        }
+    };
+
+    const handleDeleteClick = (item) => {
+        setSelectedItem(item);
+        setDelOpen(true);
+    };
+
     useEffect(() => {
         dispatch(fetchProducts({ name: debouncedQuery }));
     }, [dispatch, debouncedQuery]);
@@ -42,19 +68,28 @@ const AllProducts = () => {
     const [checkedStatesTwo, setCheckedStatesTwo] = useState({});
 
 
-    const handleChange = (event, id) => {
+    const handleTodaysDealToggle = (event, id) => {
+        const newCheckedState = event.target.checked;
+
         setCheckedStates(prevState => ({
             ...prevState,
             [id]: event.target.checked,
         }));
+
+        dispatch(toggleTodaysDeal(id, newCheckedState));
+
     };
 
-    
-    const handleChangeTwo = (event, id) => {
+
+    const handleFeaturedToggle= (event, id) => {
+        const newCheckedState = event.target.checked;
         setCheckedStatesTwo(prevState => ({
             ...prevState,
             [id]: event.target.checked,
         }));
+
+        dispatch(toggleFeatured(id, newCheckedState));
+
     };
 
     const handlePageChange = (event, newPage) => {
@@ -112,7 +147,7 @@ const AllProducts = () => {
                                     {datas.map((row, index) => (
                                         <TableRow key={index}>
                                             <TableCell align="center">
-                                            {(currentPage - 1) * rowsPerPage + index + 1}
+                                                {(currentPage - 1) * rowsPerPage + index + 1}
                                             </TableCell>
                                             <TableCell align="center">
                                                 <img
@@ -131,18 +166,18 @@ const AllProducts = () => {
                                             <TableCell align="center">{row?.category}</TableCell>
                                             <TableCell align="center">
                                                 <Switch
-                                                    checked={checkedStates[row?._id] || false}
-                                                    onChange={(e) => handleChange(e, row?._id)}
+                                                    checked={checkedStates[row?._id] || row?.todaysDeal || false}
+                                                    onChange={(e) => handleTodaysDealToggle(e, row?._id)}
                                                     inputProps={{ 'aria-label': 'controlled' }}
                                                     color="success"
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
                                                 <Switch
-                                                    checked={checkedStatesTwo[row?._id] || false}
-                                                    onChange={(e) => handleChangeTwo(e, row?._id)}
+                                                    checked={checkedStatesTwo[row?._id] || row?.featured ||false}
+                                                    onChange={(e) => handleFeaturedToggle(e, row?._id)}
                                                     inputProps={{ 'aria-label': 'controlled' }}
-                                                    color="success"
+                                                    color="secondary"
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
@@ -150,7 +185,7 @@ const AllProducts = () => {
                                                     <IconButton size="small" color="success">
                                                         <Edit fontSize="small" />
                                                     </IconButton>
-                                                    <IconButton size="small" color="error">
+                                                    <IconButton size="small" color="error" onClick={() => handleDeleteClick(row._id)} >
                                                         <Delete fontSize="small" />
                                                     </IconButton>
                                                 </div>
@@ -159,14 +194,20 @@ const AllProducts = () => {
                                     ))}
                                 </TableBody>
                             </Table>
+                            <PaginationV1
+                                pagination={productPagination}
+                                onPageChange={handlePageChange}
+                                rowsPerPage={10}
+                            />
                         </TableContainer>
                     </Box>
                 </Box>
             </Card>
-            <PaginationV1
-                pagination={productPagination}
-                onPageChange={handlePageChange}
-                rowsPerPage={10}
+
+            <ConfirmationModal
+                delOpen={delOpen}
+                delHandleClose={delHandleClose}
+                onDelete={onDelete}
             />
         </div>
     );
