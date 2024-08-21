@@ -6,6 +6,7 @@ import DropzoneImage from '../../shared/DropzoneImage';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProducts, GetParentCat, getSub } from '../../action/productAction';
+import { fetchBrand } from '../../action/brandAction';
 
 const AddProduct = () => {
 
@@ -46,7 +47,6 @@ const AddProduct = () => {
         [{ size: [] }],
         ['bold', 'italic', 'underline', 'strike', 'blockquote'],
         [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-        // ['link', 'image'],
         [{ 'color': [] }, { 'background': [] }],
         ['clean']
     ];
@@ -146,29 +146,36 @@ const AddProduct = () => {
 
     useEffect(() => {
         dispatch(GetParentCat())
+        dispatch(fetchBrand())
     }, [dispatch])
 
     const { distinctParentCategories, categories = [] } = useSelector((state) => state.productState);
     const parentCat = distinctParentCategories?.distinctParentCategories;
 
+    const { brand = [] } = useSelector((state) => state.brandState);
+    const AllBrands = brand?.brand;
+
+
 
     const validateInput = () => {
         let validationErrors = {
-            name: productData.name ? "" : " name is required",
-            image: productData.image ? "" : " image is required",
-            parent_category: productData.parent_category ? "" : "parent category is required",
-            description: productData.description ? "" : "description is required",
-            price: productData.price ? "" : "price is required",
-            sub_category: productData.sub_category ? "" : "sub_category is required",
-            brand: description.brand ? "" : "brand  is required",
-            gallery1: productData.gallery1.length > 0 ? "" : "at least one gallery image is required",
+            name: productData.name ? "" : "Name is required",
+            image: productData.image ? "" : "Image is required",
+            parent_category: productData.parent_category ? "" : "Parent category is required",
+            description: description ? "" : "Description is required",
+            price: productData.price ? "" : "Price is required",
+            sub_category: productData.sub_category ? "" : "Sub-category is required",
+            brand: productData.brand ? "" : "Brand is required",
+            gallery1: productData.gallery1 ? "" : "At least one gallery image is required",
         };
 
         setError(validationErrors);
         return Object.values(validationErrors).every(value => !value);
     };
 
-    const handleSubmit = async () => {
+
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
         if (validateInput()) {
             try {
                 const formData = new FormData();
@@ -177,8 +184,6 @@ const AddProduct = () => {
                 formData.append('brand', productData.brand);
                 formData.append('meta_title', productData.meta_title);
                 formData.append('meta_desc', productData.meta_desc);
-                formData.append('attribute', productData.attribute);
-                formData.append('color', productData.color);
                 formData.append('parent_category', productData.parent_category);
                 formData.append('sub_category', productData.sub_category);
                 formData.append('description', description);
@@ -189,16 +194,23 @@ const AddProduct = () => {
                 formData.append('gallery4', productData.gallery4);
                 formData.append('gallery5', productData.gallery5);
 
+                if (productData.attribute) {
+                    formData.append('attribute', productData.attribute);
+                }
+    
+                if (productData.color) {
+                    formData.append('color', productData.color);
+                }
+
                 dispatch(addProducts(formData));
-                enqueueSnackbar("product added successfully", { variant: "success" });
+                enqueueSnackbar("Product added successfully", { variant: "success" });
 
             } catch (error) {
                 console.error('Error adding product:', error);
-                enqueueSnackbar("can not add product", { variant: "error" });
+                enqueueSnackbar("Cannot add product", { variant: "error" });
             }
         }
     };
-
 
 
 
@@ -208,203 +220,223 @@ const AddProduct = () => {
                 <Typography variant="h5" component="div" gutterBottom>
                     Add Product
                 </Typography>
-                <form onSubmit={handleSubmit}>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Product Name"
-                                name="name"
-                                value={productData.name}
-                                onChange={handleChange}
-                                required
-                            />
-                        </Grid>
+                <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Product Name"
+                            name="name"
+                            value={productData.name}
+                            onChange={handleChange}
+                            error={!!error.name}
+                            helperText={error.name}
+                            required
 
-                        <Grid item xs={12}>
-                            <Box display="flex" justifyContent="center" gap="12px" sx={{
-                                flexDirection: { xs: 'column', md: 'row' },
-                            }}>
-                               <Grid item xs={12} md={6}  >
-                                    <FormControl fullWidth>
-                                        <InputLabel>Parent Category</InputLabel>
-                                        <Select
-                                            name="parent_category"
-                                            value={productData.parent_category}
-                                            onChange={handleChange}
-                                            required
-                                        >
-                                            <MenuItem value="" disabled>Select Parent Category</MenuItem>
-                                            {parentCat && parentCat.map((category) => (
-                                                <MenuItem key={category} value={category}>{category}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
+                        />
+                    </Grid>
 
-                                    <Grid item xs={12} md={6}  >
-                                        <FormControl fullWidth>
-                                            <InputLabel>Parent Category</InputLabel>
-                                            <Select
-                                                name="parent_category"
-                                                value={productData.parent_category}
-                                                onChange={handleChange}
-                                                required
-                                            >
-                                                <MenuItem value="" disabled>Select Parent Category</MenuItem>
-                                                {parentCat && parentCat.map((category) => (
-                                                    <MenuItem key={category} value={category}>{category}</MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
-                            </Box>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Box display="flex" justifyContent="center" gap="12px" sx={{
-                                flexDirection: { xs: 'column', md: 'row' },
-                            }}>
-                                <TextField
-                                    fullWidth
-                                    label="Price"
-                                    name="price"
-                                    value={productData.price}
-                                    onChange={handleChange}
-                                    type="number"
-                                    required
-                                />
-
-                                <FormControl fullWidth required>
-                                    <InputLabel>Brand</InputLabel>
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="center" gap="12px" sx={{
+                            flexDirection: { xs: 'column', md: 'row' },
+                        }}>
+                            <Grid item xs={12} md={6}  >
+                                <FormControl fullWidth>
+                                    <InputLabel>Parent Category</InputLabel>
                                     <Select
-                                        name="brand"
-                                        value={productData.brand}
+                                        name="parent_category"
+                                        value={productData.parent_category}
                                         onChange={handleChange}
-                                        label="Brand"
+                                        error={!!error.parent_category}
+                                        helperText={error.parent_category}
+                                        required
+
                                     >
-                                        <MenuItem value="brand1">Brand 1</MenuItem>
-                                        <MenuItem value="brand2">Brand 2</MenuItem>
-                                        <MenuItem value="brand3">Brand 3</MenuItem>
+                                        <MenuItem value="" disabled>Select Parent Category</MenuItem>
+                                        {parentCat && parentCat.map((category) => (
+                                            <MenuItem key={category} value={category}>{category}</MenuItem>
+                                        ))}
                                     </Select>
                                 </FormControl>
-                            </Box>
-                        </Grid>
+                            </Grid>
 
+                            <Grid item xs={12} md={6}  >
+                                <FormControl fullWidth>
+                                    <InputLabel>Sub Category</InputLabel>
+                                    <Select
+                                        name="sub_category"
+                                        value={productData.sub_category}
+                                        onChange={handleChange}
+                                        error={!!error.sub_category}
+                                        helperText={error.sub_category}
+                                        required
 
-                        <Grid item xs={12}>
-                            <ReactQuill
-                                theme='snow'
-                                value={description}
-                                onChange={handleDescriptionChange}
-                                placeholder="Product Description"
-                                modules={{ toolbar: toolbarOptions }}
-                                style={{ height: '100px' }}
+                                    >
+                                        <MenuItem value="" disabled>Select Sub Category</MenuItem>
+                                        {categories && categories.map((cat) => (
+                                            <MenuItem key={cat.name} value={cat.name}>{cat.name}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                        </Box>
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <Box display="flex" justifyContent="center" gap="12px" sx={{
+                            flexDirection: { xs: 'column', md: 'row' },
+                        }}>
+                            <TextField
+                                fullWidth
+                                label="Price"
+                                name="price"
+                                value={productData.price}
+                                onChange={handleChange}
+                                type="number"
+                                error={!!error.price}
+                                helperText={error.price}
+                                required
+
                             />
-                        </Grid>
 
-                        <div className='block w-full ml-4 xl:mt-14 lg:mt-24 md:mt-28 mt-56'>
-                            <p>Thumbnail</p>
-                            <DropzoneImage onChange={handleFileImageChange} image={previewImage} id={productData._id} />
-                            {error.image && <Typography color="error">{error.image}</Typography>}
-                        </div>
+                            <FormControl fullWidth >
+                                <InputLabel>Brand</InputLabel>
+                                <Select
+                                    name="brand"
+                                    value={productData.brand}
+                                    onChange={handleChange}
+                                    label="Brand"
+                                    error={!!error.brand}
 
-                        <div className='block mt-10 ml-4 w-full'>
-                            <p>Gallary Images</p>
-                            <div className='flex xl:flex-nowrap flex-wrap gap-2 justify-center items-center w-[100%] '>
-                                <div className='xl:w-[20%] w-full'>
-                                    <DropzoneImage
-                                        onChange={handleFileGallery1Change}
-                                        image={previewImageOne}
-                                        id={productData?._id}
-                                    />
-                                </div>
+                                >
+                                    {AllBrands && AllBrands.map((bb) => (
+                                        <MenuItem key={bb._id} value={bb._id}>{bb.name}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Grid>
 
-                                <div className='xl:w-[20%] w-full'>
-                                    <DropzoneImage
-                                        onChange={handleFileGallery2Change}
-                                        image={previewImageTwo}
-                                        id={productData?._id}
-                                    />
-                                </div>
 
-                                <div className='xl:w-[20%] w-full'>
-                                    <DropzoneImage
-                                        onChange={handleFileGallery3Change}
-                                        image={previewImageThree}
-                                        id={productData?._id}
-                                    />
-                                </div>
+                    <Grid item xs={12}>
+                        <ReactQuill
+                            theme='snow'
+                            value={description}
+                            onChange={handleDescriptionChange}
+                            placeholder="Product Description"
+                            modules={{ toolbar: toolbarOptions }}
+                            style={{ height: '100px' }}
+                            error={!!error.description}
+                            helperText={error.description}
 
-                                <div className='xl:w-[20%] w-full'>
-                                    <DropzoneImage
-                                        onChange={handleFileGallery4Change}
-                                        image={previewImageFour}
-                                        id={productData?._id}
-                                    />
-                                </div>
+                        />
+                    </Grid>
 
-                                <div className='xl:w-[20%] w-full'>
-                                    <DropzoneImage
-                                        onChange={handleFileGallery5Change}
-                                        image={previewImageFive}
-                                        id={productData?._id}
-                                    />
-                                </div>
+                    <div className='block w-full ml-4 xl:mt-14 lg:mt-24 md:mt-28 mt-56'>
+                        <p>Thumbnail</p>
+                        <DropzoneImage onChange={handleFileImageChange} image={previewImage} id={productData._id} />
+                        {error.image && <Typography color="error">{error.image}</Typography>}
+                    </div>
+
+                    <div className='block mt-10 ml-4 w-full'>
+                        <p>Gallary Images</p>
+                        <div className='flex xl:flex-nowrap flex-wrap gap-2 justify-center items-center w-[100%] '>
+                            <div className='xl:w-[20%] w-full'>
+                                <DropzoneImage
+                                    onChange={handleFileGallery1Change}
+                                    image={previewImageOne}
+                                    id={productData?._id}
+                                />
                             </div>
 
+                            <div className='xl:w-[20%] w-full'>
+                                <DropzoneImage
+                                    onChange={handleFileGallery2Change}
+                                    image={previewImageTwo}
+                                    id={productData?._id}
+                                />
+                            </div>
+
+                            <div className='xl:w-[20%] w-full'>
+                                <DropzoneImage
+                                    onChange={handleFileGallery3Change}
+                                    image={previewImageThree}
+                                    id={productData?._id}
+                                />
+                            </div>
+
+                            <div className='xl:w-[20%] w-full'>
+                                <DropzoneImage
+                                    onChange={handleFileGallery4Change}
+                                    image={previewImageFour}
+                                    id={productData?._id}
+                                />
+                            </div>
+
+                            <div className='xl:w-[20%] w-full'>
+                                <DropzoneImage
+                                    onChange={handleFileGallery5Change}
+                                    image={previewImageFive}
+                                    id={productData?._id}
+                                />
+                            </div>
                         </div>
+                        {error.gallery1 && <Typography color="error">{error.gallery1}</Typography>}
 
-                        <Grid item xs={12} >
-                            <TextField
-                                fullWidth
-                                label="Meta Title"
-                                name="meta_title"
-                                value={productData.meta_title}
-                                onChange={handleChange}
-                            />
-                        </Grid>
+                    </div>
 
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Meta Description"
-                                name="meta_desc"
-                                value={productData.meta_desc}
-                                onChange={handleChange}
-                                rows={4}
-                                multiline
-
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Attribute"
-                                name="attribute"
-                                value={productData.attribute}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Color"
-                                name="color"
-                                value={productData.color}
-                                onChange={handleChange}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            <Button variant="contained" color="primary" type="submit" fullWidth>
-                                Add Product
-                            </Button>
-                        </Grid>
+                    <Grid item xs={12} >
+                        <TextField
+                            fullWidth
+                            label="Meta Title"
+                            name="meta_title"
+                            value={productData.meta_title}
+                            onChange={handleChange}
+                        />
                     </Grid>
-                </form>
+
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Meta Description"
+                            name="meta_desc"
+                            value={productData.meta_desc}
+                            onChange={handleChange}
+                            rows={4}
+                            multiline
+
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Attribute"
+                            name="attribute"
+                            value={productData.attribute}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <TextField
+                            fullWidth
+                            label="Color"
+                            name="color"
+                            value={productData.color}
+                            onChange={handleChange}
+                        />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <Button
+                            variant="contained"
+                            color="primary"
+                            onClick={handleSubmit}
+                            sx={{ px: 8, py: 2 }}
+                        >
+                            Add Product
+                        </Button>
+                    </Grid>
+                </Grid>
             </Card>
         </div>
     );
