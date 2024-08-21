@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
-import './swiper.css'; 
+import './swiper.css';
 import { Navigation, Pagination, Mousewheel, Keyboard, Autoplay } from 'swiper/modules';
 import Card from "../../../components/card/Card";
 import EditHero from "../addAndEdit/EditHero";
@@ -20,19 +20,19 @@ const Hero = () => {
     const hero = useSelector((state) => state.websiteState.hero);
     const heroData = hero?.hero ?? [];
     const heroId = heroData._id || null;
-    
 
-  
+
+
 
     const datas = [
         {
-            image:heroData?.image1
+            image: heroData?.image1
         },
         {
-            image:heroData?.image2
+            image: heroData?.image2
         },
-         {
-            image:heroData?.image3
+        {
+            image: heroData?.image3
         },
     ]
 
@@ -48,7 +48,7 @@ const Hero = () => {
                     </div>
                 </div>
 
-                <div className="mt-7 w-full">
+                <div className="mt-7">
                     <Swiper
                         cssMode={true}
                         navigation={true}

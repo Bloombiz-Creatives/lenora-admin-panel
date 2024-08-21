@@ -1,5 +1,6 @@
-import { deleteProdFail, deleteProdSuccess, getProductsFail, getProductsSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
-import { globalDeleteService, globalGetService, globalPatchService } from "../utils/globalApiServices"
+import { deleteProdFail, deleteProdSuccess, getParent_catFail, getParent_catSuccess, getProductsFail, getProductsSuccess, getSubFail, getSubSuccess, prodAddFail, prodAddSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
+import { globalDeleteService, globalGetService, globalPatchService, globalPostService } from "../utils/globalApiServices"
+
 
 export const fetchProducts = (query) => {
     return async (dispatch) => {
@@ -51,3 +52,40 @@ export const toggleFeatured = (id, featured) =>  {
     }
 };
 
+
+export const addProducts = (formData) => {
+    return async (dispatch) => {
+        try {
+            const response = await globalPostService('/product', formData);
+            dispatch(prodAddSuccess(response.data))
+        } catch (error) {
+            dispatch(prodAddFail(error))
+        }
+    }
+}
+
+
+export const GetParentCat = () => {
+    return async (dispatch) => {
+        try {
+            const response = await globalGetService('/parent_cat');
+            dispatch(getParent_catSuccess(response.data))
+        } catch (error) {
+            dispatch(getParent_catFail(error))
+        }
+    }
+}
+
+
+export const getSub = (parent_category) => {
+    return async (dispatch) => {
+        try {
+            const response = await globalGetService(`/categories/by-parent?parent_category=${parent_category}`);
+            dispatch(getSubSuccess(response.data));
+            console.log(response.data, 'hyhyhhhh');  
+        } catch (error) {
+            dispatch(getSubFail(error));
+            console.error('Error fetching subcategories:', error); 
+        }
+    }
+};
