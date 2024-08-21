@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { Switch } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import DropzoneImage from '../../shared/DropzoneImage';
@@ -35,6 +36,10 @@ const AddProduct = () => {
     const [previewImageThree, setPreviewImageThree] = useState(null);
     const [previewImageFour, setPreviewImageFour] = useState(null);
     const [previewImageFive, setPreviewImageFive] = useState(null);
+
+    const [isColorEnabled, setIsColorEnabled] = useState(false);
+    const [isAttributeEnabled, setIsAttributeEnabled] = useState(false);
+
 
     const [previewImage, setPreviewImage] = useState();
     const [error, setError] = useState({});
@@ -175,7 +180,7 @@ const AddProduct = () => {
 
 
     const handleSubmit = async (e) => {
-        e.preventDefault(); 
+        e.preventDefault();
         if (validateInput()) {
             try {
                 const formData = new FormData();
@@ -197,7 +202,7 @@ const AddProduct = () => {
                 if (productData.attribute) {
                     formData.append('attribute', productData.attribute);
                 }
-    
+
                 if (productData.color) {
                     formData.append('color', productData.color);
                 }
@@ -407,25 +412,60 @@ const AddProduct = () => {
                         />
                     </Grid>
 
-                    <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            label="Attribute"
-                            name="attribute"
-                            value={productData.attribute}
-                            onChange={handleChange}
-                        />
-                    </Grid>
 
                     <Grid item xs={12}>
-                        <TextField
-                            fullWidth
-                            label="Color"
-                            name="color"
-                            value={productData.color}
-                            onChange={handleChange}
-                        />
+                        <FormControl component="fieldset">
+                            <Typography component="legend">Enable Attribute</Typography>
+                            <Switch
+                                checked={isAttributeEnabled}
+                                onChange={() => setIsAttributeEnabled(prev => !prev)}
+                                color="success"
+                            />
+                        </FormControl>
                     </Grid>
+                    {isAttributeEnabled && (
+                        <Grid item xs={12}>
+                            <TextField
+                                fullWidth
+                                label="Attribute"
+                                name="attribute"
+                                value={productData.attribute}
+                                onChange={handleChange}
+                            />
+                        </Grid>
+                    )}
+
+                    <Grid item xs={12}>
+                        <FormControl component="fieldset">
+                            <Typography component="legend">Enable Color</Typography>
+                            <Switch
+                                checked={isColorEnabled}
+                                onChange={() => setIsColorEnabled(prev => !prev)}
+                                color="success"
+                            />
+                        </FormControl>
+                    </Grid>
+
+                    {isColorEnabled && (
+                        <Grid item xs={12}>
+                            <FormControl fullWidth >
+                                <InputLabel>Color</InputLabel>
+                                <Select
+                                    label="Color"
+                                    name="color"
+                                    value={productData.color}
+                                    onChange={handleChange}
+                                    error={!!error.color}
+                                    helperText={error.color}
+                                >
+                                    {/* {AllBrands && AllBrands.map((bb) => (
+                                        <MenuItem key={bb._id} value={bb._id}>{bb.name}</MenuItem>
+                                    ))} */}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+                    )}
+
                     <Grid item xs={12}>
                         <Button
                             variant="contained"
