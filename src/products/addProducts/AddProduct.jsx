@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -28,6 +28,7 @@ const AddProduct = () => {
         gallery5: '',
     });
 
+
     const [previewImageOne, setPreviewImageOne] = useState(null);
     const [previewImageTwo, setPreviewImageTwo] = useState(null);
     const [previewImageThree, setPreviewImageThree] = useState(null);
@@ -38,6 +39,18 @@ const AddProduct = () => {
     const [error, setError] = useState({});
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
+    
+
+    const toolbarOptions = [
+        [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
+        [{ size: [] }],
+        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
+        // ['link', 'image'],
+        [{ 'color': [] }, { 'background': [] }],
+        ['clean']
+    ];
+
 
 
     const handleDescriptionChange = (value) => {
@@ -54,7 +67,7 @@ const AddProduct = () => {
 
         if (name === 'parent_category') {
             const trimmedValue = value.trim();
-            dispatch(getSub(trimmedValue)); 
+            dispatch(getSub(trimmedValue));
         }
     };
 
@@ -135,7 +148,7 @@ const AddProduct = () => {
         dispatch(GetParentCat())
     }, [dispatch])
 
-    const { distinctParentCategories } = useSelector((state) => state.productState);
+    const { distinctParentCategories , categories=[]} = useSelector((state) => state.productState);
     const parentCat = distinctParentCategories?.distinctParentCategories;
 
 
@@ -188,18 +201,8 @@ const AddProduct = () => {
     };
 
 
-    const toolbarOptions = [
-        [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
-        [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ 'list': 'ordered' }, { 'list': 'bullet' }, { 'indent': '-1' }, { 'indent': '+1' }],
-        ['link', 'image'],
-        [{ 'color': [] }, { 'background': [] }], 
-        ['clean']
-    ];
 
 
-    
     return (
         <div>
             <Card sx={{ my: 5, px: 5, py: 4, mx: 5 }}>
@@ -247,9 +250,9 @@ const AddProduct = () => {
                                             required
                                         >
                                             <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                            <MenuItem value="SubCategory 1">SubCategory 1</MenuItem>
-                                            <MenuItem value="SubCategory 2">SubCategory 2</MenuItem>
-                                            <MenuItem value="SubCategory 3">SubCategory 3</MenuItem>
+                                            {categories && categories.map((cat) => (
+                                                <MenuItem key={cat._id} value={cat}>{cat.name}</MenuItem>
+                                            ))}
                                         </Select>
                                     </FormControl>
                                 </Grid>
@@ -301,50 +304,51 @@ const AddProduct = () => {
                             <DropzoneImage onChange={handleFileImageChange} image={previewImage} id={productData._id} />
                             {error.image && <Typography color="error">{error.image}</Typography>}
                         </div>
+                        <div className='block mt-10 ml-4 w-full'>
+                            <p>Gallary Images</p>
+                            <div className='flex w-[100%]  gap-4 justify-center items-center' >
+                                <div className='w-[20%]'>
+                                    <DropzoneImage
+                                        onChange={handleFileGallery1Change}
+                                        image={previewImageOne}
+                                        id={productData?._id}
+                                    />
+                                </div>
 
-                        <div className='flex w-full ml-4 mt-10 gap-2'>
-                            <div className='w-[25%]'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery1Change}
-                                    image={previewImageOne}
-                                    id={productData?._id}
-                                />
+                                <div className='w-[20%]'>
+                                    <DropzoneImage
+                                        onChange={handleFileGallery2Change}
+                                        image={previewImageTwo}
+                                        id={productData?._id}
+                                    />
+                                </div>
+
+                                <div className='w-[20%]'>
+                                    <DropzoneImage
+                                        onChange={handleFileGallery3Change}
+                                        image={previewImageThree}
+                                        id={productData?._id}
+                                    />
+                                </div>
+
+                                <div className='w-[20%]'>
+                                    <DropzoneImage
+                                        onChange={handleFileGallery4Change}
+                                        image={previewImageFour}
+                                        id={productData?._id}
+                                    />
+                                </div>
+
+                                <div className='w-[20%]'>
+                                    <DropzoneImage
+                                        onChange={handleFileGallery5Change}
+                                        image={previewImageFive}
+                                        id={productData?._id}
+                                    />
+                                </div>
                             </div>
 
-                            <div className='w-[25%]'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery2Change}
-                                    image={previewImageTwo}
-                                    id={productData?._id}
-                                />
-                            </div>
-
-                            <div className='w-[25%]'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery3Change}
-                                    image={previewImageThree}
-                                    id={productData?._id}
-                                />
-                            </div>
-
-                            <div className='w-[25%]'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery4Change}
-                                    image={previewImageFour}
-                                    id={productData?._id}
-                                />
-                            </div>
-
-                            <div className='w-[25%]'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery5Change}
-                                    image={previewImageFive}
-                                    id={productData?._id}
-                                />
-                            </div>
                         </div>
-
-
 
                         <Grid item xs={12} >
                             <TextField
@@ -402,6 +406,4 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
-
-
 
