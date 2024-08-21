@@ -39,7 +39,7 @@ const AddProduct = () => {
     const [error, setError] = useState({});
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
-    
+
 
     const toolbarOptions = [
         [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -148,7 +148,7 @@ const AddProduct = () => {
         dispatch(GetParentCat())
     }, [dispatch])
 
-    const { distinctParentCategories , categories=[]} = useSelector((state) => state.productState);
+    const { distinctParentCategories, categories = [] } = useSelector((state) => state.productState);
     const parentCat = distinctParentCategories?.distinctParentCategories;
 
 
@@ -171,7 +171,6 @@ const AddProduct = () => {
     const handleSubmit = async () => {
         if (validateInput()) {
             try {
-
                 const formData = new FormData();
                 formData.append('name', productData.name);
                 formData.append('price', productData.price);
@@ -222,9 +221,11 @@ const AddProduct = () => {
                             />
                         </Grid>
 
-                        <div className="mt-4 w-full justify-center items-center ml-4">
-                            <Grid container spacing={2} alignItems="center">
-                                <Grid item xs={6}>
+                        <Grid item xs={12}>
+                            <Box display="flex" justifyContent="center" gap="12px" sx={{
+                                flexDirection: { xs: 'column', md: 'row' },
+                            }}>
+                               <Grid item xs={12} md={6}  >
                                     <FormControl fullWidth>
                                         <InputLabel>Parent Category</InputLabel>
                                         <Select
@@ -240,27 +241,30 @@ const AddProduct = () => {
                                         </Select>
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6}>
-                                    <FormControl fullWidth>
-                                        <InputLabel>Sub Category</InputLabel>
-                                        <Select
-                                            name="sub_category"
-                                            value={productData.sub_category}
-                                            onChange={handleChange}
-                                            required
-                                        >
-                                            <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                            {categories && categories.map((cat) => (
-                                                <MenuItem key={cat._id} value={cat}>{cat.name}</MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
-                                </Grid>
-                            </Grid>
-                        </div>
+
+                                    <Grid item xs={12} md={6}  >
+                                        <FormControl fullWidth>
+                                            <InputLabel>Parent Category</InputLabel>
+                                            <Select
+                                                name="parent_category"
+                                                value={productData.parent_category}
+                                                onChange={handleChange}
+                                                required
+                                            >
+                                                <MenuItem value="" disabled>Select Parent Category</MenuItem>
+                                                {parentCat && parentCat.map((category) => (
+                                                    <MenuItem key={category} value={category}>{category}</MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                            </Box>
+                        </Grid>
 
                         <Grid item xs={12}>
-                            <Box display="flex" justifyContent="center" gap="12px">
+                            <Box display="flex" justifyContent="center" gap="12px" sx={{
+                                flexDirection: { xs: 'column', md: 'row' },
+                            }}>
                                 <TextField
                                     fullWidth
                                     label="Price"
@@ -299,15 +303,16 @@ const AddProduct = () => {
                             />
                         </Grid>
 
-                        <div className='block w-full ml-4 mt-14'>
+                        <div className='block w-full ml-4 xl:mt-14 lg:mt-24 md:mt-28 mt-56'>
                             <p>Thumbnail</p>
                             <DropzoneImage onChange={handleFileImageChange} image={previewImage} id={productData._id} />
                             {error.image && <Typography color="error">{error.image}</Typography>}
                         </div>
+
                         <div className='block mt-10 ml-4 w-full'>
                             <p>Gallary Images</p>
-                            <div className='flex w-[100%]  gap-4 justify-center items-center' >
-                                <div className='w-[20%]'>
+                            <div className='flex xl:flex-nowrap flex-wrap gap-2 justify-center items-center w-[100%] '>
+                                <div className='xl:w-[20%] w-full'>
                                     <DropzoneImage
                                         onChange={handleFileGallery1Change}
                                         image={previewImageOne}
@@ -315,7 +320,7 @@ const AddProduct = () => {
                                     />
                                 </div>
 
-                                <div className='w-[20%]'>
+                                <div className='xl:w-[20%] w-full'>
                                     <DropzoneImage
                                         onChange={handleFileGallery2Change}
                                         image={previewImageTwo}
@@ -323,7 +328,7 @@ const AddProduct = () => {
                                     />
                                 </div>
 
-                                <div className='w-[20%]'>
+                                <div className='xl:w-[20%] w-full'>
                                     <DropzoneImage
                                         onChange={handleFileGallery3Change}
                                         image={previewImageThree}
@@ -331,7 +336,7 @@ const AddProduct = () => {
                                     />
                                 </div>
 
-                                <div className='w-[20%]'>
+                                <div className='xl:w-[20%] w-full'>
                                     <DropzoneImage
                                         onChange={handleFileGallery4Change}
                                         image={previewImageFour}
@@ -339,7 +344,7 @@ const AddProduct = () => {
                                     />
                                 </div>
 
-                                <div className='w-[20%]'>
+                                <div className='xl:w-[20%] w-full'>
                                     <DropzoneImage
                                         onChange={handleFileGallery5Change}
                                         image={previewImageFive}
