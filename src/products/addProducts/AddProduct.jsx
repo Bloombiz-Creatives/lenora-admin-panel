@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import DropzoneImage from '../../shared/DropzoneImage';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts, GetParentCat, getSub } from '../../action/productAction';
+import { addProducts, fetchColors, GetParentCat, getSub } from '../../action/productAction';
 import { fetchBrand } from '../../action/brandAction';
 
 const AddProduct = () => {
@@ -152,9 +152,10 @@ const AddProduct = () => {
     useEffect(() => {
         dispatch(GetParentCat())
         dispatch(fetchBrand())
+        dispatch(fetchColors())
     }, [dispatch])
 
-    const { distinctParentCategories, categories = [] } = useSelector((state) => state.productState);
+    const { distinctParentCategories, categories = [], color=[] } = useSelector((state) => state.productState);
     const parentCat = distinctParentCategories?.distinctParentCategories;
 
     const { brand = [] } = useSelector((state) => state.brandState);
@@ -458,9 +459,26 @@ const AddProduct = () => {
                                     error={!!error.color}
                                     helperText={error.color}
                                 >
-                                    {/* {AllBrands && AllBrands.map((bb) => (
-                                        <MenuItem key={bb._id} value={bb._id}>{bb.name}</MenuItem>
-                                    ))} */}
+                                    {color && color?.color?.map((co) => (
+                                        <MenuItem key={co._id} value={co._id}>
+                                        <Box 
+                                          sx={{ 
+                                            display: 'flex', 
+                                            alignItems: 'center' 
+                                          }}
+                                        >
+                                          <Box 
+                                            sx={{ 
+                                              width: 20, 
+                                              height: 20, 
+                                              backgroundColor: co.color_code, 
+                                              marginRight: 1, 
+                                            }} 
+                                          />
+                                          {co.name}
+                                        </Box>
+                                      </MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
                         </Grid>

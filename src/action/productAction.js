@@ -1,4 +1,4 @@
-import { deleteProdFail, deleteProdSuccess, getParent_catFail, getParent_catSuccess, getProductsFail, getProductsSuccess, getSubFail, getSubSuccess, prodAddFail, prodAddSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
+import { deleteProdFail, deleteProdSuccess, getAttriFail, getAttriSuccess, getColorsFail, getColorsSuccess, getParent_catFail, getParent_catSuccess, getProductsFail, getProductsSuccess, getSubFail, getSubSuccess, prodAddFail, prodAddSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
 import { globalDeleteService, globalGetService, globalPatchService, globalPostService } from "../utils/globalApiServices"
 
 
@@ -90,3 +90,27 @@ export const getSub = (parent_category) => {
     }
 };
 
+
+export const fetchColors = () => {
+    return async (dispatch) => {
+        try {
+            const response = await globalGetService('/color');
+            dispatch(getColorsSuccess(response.data));
+            console.log(response.data,'coloooor');
+            
+        } catch (error) {
+            dispatch(getColorsFail(error))
+        }
+    }
+}
+
+export const GetAttributeName = () => {
+    return async (dispatch) => {
+        try {
+            const response = await globalGetService('/attribut_name');
+            dispatch(getAttriSuccess(response.data))
+        } catch (error) {
+            dispatch(getAttriFail(error))
+        }
+    }
+}

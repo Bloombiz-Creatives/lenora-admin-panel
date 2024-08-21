@@ -85,7 +85,37 @@ const productSlice = createSlice({
                 ...state,
                 error: action.payload.message || "Failed to fetch subcategories",
             }
-        }
+        },
+        getColorsSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                color:action.payload,
+                error: null,
+            }
+        },
+        getColorsFail(state, action){
+            return {
+                ...state,
+                error: action.payload.message,
+            }
+        },
+        getAttriSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                distinctAttributeNames:action.payload
+            }
+        },
+        getAttriFail(state, action){
+            return {
+                ...state,
+                error:action.payload
+            }
+        },
+        
+
+
     }
 })
 
@@ -103,5 +133,9 @@ export const {
     getParent_catFail,
     getSubSuccess,
     getSubFail,
+    getColorsSuccess,
+    getColorsFail,
+    getAttriSuccess,
+    getAttriFail,
 } = actions;
 export default reducer;
