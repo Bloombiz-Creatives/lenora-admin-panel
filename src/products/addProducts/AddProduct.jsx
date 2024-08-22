@@ -194,7 +194,34 @@ const AddProduct = () => {
     };
 
     const handleClose = () => {
-        setProductData({ name: "", image: "", parent_category: "", description: "", price: "", sub_category: "", brand: "", gallery1: "", gallery5: "", gallery2: "", gallery3: "", gallery4: "", meta_title: "", meta_desc: "", attribute: "", attribute_value: "", color: "", })
+        setProductData({
+            name: "",
+            image: "",
+            parent_category: "",
+            description: "",
+            price: "",
+            sub_category: "",
+            brand: "",
+            gallery1: "",
+            gallery5: "",
+            gallery2: " ",
+            gallery3: "",
+            gallery4: "",
+            meta_title: "",
+            meta_desc: "",
+            attribute: "",
+            attribute_value: "",
+            color: "",
+        })
+        setDescription(null);
+        setIsAttributeEnabled(false);
+        setIsColorEnabled(false);
+        setPreviewImage(null);
+        setPreviewImageFive(null);
+        setPreviewImageFour(null);
+        setPreviewImageThree(null);
+        setPreviewImageTwo(null);
+        setPreviewImageOne(null);
     }
 
 

@@ -65,6 +65,14 @@ const EditProduct = ({ id }) => {
         dispatch(GetAttributeName());
     }, [dispatch]);
 
+    useEffect(() => {
+        if (productData.attribute) {
+            dispatch(GetAttributeValues(productData.attribute));
+            console.log('Attribute Values:', AttributeValues); // Check what gets logged here
+        }
+    }, [productData.attribute, dispatch]);
+    
+
     const {
         distinctParentCategories,
         categories = [],
