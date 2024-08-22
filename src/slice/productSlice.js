@@ -127,10 +127,21 @@ const productSlice = createSlice({
                 error:action.payload
             }
         },
+        editProSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                product:action.payload,
+            }
+        },
+        editProFail(state, action){
+            return {
+                ...state,
+                error:action.payload
+            }
+        },
 
         
-
-
     }
 })
 
@@ -154,5 +165,7 @@ export const {
     getAttriFail,
     getAttriValueSuccess,
     getAttriValueFail,
+    editProSuccess,
+    editProFail,
 } = actions;
 export default reducer;

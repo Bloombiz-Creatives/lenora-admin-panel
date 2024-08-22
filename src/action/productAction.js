@@ -1,5 +1,5 @@
-import { deleteProdFail, deleteProdSuccess, getAttriFail, getAttriSuccess, getAttriValueFail, getAttriValueSuccess, getColorsFail, getColorsSuccess, getParent_catFail, getParent_catSuccess, getProductsFail, getProductsSuccess, getSubFail, getSubSuccess, prodAddFail, prodAddSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
-import { globalDeleteService, globalGetService, globalPatchService, globalPostService } from "../utils/globalApiServices"
+import { deleteProdFail, deleteProdSuccess, editProFail, editProSuccess, getAttriFail, getAttriSuccess, getAttriValueFail, getAttriValueSuccess, getColorsFail, getColorsSuccess, getParent_catFail, getParent_catSuccess, getProductsFail, getProductsSuccess, getSubFail, getSubSuccess, prodAddFail, prodAddSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
+import { globalDeleteService, globalGetService, globalPatchService, globalPostService, globalPutService } from "../utils/globalApiServices"
 
 
 export const fetchProducts = (query) => {
@@ -122,6 +122,17 @@ export const GetAttributeValues = (id) => {
             dispatch(getAttriValueSuccess(response.data))
         } catch (error) {
             dispatch(getAttriValueFail(error))
+        }
+    }
+}
+
+export const updateProducts = (id, formData) => {
+    return async (dispatch) => {
+        try {
+            const response = await globalPutService(`/product/${id}`,formData);
+            dispatch(editProSuccess(response.data))
+        } catch (error) {
+            dispatch(editProFail(error))
         }
     }
 }

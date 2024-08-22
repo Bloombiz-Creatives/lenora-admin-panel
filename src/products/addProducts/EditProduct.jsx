@@ -25,12 +25,14 @@ import {
     GetAttributeValues,
     GetParentCat,
     getSub,
+    updateProducts,
 } from "../../action/productAction";
 import { fetchBrand } from "../../action/brandAction";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const EditProduct = ({ id }) => {
+
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
 
@@ -154,6 +156,28 @@ const EditProduct = ({ id }) => {
         ['clean']
     ];
 
+    // const handleFileImageChange = (event) => {
+    //     const file = event.target.files[0];
+    //     if (!file) return;
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //         setPreviewImage(reader.result);
+    //     };
+    //     reader.readAsDataURL(file);
+    //     setProductData({ ...productData, image: file });
+    // };
+
+    // const handleFileGallery1Change = (event) => {
+    //     const file = event.target.files[0];
+    //     if (!file) return;
+    //     const reader = new FileReader();
+    //     reader.onloadend = () => {
+    //         setPreviewImageOne(reader.result);
+    //     };
+    //     reader.readAsDataURL(file);
+    //     setProductData({ ...productData, gallery1: file });
+    // };
+
     const handleFileImageChange = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -162,10 +186,14 @@ const EditProduct = ({ id }) => {
             setPreviewImage(reader.result);
         };
         reader.readAsDataURL(file);
-        setProductData({ ...productData, image: file });
+    
+        // Update the image field specifically
+        setProductData(prevData => ({
+            ...prevData,
+            image: file
+        }));
     };
-
-
+    
     const handleFileGallery1Change = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -174,9 +202,13 @@ const EditProduct = ({ id }) => {
             setPreviewImageOne(reader.result);
         };
         reader.readAsDataURL(file);
-        setProductData({ ...productData, gallery1: file });
+    
+        setProductData(prevData => ({
+            ...prevData,
+            gallery1: file
+        }));
     };
-
+    
 
     const handleFileGallery2Change = (event) => {
         const file = event.target.files[0];
@@ -225,6 +257,8 @@ const EditProduct = ({ id }) => {
         setProductData({ ...productData, gallery5: file });
     };
 
+    
+
     const handleDescriptionChange = (value) => {
         setDescription(value);
     };
@@ -251,6 +285,42 @@ const EditProduct = ({ id }) => {
             });
         }
     };
+
+    const handleSubmit = () => {
+        const formData = new FormData();
+        formData.append('name', productData.name);
+        formData.append('price', productData.price);
+        formData.append('brand', productData.brand);
+        formData.append('meta_title', productData.meta_title);
+        formData.append('meta_desc', productData.meta_desc);
+        formData.append('parent_category', productData.parent_category);
+        formData.append('sub_category', productData.sub_category);
+        formData.append('description', description);
+        formData.append('image', productData.image);
+        formData.append('gallery1', productData.gallery1);
+        formData.append('gallery2', productData.gallery2);
+        formData.append('gallery3', productData.gallery3);
+        formData.append('gallery4', productData.gallery4);
+        formData.append('gallery5', productData.gallery5);
+
+       
+        if (productData.attribute) {
+            formData.append('attribute', productData.attribute);
+        }
+
+        if (productData.attribute_value) {
+            formData.append('attribute_value', productData.attribute_value);
+        }
+
+        if (productData.color) {
+            formData.append('color', productData.color);
+        }
+
+        dispatch(updateProducts(id, formData)).then(()=>{
+            enqueueSnackbar("Product updated successfully!" , { variant: "success" })
+        })
+        handleClose();
+    }
 
     return (
         <div>
@@ -417,21 +487,6 @@ const EditProduct = ({ id }) => {
                                     ))}
                                 </Select>
                             </FormControl>
-
-                            {/* <FormControl fullWidth>
-                                <InputLabel>Attribute Value</InputLabel>
-                                <Select
-                                    name="attribute_value"
-                                    value={productData.attribute_value}
-                                    onChange={handleChange}
-                                    label="attribute_value"
-                                >
-                                    <MenuItem value="" disabled>Select Attribute Value</MenuItem>
-                                    {AllAttributesValues && AllAttributesValues.map((val) => (
-                                        <MenuItem key={val} value={val}>{val}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl> */}
 
                             <FormControl fullWidth>
                                 <InputLabel id="attribute-value-label">Attribute Value</InputLabel>
