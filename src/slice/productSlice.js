@@ -5,6 +5,7 @@ const productSlice = createSlice({
     initialState:{
         loading: true,
         error: null,
+
     },
     reducers:{
         getProductsSuccess(state, action ){
@@ -37,7 +38,7 @@ const productSlice = createSlice({
             return {
                 ...state,
                 loading:false,
-                products:action.payload
+                toggles:action.payload
             }
         },
         todaysDealFail(state, action){

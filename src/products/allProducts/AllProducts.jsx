@@ -77,7 +77,9 @@ const AllProducts = () => {
             [id]: newCheckedState,
         }));
 
-        dispatch(toggleTodaysDeal(id, newCheckedState));
+        dispatch(toggleTodaysDeal(id, newCheckedState)).then(() => {
+            enqueueSnackbar("Today's Deal updated successfully!", { variant: "success" });
+        })
 
     };
 
@@ -89,9 +91,12 @@ const AllProducts = () => {
             [id]: event.target.checked,
         }));
 
-        dispatch(toggleFeatured(id, newCheckedState));
+        dispatch(toggleFeatured(id, newCheckedState)).then(() => {
+            enqueueSnackbar("Featured status updated successfully!", { variant: "success" });
+        })
 
     };
+
 
     const handlePageChange = (event, newPage) => {
         dispatch(fetchProducts({ name: debouncedQuery, page: newPage + 1 }));
