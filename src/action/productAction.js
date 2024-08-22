@@ -114,3 +114,15 @@ export const GetAttributeName = () => {
         }
     }
 }
+
+
+export const GetAttributeValues = ({id}) => {
+    return async (dispatch) => {
+        try {
+            const response = await globalGetService(`attributes/${id}/values`);
+            dispatch(getAttriSuccess(response.data))
+        } catch (error) {
+            dispatch(getAttriFail(error))
+        }
+    }
+}

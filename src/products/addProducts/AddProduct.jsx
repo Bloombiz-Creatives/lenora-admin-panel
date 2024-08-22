@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import { Switch } from '@mui/material';
 import ReactQuill from 'react-quill';
@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import DropzoneImage from '../../shared/DropzoneImage';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts, fetchColors, GetParentCat, getSub } from '../../action/productAction';
+import { addProducts, fetchColors, GetAttributeName, GetParentCat, getSub } from '../../action/productAction';
 import { fetchBrand } from '../../action/brandAction';
 
 const AddProduct = () => {
@@ -19,6 +19,7 @@ const AddProduct = () => {
         meta_title: '',
         meta_desc: '',
         attribute: '',
+        attribute_value: '',
         color: '',
         parent_category: '',
         sub_category: '',
@@ -153,13 +154,15 @@ const AddProduct = () => {
         dispatch(GetParentCat())
         dispatch(fetchBrand())
         dispatch(fetchColors())
+        dispatch(GetAttributeName())
     }, [dispatch])
 
-    const { distinctParentCategories, categories = [], color=[] } = useSelector((state) => state.productState);
+    const { distinctParentCategories, categories = [], color = [], distinctAttributeNames } = useSelector((state) => state.productState);
     const parentCat = distinctParentCategories?.distinctParentCategories;
 
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
+    const AllAttributes = distinctAttributeNames?.distinctAttributeNames;
 
 
 
@@ -200,8 +203,13 @@ const AddProduct = () => {
                 formData.append('gallery4', productData.gallery4);
                 formData.append('gallery5', productData.gallery5);
 
+
                 if (productData.attribute) {
                     formData.append('attribute', productData.attribute);
+                }
+
+                if (productData.attribute_value) {
+                    formData.append('attribute_value', productData.attribute_value);
                 }
 
                 if (productData.color) {
@@ -252,6 +260,7 @@ const AddProduct = () => {
                                         name="parent_category"
                                         value={productData.parent_category}
                                         onChange={handleChange}
+                                        label="parent_category"
                                         error={!!error.parent_category}
                                         helperText={error.parent_category}
                                         required
@@ -272,6 +281,7 @@ const AddProduct = () => {
                                         name="sub_category"
                                         value={productData.sub_category}
                                         onChange={handleChange}
+                                        label="sub_category"
                                         error={!!error.sub_category}
                                         helperText={error.sub_category}
                                         required
@@ -425,15 +435,51 @@ const AddProduct = () => {
                         </FormControl>
                     </Grid>
                     {isAttributeEnabled && (
+
                         <Grid item xs={12}>
-                            <TextField
-                                fullWidth
-                                label="Attribute"
-                                name="attribute"
-                                value={productData.attribute}
-                                onChange={handleChange}
-                            />
+                            <Box display="flex" justifyContent="center" gap="12px" sx={{
+                                flexDirection: { xs: 'column', md: 'row' },
+                            }}>
+                                <FormControl fullWidth >
+                                    <InputLabel>Attribute</InputLabel>
+                                    <Select
+                                        name="attribute"
+                                        value={productData.attribute}
+                                        onChange={handleChange}
+                                        label="Attribute"
+                                        error={!!error.attribute}
+                                        helperText={error.attribute}
+                                        required
+
+                                    >
+                                        <MenuItem value="" disabled>Select Attribute</MenuItem>
+                                        {AllAttributes && AllAttributes.map((att) => (
+                                            <MenuItem key={att.name} value={att.name}>{att.name}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+
+                                <FormControl fullWidth>
+                                    <InputLabel>Attribute Value</InputLabel>
+                                    <Select
+                                        name="attribute_value"
+                                        value={productData.attribute_value}
+                                        onChange={handleChange}
+                                        label="attribute_value"
+                                        error={!!error.attribute_value}
+                                        helperText={error.attribute_value}
+                                        required
+
+                                    >
+                                        <MenuItem value="" disabled>Select Sub Category</MenuItem>
+                                        {categories && categories.map((cat) => (
+                                            <MenuItem key={cat.name} value={cat.name}>{cat.name}</MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
                         </Grid>
+
                     )}
 
                     <Grid item xs={12}>
@@ -461,23 +507,23 @@ const AddProduct = () => {
                                 >
                                     {color && color?.color?.map((co) => (
                                         <MenuItem key={co._id} value={co._id}>
-                                        <Box 
-                                          sx={{ 
-                                            display: 'flex', 
-                                            alignItems: 'center' 
-                                          }}
-                                        >
-                                          <Box 
-                                            sx={{ 
-                                              width: 20, 
-                                              height: 20, 
-                                              backgroundColor: co.color_code, 
-                                              marginRight: 1, 
-                                            }} 
-                                          />
-                                          {co.name}
-                                        </Box>
-                                      </MenuItem>
+                                            <Box
+                                                sx={{
+                                                    display: 'flex',
+                                                    alignItems: 'center'
+                                                }}
+                                            >
+                                                <Box
+                                                    sx={{
+                                                        width: 20,
+                                                        height: 20,
+                                                        backgroundColor: co.color_code,
+                                                        marginRight: 1,
+                                                    }}
+                                                />
+                                                {co.name}
+                                            </Box>
+                                        </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
