@@ -97,7 +97,6 @@ export const fetchColors = () => {
             const response = await globalGetService('/color');
             dispatch(getColorsSuccess(response.data));
             console.log(response.data,'coloooor');
-            
         } catch (error) {
             dispatch(getColorsFail(error))
         }

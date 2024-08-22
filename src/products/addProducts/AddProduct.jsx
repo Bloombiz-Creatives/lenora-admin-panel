@@ -541,7 +541,7 @@ const AddProduct = () => {
                         </Grid>
                     )}
 
-                    <Grid item xs={12}>
+                    <Grid item xs={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -551,6 +551,7 @@ const AddProduct = () => {
                             Add Product
                         </Button>
                     </Grid>
+                   
                 </Grid>
             </Card>
         </div>
