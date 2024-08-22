@@ -113,6 +113,20 @@ const productSlice = createSlice({
                 error:action.payload
             }
         },
+        getAttriValueSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                AttributeValues:action.payload
+            }
+        },
+        getAttriValueFail(state, action){
+            return {
+                ...state,
+                error:action.payload
+            }
+        },
+
         
 
 
@@ -137,5 +151,7 @@ export const {
     getColorsFail,
     getAttriSuccess,
     getAttriFail,
+    getAttriValueSuccess,
+    getAttriValueFail,
 } = actions;
 export default reducer;

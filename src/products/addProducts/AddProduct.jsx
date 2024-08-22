@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css';
 import DropzoneImage from '../../shared/DropzoneImage';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts, fetchColors, GetAttributeName, GetParentCat, getSub } from '../../action/productAction';
+import { addProducts, fetchColors, GetAttributeName, GetAttributeValues, GetParentCat, getSub } from '../../action/productAction';
 import { fetchBrand } from '../../action/brandAction';
 
 const AddProduct = () => {
@@ -47,6 +47,12 @@ const AddProduct = () => {
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        if (productData.attribute) {
+            dispatch(GetAttributeValues(productData.attribute));
+        }
+    }, [productData.attribute, dispatch]);
+
 
     const toolbarOptions = [
         [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -74,6 +80,10 @@ const AddProduct = () => {
         if (name === 'parent_category') {
             const trimmedValue = value.trim();
             dispatch(getSub(trimmedValue));
+        }
+
+        if (name === 'attribute') {
+            dispatch(GetAttributeValues(value))
         }
     };
 
@@ -157,12 +167,13 @@ const AddProduct = () => {
         dispatch(GetAttributeName())
     }, [dispatch])
 
-    const { distinctParentCategories, categories = [], color = [], distinctAttributeNames } = useSelector((state) => state.productState);
+    const { distinctParentCategories, categories = [], color = [], distinctAttributeNames, AttributeValues = [] } = useSelector((state) => state.productState);
     const parentCat = distinctParentCategories?.distinctParentCategories;
 
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
     const AllAttributes = distinctAttributeNames?.distinctAttributeNames;
+    const AllAttributesValues = AttributeValues?.AttributeValues;
 
 
 
@@ -370,6 +381,7 @@ const AddProduct = () => {
                                     image={previewImageTwo}
                                     id={productData?._id}
                                 />
+                                {error.gallery1 && <Typography color="error">{error.gallery1}</Typography>}
                             </div>
 
                             <div className='xl:w-[20%] w-full'>
@@ -396,7 +408,6 @@ const AddProduct = () => {
                                 />
                             </div>
                         </div>
-                        {error.gallery1 && <Typography color="error">{error.gallery1}</Typography>}
 
                     </div>
 
@@ -454,7 +465,7 @@ const AddProduct = () => {
                                     >
                                         <MenuItem value="" disabled>Select Attribute</MenuItem>
                                         {AllAttributes && AllAttributes.map((att) => (
-                                            <MenuItem key={att.name} value={att.name}>{att.name}</MenuItem>
+                                            <MenuItem key={att._id} value={att._id}>{att.name}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -472,8 +483,8 @@ const AddProduct = () => {
 
                                     >
                                         <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                        {categories && categories.map((cat) => (
-                                            <MenuItem key={cat.name} value={cat.name}>{cat.name}</MenuItem>
+                                        {AllAttributesValues && AllAttributesValues.map((val) => (
+                                            <MenuItem key={val} value={val}>{val}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>

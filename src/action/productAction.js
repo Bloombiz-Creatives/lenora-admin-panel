@@ -1,4 +1,4 @@
-import { deleteProdFail, deleteProdSuccess, getAttriFail, getAttriSuccess, getColorsFail, getColorsSuccess, getParent_catFail, getParent_catSuccess, getProductsFail, getProductsSuccess, getSubFail, getSubSuccess, prodAddFail, prodAddSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
+import { deleteProdFail, deleteProdSuccess, getAttriFail, getAttriSuccess, getAttriValueFail, getAttriValueSuccess, getColorsFail, getColorsSuccess, getParent_catFail, getParent_catSuccess, getProductsFail, getProductsSuccess, getSubFail, getSubSuccess, prodAddFail, prodAddSuccess, todaysDealFail, todaysDealSuccess } from "../slice/productSlice"
 import { globalDeleteService, globalGetService, globalPatchService, globalPostService } from "../utils/globalApiServices"
 
 
@@ -116,13 +116,13 @@ export const GetAttributeName = () => {
 }
 
 
-export const GetAttributeValues = ({id}) => {
+export const GetAttributeValues = (id) => {
     return async (dispatch) => {
         try {
-            const response = await globalGetService(`attributes/${id}/values`);
-            dispatch(getAttriSuccess(response.data))
+            const response = await globalGetService(`/attributes/${id}/values`);
+            dispatch(getAttriValueSuccess(response.data))
         } catch (error) {
-            dispatch(getAttriFail(error))
+            dispatch(getAttriValueFail(error))
         }
     }
 }
