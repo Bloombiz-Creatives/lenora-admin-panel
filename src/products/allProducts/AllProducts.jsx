@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProduct, fetchProducts, toggleFeatured, toggleTodaysDeal } from "../../action/productAction";
 import Delete from "@mui/icons-material/Delete";
-import Edit from "@mui/icons-material/Edit";
+// import Edit from "@mui/icons-material/Edit";
 import { Switch } from '@mui/material';
 import { useSnackbar } from "notistack";
 import PaginationV1 from "../../shared/PaginationV1";
 import ConfirmationModal from "../../shared/ConfirmationModal";
+import EditProduct from "../addProducts/EditProduct";
 
 const AllProducts = () => {
 
@@ -73,7 +74,7 @@ const AllProducts = () => {
 
         setCheckedStates(prevState => ({
             ...prevState,
-            [id]: event.target.checked,
+            [id]: newCheckedState,
         }));
 
         dispatch(toggleTodaysDeal(id, newCheckedState));
@@ -181,9 +182,10 @@ const AllProducts = () => {
                                                 />
                                             </TableCell>
                                             <TableCell align="center">
-                                                <div className="flex justify-center items-center">
+                                                <div className="flex justify-center items-center gap-6">
                                                     <IconButton size="small" color="success">
-                                                        <Edit fontSize="small" />
+                                                        {/* <Edit fontSize="small" /> */}
+                                                        <EditProduct id={row?._id}/>
                                                     </IconButton>
                                                     <IconButton size="small" color="error" onClick={() => handleDeleteClick(row._id)} >
                                                         <Delete fontSize="small" />
@@ -214,3 +216,4 @@ const AllProducts = () => {
 };
 
 export default AllProducts;
+

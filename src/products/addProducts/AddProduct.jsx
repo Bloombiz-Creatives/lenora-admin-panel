@@ -193,6 +193,10 @@ const AddProduct = () => {
         return Object.values(validationErrors).every(value => !value);
     };
 
+    const handleClose = () => {
+        setProductData({ name: "", image: "", parent_category: "", description: "", price: "", sub_category: "", brand: "", gallery1: "", gallery5: "", gallery2: "", gallery3: "", gallery4: "", meta_title: "", meta_desc: "", attribute: "", attribute_value: "", color: "", })
+    }
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -229,7 +233,7 @@ const AddProduct = () => {
 
                 dispatch(addProducts(formData));
                 enqueueSnackbar("Product added successfully", { variant: "success" });
-
+                handleClose();
             } catch (error) {
                 console.error('Error adding product:', error);
                 enqueueSnackbar("Cannot add product", { variant: "error" });
@@ -541,7 +545,7 @@ const AddProduct = () => {
                         </Grid>
                     )}
 
-                    <Grid item xs={12} sx={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -551,7 +555,7 @@ const AddProduct = () => {
                             Add Product
                         </Button>
                     </Grid>
-                   
+
                 </Grid>
             </Card>
         </div>
