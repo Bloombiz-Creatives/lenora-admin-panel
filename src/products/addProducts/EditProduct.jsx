@@ -1,3 +1,4 @@
+
 import Edit from "@mui/icons-material/Edit";
 import {
     Box,
@@ -52,12 +53,7 @@ const EditProduct = ({ id }) => {
         color: "",
         parent_category: "",
         sub_category: "",
-        image: "",
-        gallery1: "",
-        gallery2: "",
-        gallery3: "",
-        gallery4: "",
-        gallery5: "",
+
     });
 
     useEffect(() => {
@@ -70,10 +66,10 @@ const EditProduct = ({ id }) => {
     useEffect(() => {
         if (productData.attribute) {
             dispatch(GetAttributeValues(productData.attribute));
-            console.log('Attribute Values:', AttributeValues); // Check what gets logged here
+            console.log('Attribute Values:', AttributeValues);
         }
     }, [productData.attribute, dispatch]);
-    
+
 
     const {
         distinctParentCategories,
@@ -97,55 +93,90 @@ const EditProduct = ({ id }) => {
     const [previewImageFive, setPreviewImageFive] = useState(null);
 
     const [previewImage, setPreviewImage] = useState();
+
+    const [mainImageFile, setMainImageFile] = useState(null);
+    const [galleryImageFiles, setGalleryImageFiles] = useState({
+        gallery1: null,
+        gallery2: null,
+        gallery3: null,
+        gallery4: null,
+        gallery5: null
+    });
+
     const [description, setDescription] = useState('');
     const { enqueueSnackbar } = useSnackbar();
 
+
     useEffect(() => {
-        if (id && products?.products) {
+        if (productData.attribute) {
+            dispatch(GetAttributeValues(productData.attribute));
+        }
+    }, [productData.attribute, dispatch]);
+
+    useEffect(() => {
+        if (products?.products && id) {
             const proToEdit = products.products.find((prod) => prod._id === id);
             if (proToEdit) {
-                console.log('Product to Edit:', proToEdit);
                 setDescription(proToEdit.description || '');
-
                 setProductData({
-                    _id: proToEdit._id,
-                    name: proToEdit.name,
-                    price: proToEdit.price,
+                    name: proToEdit.name || "",
+                    price: proToEdit.price || "",
                     brand: proToEdit.brand?._id || "",
-                    meta_title: proToEdit.meta_title,
-                    meta_desc: proToEdit.meta_desc,
-                    attribute: proToEdit.attribute,
-                    attribute_value: proToEdit.attribute_value,
-                    color: proToEdit.color,
-                    parent_category: proToEdit.category,
-                    sub_category: proToEdit.sub_category,
-                    image: proToEdit.image,
-                    gallery1: proToEdit.gallery1,
-                    gallery2: proToEdit.gallery2,
-                    gallery3: proToEdit.gallery3,
-                    gallery4: proToEdit.gallery4,
-                    gallery5: proToEdit.gallery5,
+                    meta_title: proToEdit.meta_title || "",
+                    meta_desc: proToEdit.meta_desc || "",
+                    attribute: proToEdit.attribute || "",
+                    attribute_value: proToEdit.attribute_value || "",
+                    color: proToEdit.color || "",
+                    parent_category: proToEdit.category || "",
+                    sub_category: proToEdit.sub_category || "",
                 });
 
-
-                setPreviewImage(proToEdit.image);
-                setPreviewImageOne(proToEdit.gallery1);
-                setPreviewImageTwo(proToEdit.gallery2);
-                setPreviewImageThree(proToEdit.gallery3);
-                setPreviewImageFour(proToEdit.gallery4);
-                setPreviewImageFive(proToEdit.gallery5);
+                setPreviewImage(proToEdit.image || null);
+                setPreviewImageOne(proToEdit.gallery1 || null);
+                setPreviewImageTwo(proToEdit.gallery2 || null);
+                setPreviewImageThree(proToEdit.gallery3 || null);
+                setPreviewImageFour(proToEdit.gallery4 || null);
+                setPreviewImageFive(proToEdit.gallery5 || null);
 
                 if (proToEdit.category) {
                     dispatch(getSub(proToEdit.category));
                 }
 
-                if (productData.attribute) {
-                    dispatch(GetAttributeValues(productData.attribute));
-                    console.log('Attribute Values:', AttributeValues);
+                if (proToEdit.attribute) {
+                    dispatch(GetAttributeValues(proToEdit.attribute));
                 }
             }
         }
-    }, [id, products?.products, dispatch]);
+    }, [products?.products, id, dispatch]);
+
+    const handleFileImageChange = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewImage(reader.result);
+        };
+        reader.readAsDataURL(file);
+        setMainImageFile(file);
+    };
+
+    const handleFileGalleryChange = (event, index) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            switch (index) {
+                case 1: setPreviewImageOne(reader.result); break;
+                case 2: setPreviewImageTwo(reader.result); break;
+                case 3: setPreviewImageThree(reader.result); break;
+                case 4: setPreviewImageFour(reader.result); break;
+                case 5: setPreviewImageFive(reader.result); break;
+            }
+        };
+        reader.readAsDataURL(file);
+        setGalleryImageFiles(prev => ({ ...prev, [`gallery${index}`]: file }));
+    };
+
 
     const toolbarOptions = [
         [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
@@ -156,114 +187,9 @@ const EditProduct = ({ id }) => {
         ['clean']
     ];
 
-    // const handleFileImageChange = (event) => {
-    //     const file = event.target.files[0];
-    //     if (!file) return;
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //         setPreviewImage(reader.result);
-    //     };
-    //     reader.readAsDataURL(file);
-    //     setProductData({ ...productData, image: file });
-    // };
-
-    // const handleFileGallery1Change = (event) => {
-    //     const file = event.target.files[0];
-    //     if (!file) return;
-    //     const reader = new FileReader();
-    //     reader.onloadend = () => {
-    //         setPreviewImageOne(reader.result);
-    //     };
-    //     reader.readAsDataURL(file);
-    //     setProductData({ ...productData, gallery1: file });
-    // };
-
-    const handleFileImageChange = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImage(reader.result);
-        };
-        reader.readAsDataURL(file);
-    
-        // Update the image field specifically
-        setProductData(prevData => ({
-            ...prevData,
-            image: file
-        }));
-    };
-    
-    const handleFileGallery1Change = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImageOne(reader.result);
-        };
-        reader.readAsDataURL(file);
-    
-        setProductData(prevData => ({
-            ...prevData,
-            gallery1: file
-        }));
-    };
-    
-
-    const handleFileGallery2Change = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImageTwo(reader.result);
-        };
-        reader.readAsDataURL(file);
-        setProductData({ ...productData, gallery2: file });
-    };
-
-
-    const handleFileGallery3Change = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImageThree(reader.result);
-        };
-        reader.readAsDataURL(file);
-        setProductData({ ...productData, gallery3: file });
-    };
-
-
-    const handleFileGallery4Change = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImageFour(reader.result);
-        };
-        reader.readAsDataURL(file);
-        setProductData({ ...productData, gallery4: file });
-    };
-
-
-    const handleFileGallery5Change = (event) => {
-        const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImageFive(reader.result);
-        };
-        reader.readAsDataURL(file);
-        setProductData({ ...productData, gallery5: file });
-    };
-
-    
-
     const handleDescriptionChange = (value) => {
         setDescription(value);
     };
-
-
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -296,14 +222,33 @@ const EditProduct = ({ id }) => {
         formData.append('parent_category', productData.parent_category);
         formData.append('sub_category', productData.sub_category);
         formData.append('description', description);
-        formData.append('image', productData.image);
-        formData.append('gallery1', productData.gallery1);
-        formData.append('gallery2', productData.gallery2);
-        formData.append('gallery3', productData.gallery3);
-        formData.append('gallery4', productData.gallery4);
-        formData.append('gallery5', productData.gallery5);
+        // formData.append('image', productData.image);
+        // formData.append('gallery1', productData.gallery1);
+        // formData.append('gallery2', productData.gallery2);
+        // formData.append('gallery3', productData.gallery3);
+        // formData.append('gallery4', productData.gallery4);
+        // formData.append('gallery5', productData.gallery5);
 
-       
+        if (mainImageFile) {
+            formData.append('image', mainImageFile);
+        }
+        if (galleryImageFiles.gallery1) {
+            formData.append('gallery1', galleryImageFiles.gallery1);
+        }
+        if (galleryImageFiles.gallery2) {
+            formData.append('gallery2', galleryImageFiles.gallery2);
+        }
+        if (galleryImageFiles.gallery3) {
+            formData.append('gallery3', galleryImageFiles.gallery3);
+        }
+        if (galleryImageFiles.gallery4) {
+            formData.append('gallery4', galleryImageFiles.gallery4);
+        }
+        if (galleryImageFiles.gallery5) {
+            formData.append('gallery5', galleryImageFiles.gallery5);
+        }
+
+
         if (productData.attribute) {
             formData.append('attribute', productData.attribute);
         }
@@ -316,8 +261,8 @@ const EditProduct = ({ id }) => {
             formData.append('color', productData.color);
         }
 
-        dispatch(updateProducts(id, formData)).then(()=>{
-            enqueueSnackbar("Product updated successfully!" , { variant: "success" })
+        dispatch(updateProducts(id, formData)).then(() => {
+            enqueueSnackbar("Product updated successfully!", { variant: "success" })
         })
         handleClose();
     }
@@ -425,49 +370,28 @@ const EditProduct = ({ id }) => {
                                 modules={{ toolbar: toolbarOptions }}
                                 style={{ height: '100px' }}
                             />
-
                         </div>
 
                         <div className='block w-full mt-16'>
                             <p>Thumbnail</p>
-                            <DropzoneImage onChange={handleFileImageChange} image={previewImage} id={productData._id} />
+                            <DropzoneImage onChange={handleFileImageChange} image={previewImage} id="main-image" />
                         </div>
 
                         <div className="flex gap-4 mt-4 w-full justify-center items-center">
                             <div className=' w-full'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery1Change}
-                                    image={previewImageOne}
-                                    id={productData?._id}
-                                />
+                                <DropzoneImage onChange={(e) => handleFileGalleryChange(e, 1)} image={previewImageOne} id="gallery1" />
                             </div>
                             <div className=' w-full'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery2Change}
-                                    image={previewImageTwo}
-                                    id={productData?._id}
-                                />
+                                <DropzoneImage onChange={(e) => handleFileGalleryChange(e, 2)} image={previewImageTwo} id="gallery2" />
                             </div>
                             <div className=' w-full'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery3Change}
-                                    image={previewImageThree}
-                                    id={productData?._id}
-                                />
+                                <DropzoneImage onChange={(e) => handleFileGalleryChange(e, 3)} image={previewImageThree} id="gallery3" />
                             </div>
                             <div className=' w-full'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery4Change}
-                                    image={previewImageFour}
-                                    id={productData?._id}
-                                />
+                                <DropzoneImage onChange={(e) => handleFileGalleryChange(e, 4)} image={previewImageFour} id="gallery4" />
                             </div>
                             <div className=' w-full'>
-                                <DropzoneImage
-                                    onChange={handleFileGallery5Change}
-                                    image={previewImageFive}
-                                    id={productData?._id}
-                                />
+                                <DropzoneImage onChange={(e) => handleFileGalleryChange(e, 5)} image={previewImageFive} id="gallery5" />
                             </div>
                         </div>
 
@@ -516,6 +440,7 @@ const EditProduct = ({ id }) => {
                                     label="Color"
                                     name="color"
                                     value={productData.color}
+                                    onChange={handleChange}
                                 >
                                     {color && color?.color?.map((co) => (
                                         <MenuItem key={co._id} value={co._id}>
@@ -542,7 +467,6 @@ const EditProduct = ({ id }) => {
 
                         </div>
 
-
                     </Box>
                 </DialogContent>
                 <DialogActions
@@ -560,6 +484,7 @@ const EditProduct = ({ id }) => {
                             borderRadius: "10px",
                         }}
                         variant="contained"
+                        onClick={handleSubmit}
                     >
                         Save
                     </Button>

@@ -130,7 +130,8 @@ export const updateProducts = (id, formData) => {
     return async (dispatch) => {
         try {
             const response = await globalPutService(`/product/${id}`,formData);
-            dispatch(editProSuccess(response.data))
+            dispatch(editProSuccess(response.data));
+            dispatch(fetchProducts())
         } catch (error) {
             dispatch(editProFail(error))
         }

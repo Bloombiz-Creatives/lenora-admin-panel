@@ -190,7 +190,7 @@ const AllProducts = () => {
                                                 <div className="flex justify-center items-center gap-6">
                                                     <IconButton size="small" color="success">
                                                         {/* <Edit fontSize="small" /> */}
-                                                        <EditProduct id={row?._id}/>
+                                                        <EditProduct id={row?._id} mode ='edit'/>
                                                     </IconButton>
                                                     <IconButton size="small" color="error" onClick={() => handleDeleteClick(row._id)} >
                                                         <Delete fontSize="small" />
