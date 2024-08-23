@@ -32,9 +32,9 @@ const AddEditCategory = ({ mode, id }) => {
                 setData({
                     _id: categoryToEdit._id,
                     name: categoryToEdit.name,
-                    image: categoryToEdit.image,
                     parent_category: categoryToEdit.parent_category,
-                    icon: categoryToEdit.icon,
+                    icon: null,
+                    image: null,
 
                 });
                 setPreviewImage(categoryToEdit.image);
@@ -58,32 +58,29 @@ const AddEditCategory = ({ mode, id }) => {
 
 
 
-
-
     const handleFileInputChange = (event) => {
         const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewImage(reader.result);
-        };
-        reader.readAsDataURL(file);
-        setData({ ...data, image: file });
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => setPreviewImage(reader.result);
+            reader.readAsDataURL(file);
+            setData({ ...data, image: file });
+        }
     };
-
 
     const handleFileInputChange1 = (event) => {
         const file = event.target.files[0];
-        if (!file) return;
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setPreviewIcon(reader.result);
-        };
-        reader.readAsDataURL(file);
-        setData({ ...data, icon: file });
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => setPreviewIcon(reader.result);
+            reader.readAsDataURL(file);
+            setData({ ...data, icon: file });
+        }
     };
 
 
+
+    
     const validateInput = () => {
         let validationErrors = {
             name: data.name ? "" : " name is required",
@@ -167,7 +164,6 @@ const AddEditCategory = ({ mode, id }) => {
                 <DialogContent>
 
                     <Box component="form" autoComplete="off">
-
                         <h3 className='text-[15px]'>Parent Category</h3>
                         <TextField
                             autoFocus
@@ -200,7 +196,7 @@ const AddEditCategory = ({ mode, id }) => {
                                 <DropzoneImage
                                     onChange={handleFileInputChange}
                                     image={previewImage}
-                                    id={data?._id}
+                                    id={data?.id}
                                 />
                                 {error.image && <Typography color="error">{error.image}</Typography>}
                             </div>
@@ -210,7 +206,7 @@ const AddEditCategory = ({ mode, id }) => {
                                 <DropzoneImage
                                     onChange={handleFileInputChange1}
                                     image={previewIcon}
-                                    id={data?._id}
+                                    id={data?.id}
                                 />
                                 {error.icon && <Typography color="error">{error.icon}</Typography>}
                             </div>

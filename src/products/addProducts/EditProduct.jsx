@@ -222,12 +222,7 @@ const EditProduct = ({ id }) => {
         formData.append('parent_category', productData.parent_category);
         formData.append('sub_category', productData.sub_category);
         formData.append('description', description);
-        // formData.append('image', productData.image);
-        // formData.append('gallery1', productData.gallery1);
-        // formData.append('gallery2', productData.gallery2);
-        // formData.append('gallery3', productData.gallery3);
-        // formData.append('gallery4', productData.gallery4);
-        // formData.append('gallery5', productData.gallery5);
+      
 
         if (mainImageFile) {
             formData.append('image', mainImageFile);
