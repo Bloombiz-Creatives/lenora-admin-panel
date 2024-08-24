@@ -124,7 +124,6 @@ const EditProduct = ({ id }) => {
                     meta_title: proToEdit.meta_title || "",
                     meta_desc: proToEdit.meta_desc || "",
                     attribute: proToEdit.attribute || "",
-                    // attribute_value: proToEdit.attribute_value || "",
                     attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
                     color: proToEdit.color || "",
                     parent_category: proToEdit.category || "",
@@ -191,30 +190,7 @@ const EditProduct = ({ id }) => {
         setDescription(value);
     };
 
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-
-    //     setProductData({
-    //         ...productData,
-    //         [name]: Array.isArray(value) ? value : [value],
-    //     });
-
-
-
-    //     if (name === "parent_category") {
-    //         const trimmedValue = value.trim();
-    //         dispatch(getSub(trimmedValue));
-    //     }
-
-    //     if (name === "attribute") {
-    //         dispatch(GetAttributeValues(value));
-    //         setProductData({
-    //             ...productData,
-    //             attribute_value: [],
-    //         });
-    //     }
-    // };
-
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
 
