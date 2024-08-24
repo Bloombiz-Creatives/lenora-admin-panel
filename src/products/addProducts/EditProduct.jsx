@@ -53,7 +53,6 @@ const EditProduct = ({ id }) => {
         color: [],
         parent_category: "",
         sub_category: "",
-
     });
 
     useEffect(() => {
@@ -192,27 +191,56 @@ const EditProduct = ({ id }) => {
         setDescription(value);
     };
 
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+
+    //     setProductData({
+    //         ...productData,
+    //         [name]: Array.isArray(value) ? value : [value],
+    //     });
+
+
+
+    //     if (name === "parent_category") {
+    //         const trimmedValue = value.trim();
+    //         dispatch(getSub(trimmedValue));
+    //     }
+
+    //     if (name === "attribute") {
+    //         dispatch(GetAttributeValues(value));
+    //         setProductData({
+    //             ...productData,
+    //             attribute_value: [],
+    //         });
+    //     }
+    // };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        setProductData({
-            ...productData,
-            [name]: Array.isArray(value) ? value : [value],
-        });
-
-      
-
-        if (name === "parent_category") {
-            const trimmedValue = value.trim();
-            dispatch(getSub(trimmedValue));
-        }
-
         if (name === "attribute") {
+            setProductData(prevData => ({
+                ...prevData,
+                [name]: value,
+                attribute_value: []
+            }));
             dispatch(GetAttributeValues(value));
-            setProductData({
-                ...productData,
-                attribute_value: [],
-            });
+        } else if (name === "attribute_value") {
+            setProductData(prevData => ({
+                ...prevData,
+                [name]: Array.isArray(value) ? value : [value]
+            }));
+        } else if (name === "parent_category") {
+            setProductData(prevData => ({
+                ...prevData,
+                [name]: value
+            }));
+            dispatch(getSub(value.trim()));
+        } else {
+            setProductData(prevData => ({
+                ...prevData,
+                [name]: value
+            }));
         }
     };
 
@@ -401,7 +429,8 @@ const EditProduct = ({ id }) => {
                                 <InputLabel>Attribute</InputLabel>
                                 <Select
                                     name="attribute"
-                                    value={productData.attribute}
+                                    // value={productData.attribute}
+                                    value={productData.attribute || ""}
                                     onChange={handleChange}
                                     label="Attribute"
                                 >
@@ -411,9 +440,9 @@ const EditProduct = ({ id }) => {
                                     ))}
                                 </Select>
                             </FormControl>
-          
 
-                            <FormControl fullWidth>
+
+                            {/* <FormControl fullWidth>
                                 <InputLabel id="attribute-value-label">Attribute Value</InputLabel>
                                 <Select
                                     labelId="attribute-value-label"
@@ -431,6 +460,26 @@ const EditProduct = ({ id }) => {
                                                 {attributeValue}
                                             </MenuItem>
                                         ))}
+                                </Select>
+                            </FormControl> */}
+
+                            <FormControl fullWidth>
+                                <InputLabel id="attribute-value-label">Attribute Value</InputLabel>
+                                <Select
+                                    labelId="attribute-value-label"
+                                    id="attribute_value"
+                                    name="attribute_value"
+                                    value={productData.attribute_value || []}
+                                    label="Select Attribute Value"
+                                    onChange={handleChange}
+                                    multiple
+                                    renderValue={(selected) => selected.join(', ')}
+                                >
+                                    {AllAttributesValues && AllAttributesValues.map((attributeValue) => (
+                                        <MenuItem key={attributeValue} value={attributeValue}>
+                                            {attributeValue}
+                                        </MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
 
