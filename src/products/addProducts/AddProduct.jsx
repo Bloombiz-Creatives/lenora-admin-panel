@@ -19,8 +19,10 @@ const AddProduct = () => {
         meta_title: '',
         meta_desc: '',
         attribute: '',
-        attribute_value: '',
-        color: '',
+        // attribute_value: '',
+        // color: '',
+        attribute_value: [],
+        color: [],
         parent_category: '',
         sub_category: '',
         image: '',
@@ -72,9 +74,14 @@ const AddProduct = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
+        // setProductData({
+        //     ...productData,
+        //     [e.target.name]: e.target.value,
+        // });
+
         setProductData({
             ...productData,
-            [e.target.name]: e.target.value,
+            [name]: Array.isArray(value) ? value : value,
         });
 
         if (name === 'parent_category') {
@@ -250,13 +257,21 @@ const AddProduct = () => {
                     formData.append('attribute', productData.attribute);
                 }
 
-                if (productData.attribute_value) {
-                    formData.append('attribute_value', productData.attribute_value);
-                }
+                // if (productData.attribute_value) {
+                //     formData.append('attribute_value', productData.attribute_value);
+                // }
 
-                if (productData.color) {
-                    formData.append('color', productData.color);
-                }
+                // if (productData.color) {
+                //     formData.append('color', productData.color);
+                // }
+
+                productData.attribute_value.forEach((value) => {
+                    formData.append('attribute_value', value);
+                });
+                
+                productData.color.forEach((color) => {
+                    formData.append('color', color);
+                });
 
                 dispatch(addProducts(formData));
                 enqueueSnackbar("Product added successfully", { variant: "success" });
@@ -504,13 +519,20 @@ const AddProduct = () => {
                                 <FormControl fullWidth>
                                     <InputLabel>Attribute Value</InputLabel>
                                     <Select
+                                        // name="attribute_value"
+                                        // value={productData.attribute_value}
+                                        // onChange={handleChange}
+                                        // label="attribute_value"
+                                        // error={!!error.attribute_value}
+                                        // helperText={error.attribute_value}
+                                        // required
+
                                         name="attribute_value"
                                         value={productData.attribute_value}
                                         onChange={handleChange}
-                                        label="attribute_value"
-                                        error={!!error.attribute_value}
-                                        helperText={error.attribute_value}
-                                        required
+                                        label="Attribute Value"
+                                        multiple
+                                        renderValue={(selected) => selected.join(', ')}
 
                                     >
                                         <MenuItem value="" disabled>Select Sub Category</MenuItem>
@@ -540,12 +562,22 @@ const AddProduct = () => {
                             <FormControl fullWidth >
                                 <InputLabel>Color</InputLabel>
                                 <Select
+                                    // label="Color"
+                                    // name="color"
+                                    // value={productData.color}
+                                    // onChange={handleChange}
+                                    // error={!!error.color}
+                                    // helperText={error.color}
+
                                     label="Color"
                                     name="color"
                                     value={productData.color}
                                     onChange={handleChange}
-                                    error={!!error.color}
-                                    helperText={error.color}
+                                    multiple
+                                    renderValue={(selected) => selected.map(id => {
+                                        const selectedColor = color.color.find(co => co._id === id);
+                                        return selectedColor ? selectedColor.name : '';
+                                    }).join(', ')}
                                 >
                                     {color && color?.color?.map((co) => (
                                         <MenuItem key={co._id} value={co._id}>

@@ -49,8 +49,8 @@ const EditProduct = ({ id }) => {
         meta_title: "",
         meta_desc: "",
         attribute: "",
-        attribute_value: "",
-        color: "",
+        attribute_value: [],
+        color: [],
         parent_category: "",
         sub_category: "",
 
@@ -125,7 +125,8 @@ const EditProduct = ({ id }) => {
                     meta_title: proToEdit.meta_title || "",
                     meta_desc: proToEdit.meta_desc || "",
                     attribute: proToEdit.attribute || "",
-                    attribute_value: proToEdit.attribute_value || "",
+                    // attribute_value: proToEdit.attribute_value || "",
+                    attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
                     color: proToEdit.color || "",
                     parent_category: proToEdit.category || "",
                     sub_category: proToEdit.sub_category || "",
@@ -193,10 +194,13 @@ const EditProduct = ({ id }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+
         setProductData({
             ...productData,
-            [name]: value,
+            [name]: Array.isArray(value) ? value : [value],
         });
+
+      
 
         if (name === "parent_category") {
             const trimmedValue = value.trim();
@@ -207,7 +211,7 @@ const EditProduct = ({ id }) => {
             dispatch(GetAttributeValues(value));
             setProductData({
                 ...productData,
-                attribute_value: "",
+                attribute_value: [],
             });
         }
     };
@@ -222,7 +226,7 @@ const EditProduct = ({ id }) => {
         formData.append('parent_category', productData.parent_category);
         formData.append('sub_category', productData.sub_category);
         formData.append('description', description);
-      
+
 
         if (mainImageFile) {
             formData.append('image', mainImageFile);
@@ -248,13 +252,14 @@ const EditProduct = ({ id }) => {
             formData.append('attribute', productData.attribute);
         }
 
-        if (productData.attribute_value) {
-            formData.append('attribute_value', productData.attribute_value);
-        }
 
-        if (productData.color) {
-            formData.append('color', productData.color);
-        }
+        productData.attribute_value.forEach((value) => {
+            formData.append('attribute_value', value);
+        });
+
+        productData.color.forEach((color) => {
+            formData.append('color', color);
+        });
 
         dispatch(updateProducts(id, formData)).then(() => {
             enqueueSnackbar("Product updated successfully!", { variant: "success" })
@@ -406,6 +411,7 @@ const EditProduct = ({ id }) => {
                                     ))}
                                 </Select>
                             </FormControl>
+          
 
                             <FormControl fullWidth>
                                 <InputLabel id="attribute-value-label">Attribute Value</InputLabel>
@@ -413,9 +419,11 @@ const EditProduct = ({ id }) => {
                                     labelId="attribute-value-label"
                                     id="attribute_value"
                                     name="attribute_value"
-                                    value={productData.attribute_value}
+                                    value={Array.isArray(productData.attribute_value) ? productData.attribute_value : []} // Ensure it's an array
                                     label="Select Attribute Value"
                                     onChange={handleChange}
+                                    multiple
+                                    renderValue={(selected) => selected.join(', ')}
                                 >
                                     {AllAttributesValues &&
                                         AllAttributesValues.map((attributeValue) => (
@@ -425,6 +433,7 @@ const EditProduct = ({ id }) => {
                                         ))}
                                 </Select>
                             </FormControl>
+
 
                         </div>
 
@@ -436,6 +445,11 @@ const EditProduct = ({ id }) => {
                                     name="color"
                                     value={productData.color}
                                     onChange={handleChange}
+                                    multiple
+                                    renderValue={(selected) => selected.map(id => {
+                                        const selectedColor = color.color.find(co => co._id === id);
+                                        return selectedColor ? selectedColor.name : '';
+                                    }).join(', ')}
                                 >
                                     {color && color?.color?.map((co) => (
                                         <MenuItem key={co._id} value={co._id}>
@@ -502,3 +516,4 @@ const EditProduct = ({ id }) => {
 };
 
 export default EditProduct;
+
