@@ -48,7 +48,7 @@ const Hero = () => {
                     </div>
                 </div>
 
-                <div className="mt-7">
+                <div className="mt-7 w-full">
                     <Swiper
                         cssMode={true}
                         navigation={true}
@@ -60,11 +60,11 @@ const Hero = () => {
                             disableOnInteraction: false,
                         }}
                         modules={[Navigation, Pagination, Mousewheel, Keyboard, Autoplay]}
-                        className="mySwiper"
+                        className="mySwiper "
                     >
                         {datas.map((da, index) => (
                             <SwiperSlide key={index}>
-                                <img src={da.image} alt={`Slide ${index + 1}`} className=" object-cover rounded-[5px] " />
+                                <img src={da.image} alt={`Slide ${index + 1}`} className=" object-contain rounded-[5px] " />
                             </SwiperSlide>
                         ))}
                     </Swiper>

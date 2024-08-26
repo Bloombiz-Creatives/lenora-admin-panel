@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteProduct, fetchProducts, toggleFeatured, toggleTodaysDeal } from "../../action/productAction";
 import Delete from "@mui/icons-material/Delete";
-// import Edit from "@mui/icons-material/Edit";
 import { Switch } from '@mui/material';
 import { useSnackbar } from "notistack";
 import PaginationV1 from "../../shared/PaginationV1";

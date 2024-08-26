@@ -90,6 +90,11 @@ const AddProduct = () => {
         }
 
         if (name === 'attribute') {
+            setProductData(prevData => ({
+                ...prevData,
+                [name]: value,
+                attribute_value: []
+            }));
             dispatch(GetAttributeValues(value))
         }
     };
@@ -528,7 +533,8 @@ const AddProduct = () => {
                                         // required
 
                                         name="attribute_value"
-                                        value={productData.attribute_value}
+                                        // value={productData.attribute_value}
+                                        value={productData.attribute_value || []}
                                         onChange={handleChange}
                                         label="Attribute Value"
                                         multiple
