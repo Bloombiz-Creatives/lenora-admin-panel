@@ -602,7 +602,6 @@ const EditProduct = ({ id }) => {
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
     const AllAttributes = distinctAttributeNames?.distinctAttributeNames;
-    // const AllAttributesValues = AttributeValues?.AttributeValues();
     const AllAttributesValues = (AttributeValues?.AttributeValues?._id === productData.attribute)
         ? AttributeValues.AttributeValues.value || []
         : [];
@@ -710,6 +709,11 @@ const EditProduct = ({ id }) => {
                 if (proToEdit.category) {
                     dispatch(getSub(proToEdit.category));
                 }
+
+                
+               
+
+
             }
         }
     }, [products?.products, id, dispatch]);
@@ -717,9 +721,10 @@ const EditProduct = ({ id }) => {
 
     useEffect(() => {
         if (productData.attribute) {
-           dispatch(GetAttributeValues())
+           dispatch(GetAttributeValues(productData.attribute))
         }
     }, [productData.attribute,dispatch]);
+    
 
     console.log(productData, 'Product Data:');
     console.log(productData.attribute, 'Selected Attribute:');
@@ -728,34 +733,62 @@ const EditProduct = ({ id }) => {
 
 
 
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+
+    //     if (name === "attribute") {
+    //         setProductData(prevData => ({
+    //             ...prevData,
+    //             [name]: value,
+    //             attribute_value: []
+    //         }));
+    //         dispatch(GetAttributeValues(value));
+    //     } else if (name === "attribute_value") {
+    //         setProductData(prevData => ({
+    //             ...prevData,
+    //             [name]: Array.isArray(value) ? value : [value]
+    //         }));
+    //     } else if (name === "parent_category") {
+    //         setProductData(prevData => ({
+    //             ...prevData,
+    //             [name]: value
+    //         }));
+    //         dispatch(getSub(value.trim()));
+    //     } else {
+    //         setProductData(prevData => ({
+    //             ...prevData,
+    //             [name]: value
+    //         }));
+    //     }
+    // }
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        if (name === "attribute") {
+        setProductData({
+            ...productData,
+            [name]: Array.isArray(value) ? value : value,
+        });
+
+
+        if (name === 'parent_category') {
+            setProductData(prevData => ({
+                ...prevData,
+                sub_category: '', // Reset sub_category when parent_category changes
+            }));
+            dispatch(getSub(value.trim()));
+        }
+
+        if (name === 'attribute') {
             setProductData(prevData => ({
                 ...prevData,
                 [name]: value,
                 attribute_value: []
             }));
-            dispatch(GetAttributeValues(value));
-        } else if (name === "attribute_value") {
-            setProductData(prevData => ({
-                ...prevData,
-                [name]: Array.isArray(value) ? value : [value]
-            }));
-        } else if (name === "parent_category") {
-            setProductData(prevData => ({
-                ...prevData,
-                [name]: value
-            }));
-            dispatch(getSub(value.trim()));
-        } else {
-            setProductData(prevData => ({
-                ...prevData,
-                [name]: value
-            }));
+            dispatch(GetAttributeValues(value))
         }
-    }
+    };
+
 
 
     const handleFileImageChange = (event) => {
@@ -1001,6 +1034,7 @@ const EditProduct = ({ id }) => {
                                     labelId="attribute-value-label"
                                     id="attribute_value"
                                     name="attribute_value"
+                                    label="attribute_value"
                                     value={productData.attribute_value || []}
                                     onChange={handleChange}
                                     multiple

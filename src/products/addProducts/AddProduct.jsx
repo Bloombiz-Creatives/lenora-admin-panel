@@ -77,10 +77,6 @@ const AddProduct = () => {
             [name]: Array.isArray(value) ? value : value,
         });
 
-        // if (name === 'parent_category') {
-        //     const trimmedValue = value.trim();
-        //     dispatch(getSub(trimmedValue));
-        // }
 
         if (name === 'parent_category') {
             setProductData(prevData => ({
