@@ -1006,7 +1006,7 @@ const EditProduct = ({ id }) => {
                                     multiple
                                     renderValue={(selected) => selected.join(', ')}
                                 >
-                                    {AllAttributesValues  && AllAttributesValues .map((attributeValue) => (
+                                    {AllAttributesValues  && AllAttributesValues.map((attributeValue) => (
                                         <MenuItem key={attributeValue} value={attributeValue}>
                                             {attributeValue}
                                         </MenuItem>

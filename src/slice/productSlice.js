@@ -5,7 +5,7 @@ const productSlice = createSlice({
     initialState:{
         loading: true,
         error: null,
-
+        AttributeValues:[],
     },
     reducers:{
         getProductsSuccess(state, action ){
@@ -114,11 +114,11 @@ const productSlice = createSlice({
                 error:action.payload
             }
         },
-        getAttriValueSuccess(state, action){
+        getAttriValueSuccess(state, action){            
             return {
                 ...state,
                 loading:false,
-                AttributeValues:action.payload
+                AttributeValues:action.payload,
             }
         },
         getAttriValueFail(state, action){

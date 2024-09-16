@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box, Autocomplete } from '@mui/material';
+import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
 import { Switch } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -51,7 +51,7 @@ const AddProduct = () => {
         if (productData.attribute) {
             dispatch(GetAttributeValues(productData.attribute));
         }
-    }, [productData.attribute, dispatch]);
+    }, [dispatch, productData.attribute]);
 
 
     const toolbarOptions = [
@@ -185,8 +185,17 @@ const AddProduct = () => {
 
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
-    const AllAttributes = distinctAttributeNames?.distinctAttributeNames;
-    const AllAttributesValues = AttributeValues?.AttributeValues;
+    const AllAttributes = distinctAttributeNames?.distinctAttributeNames || [];
+    // const AllAttributesValues = AttributeValues?.AttributeValues || [];
+
+    const AllAttributesValues = (AttributeValues?.AttributeValues?._id === productData.attribute)
+        ? AttributeValues.AttributeValues.value || []
+        : [];
+
+
+
+    console.log('Processed AllAttributesValues:', AllAttributesValues);
+
 
 
 
@@ -300,11 +309,10 @@ const AddProduct = () => {
                             error={!!error.name}
                             helperText={error.name}
                             required
-
                         />
                     </Grid>
 
-                
+
                     <Grid item xs={12}>
                         <Box display="flex" justifyContent="center" gap="12px" sx={{
                             flexDirection: { xs: 'column', md: 'row' },
@@ -512,27 +520,34 @@ const AddProduct = () => {
                                     </Select>
                                 </FormControl>
 
-                                <FormControl fullWidth>
-                                    <InputLabel>Attribute Value</InputLabel>
-                                    <Select
-                                        name="attribute_value"
-                                        value={productData.attribute_value || []}
-                                        onChange={handleChange}
-                                        label="Attribute Value"
-                                        multiple
-                                        renderValue={(selected) => selected.join(', ')}
+                                {productData.attribute && (
+                                    <FormControl fullWidth>
+                                        <InputLabel>Attribute Value</InputLabel>
+                                        <Select
+                                            name="attribute_value"
+                                            value={productData.attribute_value || []}
+                                            onChange={handleChange}
+                                            label="Attribute Value"
+                                            multiple
+                                            renderValue={(selected) => selected.join(', ')}
 
-                                    >
-                                        <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                        {AllAttributesValues && AllAttributesValues.map((val) => (
-                                            <MenuItem key={val} value={val}>{val}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                        >
+                                            <MenuItem value="" disabled>Select Sub Category</MenuItem>
+                                            {AllAttributesValues && AllAttributesValues?.map((val) => (
+                                                <MenuItem key={val} value={val}>{val}</MenuItem>
+                                            ))}
+
+
+                                        </Select>
+                                    </FormControl>
+                                )}
+
                             </Box>
                         </Grid>
-
                     )}
+
+
+
 
                     <Grid item xs={12}>
                         <FormControl component="fieldset">
