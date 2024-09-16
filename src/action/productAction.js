@@ -27,12 +27,13 @@ export const deleteProduct = (id) => {
 }
 
 
-export const toggleTodaysDeal = (id, todaysDeal) =>  {
+export const toggleTodaysDeal = (id, todaysDeal, debouncedQuery, currentPage) =>  {
     return async (dispatch) => {
         try {
             const response = await globalPatchService(`/product/${id}/todays-deal`, { todaysDeal });
             dispatch(todaysDealSuccess(response.data))
-            dispatch(fetchProducts())
+            // dispatch(fetchProducts())
+            dispatch(fetchProducts({ name: debouncedQuery, page: currentPage }));
         } catch (error) {
             dispatch(todaysDealFail(error));
         }
@@ -40,12 +41,13 @@ export const toggleTodaysDeal = (id, todaysDeal) =>  {
 };
 
 
-export const toggleFeatured = (id, featured) =>  {
+export const toggleFeatured = (id, featured, debouncedQuery, currentPage) =>  {
     return async (dispatch) => {
         try {
             const response = await globalPatchService(`/product/${id}/featured`, { featured });
             dispatch(todaysDealSuccess(response.data))
-            dispatch(fetchProducts())
+            // dispatch(fetchProducts())
+            dispatch(fetchProducts({ name: debouncedQuery, page: currentPage }));
         } catch (error) {
             dispatch(todaysDealFail(error));
         }
@@ -118,6 +120,7 @@ export const GetAttributeValues = (id) => {
     return async (dispatch) => {
         try {
             const response = await globalGetService(`/attributes/${id}/values`);
+            console.log(response.data, 'Fetched Data');
             dispatch(getAttriValueSuccess(response.data))
         } catch (error) {
             dispatch(getAttriValueFail(error))

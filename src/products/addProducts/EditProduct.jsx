@@ -595,11 +595,20 @@ const EditProduct = ({ id }) => {
         products,
     } = useSelector((state) => state.productState);
 
+    console.log(AttributeValues, 'Redux Attribute Values');
+
+
     const parentCat = distinctParentCategories?.distinctParentCategories;
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
     const AllAttributes = distinctAttributeNames?.distinctAttributeNames;
-    const AllAttributesValues = AttributeValues?.AttributeValues;
+    // const AllAttributesValues = AttributeValues?.AttributeValues();
+    const AllAttributesValues = (AttributeValues?.AttributeValues?._id === productData.attribute)
+        ? AttributeValues.AttributeValues.value || []
+        : [];
+
+    console.log(AllAttributesValues, 'check check');
+
 
     const [previewImageOne, setPreviewImageOne] = useState(null);
     const [previewImageTwo, setPreviewImageTwo] = useState(null);
@@ -620,6 +629,55 @@ const EditProduct = ({ id }) => {
 
     const [description, setDescription] = useState('');
     const { enqueueSnackbar } = useSnackbar();
+
+
+    // useEffect(() => {
+    //     if (products?.products && id) {
+    //         const proToEdit = products.products.find((prod) => prod._id === id);
+    //         console.log(proToEdit, 'ppppp');
+
+    //         if (proToEdit) {
+    //             setDescription(proToEdit.description || '');
+    //             setProductData({
+    //                 name: proToEdit.name || "",
+    //                 price: proToEdit.price || "",
+    //                 brand: proToEdit.brand?._id || "",
+    //                 meta_title: proToEdit.meta_title || "",
+    //                 meta_desc: proToEdit.meta_desc || "",
+    //                 attribute: proToEdit.attribute || "",
+    //                 attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
+    //                 color: proToEdit.color || "",
+    //                 parent_category: proToEdit.category || "",
+    //                 sub_category: proToEdit.sub_category || "",
+    //             });
+
+    //             setPreviewImage(proToEdit.image || null);
+    //             setPreviewImageOne(proToEdit.gallery1 || null);
+    //             setPreviewImageTwo(proToEdit.gallery2 || null);
+    //             setPreviewImageThree(proToEdit.gallery3 || null);
+    //             setPreviewImageFour(proToEdit.gallery4 || null);
+    //             setPreviewImageFive(proToEdit.gallery5 || null);
+
+    //             if (proToEdit.category) {
+    //                 dispatch(getSub(proToEdit.category));
+    //             }
+    //         }
+    //     }
+    // }, [products?.products, id, dispatch]);
+
+    // useEffect(() => {
+    //     if (productData.attribute) {
+    //         dispatch(GetAttributeValues(productData.attribute))
+    //     }
+    // }, [productData.attribute, dispatch, AllAttributesValues]);
+
+
+    // console.log(productData, 'Product Data:');
+    // console.log(productData.attribute, 'Selected Attribute:');
+    // console.log(productData.attribute_value, 'Selected Attribute Values:');
+    // console.log(AllAttributesValues, 'Fetched Attribute Values:');
+
+    // const [filteredAttributeValues, setFilteredAttributeValues] = useState([]);
 
 
     useEffect(() => {
@@ -656,16 +714,18 @@ const EditProduct = ({ id }) => {
         }
     }, [products?.products, id, dispatch]);
 
+
     useEffect(() => {
         if (productData.attribute) {
-            dispatch(GetAttributeValues(productData.attribute))
+           dispatch(GetAttributeValues())
         }
-    }, [productData.attribute])
+    }, [productData.attribute,dispatch]);
 
-    console.log(productData, 'iuiuiui');
-    console.log(productData.attribute, 'atttttt');
-    console.log(productData.attribute_value, 'tytytytyt');
-  
+    console.log(productData, 'Product Data:');
+    console.log(productData.attribute, 'Selected Attribute:');
+    console.log(productData.attribute_value, 'Selected Attribute Values:');
+    console.log(AllAttributesValues, 'All Attributes Values after fetch');
+
 
 
     const handleChange = (e) => {
@@ -675,9 +735,9 @@ const EditProduct = ({ id }) => {
             setProductData(prevData => ({
                 ...prevData,
                 [name]: value,
-                attribute_value: [] // Reset attribute values when attribute changes
+                attribute_value: []
             }));
-            dispatch(GetAttributeValues(value)); // Fetch new attribute values based on selected attribute
+            dispatch(GetAttributeValues(value));
         } else if (name === "attribute_value") {
             setProductData(prevData => ({
                 ...prevData,
@@ -739,8 +799,6 @@ const EditProduct = ({ id }) => {
     const handleDescriptionChange = (value) => {
         setDescription(value);
     };
-
-
 
 
     const handleSubmit = () => {
@@ -870,7 +928,6 @@ const EditProduct = ({ id }) => {
                                 value={productData.price}
                                 onChange={handleChange}
                                 type="number"
-
                             />
 
                             <FormControl fullWidth >
@@ -923,7 +980,6 @@ const EditProduct = ({ id }) => {
                         </div>
 
                         <div className="flex mt-4 gap-4">
-
                             <FormControl fullWidth>
                                 <InputLabel>Attribute</InputLabel>
                                 <Select
@@ -950,16 +1006,14 @@ const EditProduct = ({ id }) => {
                                     multiple
                                     renderValue={(selected) => selected.join(', ')}
                                 >
-                                    {AllAttributesValues && AllAttributesValues.map((attributeValue) => (
+                                    {AllAttributesValues  && AllAttributesValues .map((attributeValue) => (
                                         <MenuItem key={attributeValue} value={attributeValue}>
                                             {attributeValue}
                                         </MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
-
                         </div>
-
 
                         <div className="mt-4">
                             <FormControl fullWidth >

@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box, Autocomplete } from '@mui/material';
 import { Switch } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -19,8 +19,6 @@ const AddProduct = () => {
         meta_title: '',
         meta_desc: '',
         attribute: '',
-        // attribute_value: '',
-        // color: '',
         attribute_value: [],
         color: [],
         parent_category: '',
@@ -74,19 +72,22 @@ const AddProduct = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        // setProductData({
-        //     ...productData,
-        //     [e.target.name]: e.target.value,
-        // });
-
         setProductData({
             ...productData,
             [name]: Array.isArray(value) ? value : value,
         });
 
+        // if (name === 'parent_category') {
+        //     const trimmedValue = value.trim();
+        //     dispatch(getSub(trimmedValue));
+        // }
+
         if (name === 'parent_category') {
-            const trimmedValue = value.trim();
-            dispatch(getSub(trimmedValue));
+            setProductData(prevData => ({
+                ...prevData,
+                sub_category: '', // Reset sub_category when parent_category changes
+            }));
+            dispatch(getSub(value.trim()));
         }
 
         if (name === 'attribute') {
@@ -262,18 +263,11 @@ const AddProduct = () => {
                     formData.append('attribute', productData.attribute);
                 }
 
-                // if (productData.attribute_value) {
-                //     formData.append('attribute_value', productData.attribute_value);
-                // }
-
-                // if (productData.color) {
-                //     formData.append('color', productData.color);
-                // }
 
                 productData.attribute_value.forEach((value) => {
                     formData.append('attribute_value', value);
                 });
-                
+
                 productData.color.forEach((color) => {
                     formData.append('color', color);
                 });
@@ -287,7 +281,6 @@ const AddProduct = () => {
             }
         }
     };
-
 
 
     return (
@@ -311,22 +304,21 @@ const AddProduct = () => {
                         />
                     </Grid>
 
+                
                     <Grid item xs={12}>
                         <Box display="flex" justifyContent="center" gap="12px" sx={{
                             flexDirection: { xs: 'column', md: 'row' },
                         }}>
-                            <Grid item xs={12} md={6}  >
+                            <Grid item xs={12} md={productData.parent_category ? 6 : 12}>
                                 <FormControl fullWidth>
                                     <InputLabel>Parent Category</InputLabel>
                                     <Select
                                         name="parent_category"
                                         value={productData.parent_category}
                                         onChange={handleChange}
-                                        label="parent_category"
+                                        label="Parent Category"
                                         error={!!error.parent_category}
-                                        helperText={error.parent_category}
                                         required
-
                                     >
                                         <MenuItem value="" disabled>Select Parent Category</MenuItem>
                                         {parentCat && parentCat.map((category) => (
@@ -336,28 +328,29 @@ const AddProduct = () => {
                                 </FormControl>
                             </Grid>
 
-                            <Grid item xs={12} md={6}  >
-                                <FormControl fullWidth>
-                                    <InputLabel>Sub Category</InputLabel>
-                                    <Select
-                                        name="sub_category"
-                                        value={productData.sub_category}
-                                        onChange={handleChange}
-                                        label="sub_category"
-                                        error={!!error.sub_category}
-                                        helperText={error.sub_category}
-                                        required
-
-                                    >
-                                        <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                        {categories && categories.map((cat) => (
-                                            <MenuItem key={cat.name} value={cat.name}>{cat.name}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
+                            {productData.parent_category && (
+                                <Grid item xs={12} md={6}>
+                                    <FormControl fullWidth>
+                                        <InputLabel>Sub Category</InputLabel>
+                                        <Select
+                                            name="sub_category"
+                                            value={productData.sub_category}
+                                            onChange={handleChange}
+                                            label="Sub Category"
+                                            error={!!error.sub_category}
+                                            required
+                                        >
+                                            <MenuItem value="" disabled>Select Sub Category</MenuItem>
+                                            {categories && categories.map((cat) => (
+                                                <MenuItem key={cat.name} value={cat.name}>{cat.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                    </FormControl>
+                                </Grid>
+                            )}
                         </Box>
                     </Grid>
+
 
                     <Grid item xs={12}>
                         <Box display="flex" justifyContent="center" gap="12px" sx={{
@@ -481,7 +474,6 @@ const AddProduct = () => {
                             onChange={handleChange}
                             rows={4}
                             multiline
-
                         />
                     </Grid>
 
@@ -512,7 +504,6 @@ const AddProduct = () => {
                                         error={!!error.attribute}
                                         helperText={error.attribute}
                                         required
-
                                     >
                                         <MenuItem value="" disabled>Select Attribute</MenuItem>
                                         {AllAttributes && AllAttributes.map((att) => (
@@ -524,16 +515,7 @@ const AddProduct = () => {
                                 <FormControl fullWidth>
                                     <InputLabel>Attribute Value</InputLabel>
                                     <Select
-                                        // name="attribute_value"
-                                        // value={productData.attribute_value}
-                                        // onChange={handleChange}
-                                        // label="attribute_value"
-                                        // error={!!error.attribute_value}
-                                        // helperText={error.attribute_value}
-                                        // required
-
                                         name="attribute_value"
-                                        // value={productData.attribute_value}
                                         value={productData.attribute_value || []}
                                         onChange={handleChange}
                                         label="Attribute Value"
@@ -568,13 +550,6 @@ const AddProduct = () => {
                             <FormControl fullWidth >
                                 <InputLabel>Color</InputLabel>
                                 <Select
-                                    // label="Color"
-                                    // name="color"
-                                    // value={productData.color}
-                                    // onChange={handleChange}
-                                    // error={!!error.color}
-                                    // helperText={error.color}
-
                                     label="Color"
                                     name="color"
                                     value={productData.color}
