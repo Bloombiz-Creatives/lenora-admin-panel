@@ -149,10 +149,10 @@ import AddEditCategory from './AddEditCategory';
                                                 src={row?.image}
                                                 alt={`Logo ${index + 1}`}
                                                 style={{
-                                                    width: '50px',
+                                                    width: '55px',
                                                     display: 'block',
                                                     margin: '0 auto',
-                                                    height: '50px',
+                                                    height: '55px',
                                                     borderRadius: '27px',
                                                     objectFit:'cover'
                                                 }}
@@ -163,12 +163,13 @@ import AddEditCategory from './AddEditCategory';
                                                 src={row?.icon}
                                                 alt={`Logo ${index + 1}`}
                                                 style={{
-                                                    width: '40px',
+                                                    width: '45px',
                                                     display: 'block',
                                                     margin: '0 auto',
-                                                    height: '40px',
-                                                    borderRadius: '27px',
-                                                    objectFit:'contain'
+                                                    height: '45px',
+                                                    borderRadius: '10px',
+                                                    objectFit:'cover',
+                                                    padding:'2px'
                                                 }}
                                             />
                                         </TableCell>

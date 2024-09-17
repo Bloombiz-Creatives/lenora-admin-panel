@@ -630,55 +630,6 @@ const EditProduct = ({ id }) => {
     const { enqueueSnackbar } = useSnackbar();
 
 
-    // useEffect(() => {
-    //     if (products?.products && id) {
-    //         const proToEdit = products.products.find((prod) => prod._id === id);
-    //         console.log(proToEdit, 'ppppp');
-
-    //         if (proToEdit) {
-    //             setDescription(proToEdit.description || '');
-    //             setProductData({
-    //                 name: proToEdit.name || "",
-    //                 price: proToEdit.price || "",
-    //                 brand: proToEdit.brand?._id || "",
-    //                 meta_title: proToEdit.meta_title || "",
-    //                 meta_desc: proToEdit.meta_desc || "",
-    //                 attribute: proToEdit.attribute || "",
-    //                 attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
-    //                 color: proToEdit.color || "",
-    //                 parent_category: proToEdit.category || "",
-    //                 sub_category: proToEdit.sub_category || "",
-    //             });
-
-    //             setPreviewImage(proToEdit.image || null);
-    //             setPreviewImageOne(proToEdit.gallery1 || null);
-    //             setPreviewImageTwo(proToEdit.gallery2 || null);
-    //             setPreviewImageThree(proToEdit.gallery3 || null);
-    //             setPreviewImageFour(proToEdit.gallery4 || null);
-    //             setPreviewImageFive(proToEdit.gallery5 || null);
-
-    //             if (proToEdit.category) {
-    //                 dispatch(getSub(proToEdit.category));
-    //             }
-    //         }
-    //     }
-    // }, [products?.products, id, dispatch]);
-
-    // useEffect(() => {
-    //     if (productData.attribute) {
-    //         dispatch(GetAttributeValues(productData.attribute))
-    //     }
-    // }, [productData.attribute, dispatch, AllAttributesValues]);
-
-
-    // console.log(productData, 'Product Data:');
-    // console.log(productData.attribute, 'Selected Attribute:');
-    // console.log(productData.attribute_value, 'Selected Attribute Values:');
-    // console.log(AllAttributesValues, 'Fetched Attribute Values:');
-
-    // const [filteredAttributeValues, setFilteredAttributeValues] = useState([]);
-
-
     useEffect(() => {
         if (products?.products && id) {
             const proToEdit = products.products.find((prod) => prod._id === id);
@@ -709,10 +660,6 @@ const EditProduct = ({ id }) => {
                 if (proToEdit.category) {
                     dispatch(getSub(proToEdit.category));
                 }
-
-                
-               
-
 
             }
         }
