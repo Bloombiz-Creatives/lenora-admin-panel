@@ -426,7 +426,7 @@ const AddEditCategory = ({ mode, id }) => {
 
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>
-                                <p>Image</p>
+                                <p>Image (212×101)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange}
                                     image={previewImage}
@@ -436,7 +436,7 @@ const AddEditCategory = ({ mode, id }) => {
                             </div>
 
                             <div className='block w-full'>
-                                <p>Icon</p>
+                                <p>Icon (25×25)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange1}
                                     image={previewIcon}
