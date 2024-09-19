@@ -61,7 +61,7 @@ const AllProducts = () => {
 
 
     const currentPage = productPagination?.currentPage || 1;
-    const rowsPerPage = productPagination?.rowsPerPage || 10;
+    const rowsPerPage = productPagination?.rowsPerPage || 20;
 
 
     const [checkedStates, setCheckedStates] = useState({});
@@ -203,7 +203,7 @@ const AllProducts = () => {
                             <PaginationV1
                                 pagination={productPagination}
                                 onPageChange={handlePageChange}
-                                rowsPerPage={10}
+                                rowsPerPage={20}
                             />
                         </TableContainer>
                     </Box>
