@@ -60,6 +60,7 @@ export const addProducts = (formData) => {
         try {
             const response = await globalPostService('/product', formData);
             dispatch(prodAddSuccess(response.data))
+            dispatch(fetchProducts());
         } catch (error) {
             dispatch(prodAddFail(error))
         }
