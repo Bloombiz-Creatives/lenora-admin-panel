@@ -14,6 +14,8 @@ import { Accordion, AccordionDetails, AccordionSummary, Paper } from '@mui/mater
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import logo from '/lenora2-01.png';
 import cat1 from '../assets/cat1.svg';
+import brand1 from '../assets/brand1.svg';
+import prod from '../assets/prod.svg';
 
 const drawerWidth = 250;
 
@@ -87,16 +89,12 @@ export default function Sidebar() {
     const menuItems = [
         {
             text: 'Website', route: '/dashboard', icon1: cat1, icon2: cat1,
-            subItems: [
-                { text: 'Home ', route: '/dashboard' },
-                { text: ' Shope  ', route: '/dashboard/shope' },
-            ],
         },
-        { text: 'Brands', route: '/dashboard/brands', icon1: cat1, icon2: cat1 },
+        { text: 'Brands', route: '/dashboard/brands', icon1: brand1, icon2: brand1 },
         { text: 'Categories', route: '/dashboard/categories', icon1: cat1, icon2: cat1 }, 
         { text: 'Attributes', route: '/dashboard/attributes', icon1: cat1, icon2: cat1 },
         { text: 'Colors', route: '/dashboard/colors', icon1: cat1, icon2: cat1 },   
-        { text: 'Products', route: '/dashboard/products', icon1: cat1, icon2: cat1 ,
+        { text: 'Products', route: '/dashboard/products', icon1: prod, icon2: prod ,
             subItems: [
                 { text: 'All Products ', route: '/dashboard/products' },
                 { text: ' Add Products ', route: '/dashboard/products/add' },
