@@ -16,6 +16,9 @@ import logo from '/lenora2-01.png';
 import cat1 from '../assets/cat1.svg';
 import brand1 from '../assets/brand1.svg';
 import prod from '../assets/prod.svg';
+import attri1 from '../assets/attri1.svg';
+import col1 from '../assets/col1.svg';
+import web1 from '../assets/web1.svg';
 
 const drawerWidth = 250;
 
@@ -88,12 +91,12 @@ export default function Sidebar() {
 
     const menuItems = [
         {
-            text: 'Website', route: '/dashboard', icon1: cat1, icon2: cat1,
+            text: 'Website', route: '/dashboard', icon1: web1, icon2: web1,
         },
         { text: 'Brands', route: '/dashboard/brands', icon1: brand1, icon2: brand1 },
         { text: 'Categories', route: '/dashboard/categories', icon1: cat1, icon2: cat1 }, 
-        { text: 'Attributes', route: '/dashboard/attributes', icon1: cat1, icon2: cat1 },
-        { text: 'Colors', route: '/dashboard/colors', icon1: cat1, icon2: cat1 },   
+        { text: 'Attributes', route: '/dashboard/attributes', icon1: attri1, icon2: attri1 },
+        { text: 'Colors', route: '/dashboard/colors', icon1: col1, icon2: col1 },   
         { text: 'Products', route: '/dashboard/products', icon1: prod, icon2: prod ,
             subItems: [
                 { text: 'All Products ', route: '/dashboard/products' },
