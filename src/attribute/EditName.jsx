@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import CloseIcon from '@mui/icons-material/Close';
 import { useSnackbar } from 'notistack';
 import { editAttribute } from '../action/attributeAction';
+import PropTypes from 'prop-types';
+
 
 const EditName = ({ id }) => {
     const [open, setOpen] = useState(false);
@@ -93,5 +95,9 @@ const EditName = ({ id }) => {
         </div>
     );
 }
+
+EditName.propTypes = {
+    id: PropTypes.string,
+  };
 
 export default EditName;

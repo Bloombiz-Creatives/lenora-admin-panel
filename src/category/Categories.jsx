@@ -27,7 +27,7 @@ import AddEditCategory from './AddEditCategory';
     const [selectedId, setSelectedId] = useState(null);
     const [query, setQuery] = useState('');
     const [debouncedQuery, setDebouncedQuery] = useState(query);
-    const [editMode, setEditMode] = useState(false);
+    // const [editMode, setEditMode] = useState(false);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -64,7 +64,7 @@ import AddEditCategory from './AddEditCategory';
     };
 
     const handleEdit = (id) => {
-        setEditMode(true);
+        // setEditMode(true);
         handleClose();
         handleClick(null, id);
     };

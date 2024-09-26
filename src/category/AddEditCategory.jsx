@@ -247,6 +247,8 @@ import { addCategory, updateCategory } from '../action/categoryAction';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
 import DropzoneImage from '../shared/DropzoneImage';
+import PropTypes from 'prop-types';
+
 
 const AddEditCategory = ({ mode, id }) => {
     const [open, setOpen] = useState(false);
@@ -362,7 +364,7 @@ const AddEditCategory = ({ mode, id }) => {
                     }
                 }
                 handleClose();
-            } catch (error) {
+            } catch {
                 enqueueSnackbar("Failed to process category.", { variant: "error" });
             }
         }
@@ -467,5 +469,11 @@ const AddEditCategory = ({ mode, id }) => {
         </div>
     );
 };
+
+AddEditCategory.propTypes = {
+    mode: PropTypes.string.isRequired,
+    id: PropTypes.string,
+
+  };
 
 export default AddEditCategory;

@@ -62,7 +62,7 @@ const AddBrands = ({ mode }) => {
         await dispatch(addBrands(formData));
         enqueueSnackbar("Brand Added Successfully", { variant: "success" });
         handleClose();
-      } catch (error) {
+      } catch  {
         enqueueSnackbar("Failed to process brand.", { variant: "error" });
       }
     }

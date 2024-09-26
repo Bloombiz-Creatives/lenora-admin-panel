@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { updateAttributeValue } from '../action/attributeAction';
+import PropTypes from 'prop-types';
 
 const EditValue = ({ id, index, value }) => {
     const [open, setOpen] = useState(false);
@@ -71,5 +72,11 @@ const EditValue = ({ id, index, value }) => {
         </div>
     );
 }
+
+EditValue.propTypes = {
+    id: PropTypes.string,
+    index: PropTypes.string,
+    value: PropTypes.string,
+  };
 
 export default EditValue;
