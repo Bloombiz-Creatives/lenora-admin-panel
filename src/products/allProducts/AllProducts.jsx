@@ -230,12 +230,13 @@ const AllProducts = () => {
                       </TableCell>
                       <TableCell align="center">
                         <div className="flex justify-center items-center gap-6">
-                          <IconButton size="small" color="success">
+                          <IconButton
+                            size="small"
+                            color="success"
+                            onClick={() => handleOpen(row?._id)}
+                          >
                             {/* <Edit fontSize="small" /> */}
-                            <Edit
-                              fontSize="small"
-                              onClick={() => handleOpen(row?._id)}
-                            />
+                            <Edit fontSize="small" />
 
                             {/* <EditProduct id={row?._id} mode ='edit'/> */}
                           </IconButton>

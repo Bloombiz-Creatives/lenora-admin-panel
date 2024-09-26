@@ -104,7 +104,7 @@ const EditProduct = ({ id,open,handleClose }) => {
 
     useEffect(() => {
         if (products?.products && id) {
-            const proToEdit = products?.products.find((prod) => prod._id === id);
+            const proToEdit = products?.products?.find((prod) => prod._id === id);
             console.log(proToEdit, 'ppppp');
 
             if (proToEdit) {
@@ -285,16 +285,16 @@ const EditProduct = ({ id,open,handleClose }) => {
         }
 
 
-        if (productData.attribute) {
-            formData.append('attribute', productData.attribute);
+        if (productData?.attribute) {
+            formData.append('attribute', productData?.attribute);
         }
 
 
-        productData.attribute_value.forEach((value) => {
+        productData?.attribute_value?.forEach((value) => {
             formData.append('attribute_value', value);
         });
 
-        productData.color.forEach((color) => {
+        productData?.color.forEach((color) => {
             formData.append('color', color);
         });
 
@@ -473,12 +473,12 @@ const EditProduct = ({ id,open,handleClose }) => {
                                 <Select
                                     label="Color"
                                     name="color"
-                                    value={productData.color}
+                                    value={productData?.color}
                                     onChange={handleChange}
                                     multiple
-                                    renderValue={(selected) => selected.map(id => {
-                                        const selectedColor = color.color.find(co => co._id === id);
-                                        return selectedColor ? selectedColor.name : '';
+                                    renderValue={(selected) => selected?.map(id => {
+                                        const selectedColor = color?.color?.find(co => co._id === id);
+                                        return selectedColor ? selectedColor?.name : '';
                                     }).join(', ')}
                                 >
                                     {color && color?.color?.map((co) => (
