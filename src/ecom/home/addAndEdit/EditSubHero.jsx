@@ -6,6 +6,8 @@ import DropzoneImage from "../../../shared/DropzoneImage";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import { useSnackbar } from "notistack";
+import PropTypes from 'prop-types';
+
 
 
 const EditSubHero = ({mode, id}) => {
@@ -161,5 +163,11 @@ const EditSubHero = ({mode, id}) => {
         </div>
     )
 }
+
+
+EditSubHero.propTypes = {
+    id: PropTypes.string.isRequired,
+    mode: PropTypes.string.isRequired,
+};
 
 export default EditSubHero

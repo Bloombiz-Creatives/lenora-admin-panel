@@ -1,6 +1,6 @@
 import { globalPostService } from "../../utils/globalApiServices";
 
-export const adminLogin = async(credentials, next)=>{
+export const adminLogin = async(credentials)=>{
     console.log(credentials,'here in api');
 try {
   const response=await  globalPostService('login',credentials);

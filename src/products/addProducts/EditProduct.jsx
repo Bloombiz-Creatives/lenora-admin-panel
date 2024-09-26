@@ -554,6 +554,8 @@ import {
 import { fetchBrand } from "../../action/brandAction";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import PropTypes from 'prop-types';
+
 
 const EditProduct = ({ id }) => {
 
@@ -594,8 +596,6 @@ const EditProduct = ({ id }) => {
         AttributeValues = [],
         products,
     } = useSelector((state) => state.productState);
-
-    console.log(AttributeValues, 'Redux Attribute Values');
 
 
     const parentCat = distinctParentCategories?.distinctParentCategories;
@@ -1072,6 +1072,10 @@ const EditProduct = ({ id }) => {
             </Dialog>
         </div>
     );
+};
+
+EditProduct.propTypes = {
+    id: PropTypes.string.isRequired,
 };
 
 export default EditProduct;

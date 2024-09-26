@@ -37,7 +37,7 @@ const ResetPassword = () => {
             } else {
                 enqueueSnackbar('Failed to reset password. Please try again.', { variant: 'error' });
             }
-        } catch (error) {
+        } catch {
             enqueueSnackbar('An error occurred. Please try again later.', { variant: 'error' });
         }
     };

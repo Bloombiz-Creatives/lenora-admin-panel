@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { editColor } from "../action/colorAction";
+import PropTypes from 'prop-types';
+
 
 
 const EditColor = ({ id }) => {
@@ -111,5 +113,9 @@ const EditColor = ({ id }) => {
         </div>
     )
 }
+
+EditColor.propTypes = {
+    id: PropTypes.string.isRequired
+};
 
 export default EditColor

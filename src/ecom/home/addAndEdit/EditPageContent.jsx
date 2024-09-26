@@ -5,6 +5,8 @@ import { useDispatch } from "react-redux";
 import { editHomePageContent } from "../../../action/websiteAction";
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, TextField } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
+
 
 
 const EditPageContent = ({ data}) => {
@@ -50,7 +52,7 @@ const EditPageContent = ({ data}) => {
             await dispatch(editHomePageContent(data._id, form));
             enqueueSnackbar("Pagecontent edited Successfully", { variant: "success" });
             handleClose();
-        } catch (error) {
+        } catch  {
             enqueueSnackbar("Failed to edit pagecontent.", { variant: "error" });
         }
     };
@@ -117,5 +119,14 @@ const EditPageContent = ({ data}) => {
         </div>
     )
 }
+
+
+EditPageContent.propTypes = {
+    data: PropTypes.shape({
+      _id: PropTypes.string.isRequired,
+      heading: PropTypes.string,
+      text: PropTypes.string,
+    }).isRequired,
+  };
 
 export default EditPageContent

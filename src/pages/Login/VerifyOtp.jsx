@@ -31,7 +31,7 @@ const VerifyOtp = () => {
             } else {
                 enqueueSnackbar('Invalid or expired OTP. Please try again.', { variant: 'error' });
             }
-        } catch (error) {
+        } catch {
             enqueueSnackbar('An error occurred. Please try again later.', { variant: 'error' });
         }
     };

@@ -1,3 +1,5 @@
+import PropTypes from 'prop-types';
+
 function InputField(props) {
     const { label, id, extra, type, placeholder, variant, state, disabled ,onChange ,value} =
       props;
@@ -37,5 +39,28 @@ function InputField(props) {
     );
   }
   
+
+
+InputField.propTypes = {
+  label: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  extra: PropTypes.string,
+  type: PropTypes.string.isRequired,
+  placeholder: PropTypes.string,
+  variant: PropTypes.oneOf(['auth', 'other']),  // assuming 'auth' and 'other' are possible variants
+  state: PropTypes.oneOf(['error', 'success', '']),  // assuming 'error', 'success', or no state
+  disabled: PropTypes.bool,
+  onChange: PropTypes.func.isRequired,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
+};
+
+InputField.defaultProps = {
+  extra: '',
+  placeholder: '',
+  variant: 'other',
+  state: '',
+  disabled: false
+};
+
   export default InputField;
   

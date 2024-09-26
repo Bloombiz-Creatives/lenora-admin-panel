@@ -6,6 +6,7 @@ import { editPromo } from '../../../action/websiteAction';
 import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton } from '@mui/material';
 import DropzoneImage from '../../../shared/DropzoneImage';
 import CloseIcon from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
 
 
 const EditPromo = ({mode, id}) => {
@@ -137,5 +138,10 @@ const EditPromo = ({mode, id}) => {
         </div>
     )
 }
+
+EditPromo.propTypes = {
+    id: PropTypes.string.isRequired,
+    mode: PropTypes.string.isRequired,
+};
 
 export default EditPromo

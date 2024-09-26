@@ -6,6 +6,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useDispatch } from 'react-redux';
 import { addBrands } from '../action/brandAction';
 import { useSnackbar } from 'notistack';
+import PropTypes from 'prop-types';
+
 
 const AddBrands = ({ mode }) => {
   const [open, setOpen] = useState(false);
@@ -120,6 +122,10 @@ const AddBrands = ({ mode }) => {
       </Dialog>
     </div>
   );
+};
+
+AddBrands.propTypes = {
+  mode: PropTypes.string.isRequired,
 };
 
 export default AddBrands;
