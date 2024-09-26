@@ -60,10 +60,6 @@ function App() {
                     <Route path="colors" element={<Color />} />
                     <Route path="products" element={<Products/>} />
                     <Route path="products/add" element={<AddProduct/>} />
-
-
-
-
                   </Routes>
                 </Box>
                 {/* <Footer /> */}

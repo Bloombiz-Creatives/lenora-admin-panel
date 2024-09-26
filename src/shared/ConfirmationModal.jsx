@@ -1,5 +1,7 @@
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import PropTypes from 'prop-types';
+
 
 const ConfirmationModal = ({ delOpen, delHandleClose, onDelete }) => {
     return (
@@ -26,5 +28,11 @@ const ConfirmationModal = ({ delOpen, delHandleClose, onDelete }) => {
         </Dialog>
     )
 }
+
+ConfirmationModal.propTypes = {
+    delOpen: PropTypes.string.isRequired,
+    delHandleClose: PropTypes.string.isRequired,
+    onDelete: PropTypes.string.isRequired,
+};
 
 export default ConfirmationModal;

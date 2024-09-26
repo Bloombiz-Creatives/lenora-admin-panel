@@ -1,6 +1,6 @@
 // import { useEffect } from 'react';
-import { Modal, List, ListItem, Typography, Divider } from '@mui/material';
-import { Button } from '@mui/material';
+import { Modal, Typography, Divider } from '@mui/material';
+import PropTypes from 'prop-types';
 
 // import { clearNotifications, fetchNotify, readNotify } from '../action/notifyController';
 // import { useDispatch, useSelector } from 'react-redux';
@@ -103,6 +103,11 @@ const NotificationModal = ({ open, onClose }) => {
             </div>
         </Modal>
     );
+};
+
+NotificationModal.propTypes = {
+    open: PropTypes.string.isRequired,
+    onClose: PropTypes.string.isRequired,
 };
 
 export default NotificationModal;

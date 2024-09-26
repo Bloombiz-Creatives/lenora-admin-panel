@@ -6,6 +6,7 @@ import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider
 import CloseIcon from '@mui/icons-material/Close';
 import DropzoneImage from "../../../shared/DropzoneImage";
 import { editHomeHero } from "../../../action/websiteAction";
+import PropTypes from 'prop-types';
 
 
 const EditHero = ({ mode, id }) => {
@@ -163,5 +164,10 @@ const EditHero = ({ mode, id }) => {
         </div>
     )
 }
+
+EditHero.propTypes = {
+    mode: PropTypes.string.isRequired,
+    id: PropTypes.string.isRequired,
+};
 
 export default EditHero
