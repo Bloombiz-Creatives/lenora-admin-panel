@@ -7,7 +7,7 @@ const attributeSlice = createSlice({
         error: null,
     },
     reducers: {
-        attributeFetchRequest(state, action) {
+        attributeFetchRequest(state) {
             return {
                 ...state,
                 loading: true,

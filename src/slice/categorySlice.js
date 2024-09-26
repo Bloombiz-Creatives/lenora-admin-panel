@@ -7,7 +7,7 @@ const categorySlice = createSlice({
         error: null,
     },
     reducers: {
-        catAddRequest(state, action) {
+        catAddRequest(state) {
             return {
                 ...state,
                 loading: true,
@@ -28,7 +28,7 @@ const categorySlice = createSlice({
                 error: action.payload
             }
         },
-        catEditRequets(state, action){
+        catEditRequets(state){
             return{
                 ...state,
                 loading:true,
@@ -49,7 +49,7 @@ const categorySlice = createSlice({
                 error:action.payload
             }
         },
-        catGetAllRequest(state,action){
+        catGetAllRequest(state){
             return {
                 ...state,
                 loading:true,

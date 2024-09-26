@@ -9,7 +9,7 @@ const userSlice = createSlice({
         user: null,
     },
     reducers:{
-        logoutSuccess(state, action) {
+        logoutSuccess(state) {
             return {
                 ...state,
                 loading: false,
@@ -22,7 +22,7 @@ const userSlice = createSlice({
                 error: action.payload
             }
         },
-        forgetPassRequest(state, action) {
+        forgetPassRequest(state) {
             return {
                 ...state,
                 loading: true

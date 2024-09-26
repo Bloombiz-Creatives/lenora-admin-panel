@@ -7,7 +7,7 @@ const brandSlice = createSlice({
         error:null,
     },
     reducers:{
-        brandAddRequest(state, action) {
+        brandAddRequest(state) {
             return {
                 ...state,
                 loading: true,
@@ -28,7 +28,7 @@ const brandSlice = createSlice({
                 error: action.payload
             }
         },
-        brandGetAllRequest(state,action){
+        brandGetAllRequest(state){
             return {
                 ...state,
                 loading:true,

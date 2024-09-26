@@ -1,6 +1,6 @@
-import { Badge, IconButton } from "@mui/material";
-import NotificationModal from './NotificationModal';
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
+// import { Badge, IconButton } from "@mui/material";
+// import NotificationModal from './NotificationModal';
+// import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone';
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { logoutAdmin } from "../action/userAction";
@@ -11,16 +11,16 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 const Navbar = () => {
 
-    const [modalOpen, setModalOpen] = useState(false);
+    // const [modalOpen, setModalOpen] = useState(false);
     const dispatch = useDispatch();
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
     const [hover, setHover] = useState(false);
 
 
-    const handleOpenModal = () => {
-        setModalOpen(true);
-    };
+    // const handleOpenModal = () => {
+    //     setModalOpen(true);
+    // };
 
 
 
@@ -40,16 +40,16 @@ const Navbar = () => {
         }
     };
 
-    const unreadCount = 0;
+    // const unreadCount = 0;
 
-    const handleCloseModal = () => setModalOpen(false);
+    // const handleCloseModal = () => setModalOpen(false);
 
 
 
     return (
         <nav className="flex px-8 py-2 bg-white shadow-md w-full  justify-end">
             <div className="flex gap-10 ">
-                <IconButton
+                {/* <IconButton
                     className='rounded-lg  p-1'
                     onClick={handleOpenModal}
                     color="inherit"
@@ -57,8 +57,8 @@ const Navbar = () => {
                     <Badge badgeContent={unreadCount} color="error">
                         <NotificationsNoneIcon className="text-[#525b39] cursor-pointer" />
                     </Badge>
-                </IconButton>
-                <NotificationModal open={modalOpen} onClose={handleCloseModal} />
+                </IconButton> */}
+                {/* <NotificationModal open={modalOpen} onClose={handleCloseModal} /> */}
 
                 <button
                     style={{

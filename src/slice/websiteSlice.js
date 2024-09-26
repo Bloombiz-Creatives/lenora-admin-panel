@@ -7,7 +7,7 @@ const websiteSlice = createSlice({
         error: null,
     },
     reducers: {
-        homeHeroGetRequest(state, action) {
+        homeHeroGetRequest(state) {
             return {
                 ...state,
                 loading: true
@@ -27,7 +27,7 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
-        homeHeroEditRequest(state, action) {
+        homeHeroEditRequest(state) {
             return {
                 ...state,
                 loading: true
@@ -48,7 +48,7 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
-        subGetRequest(state, action) {
+        subGetRequest(state) {
             return {
                 ...state,
                 loading: true
@@ -68,7 +68,7 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
-        subEditRequest(state, action) {
+        subEditRequest(state) {
             return {
                 ...state,
                 loading: true
@@ -89,7 +89,7 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
-        promoGetRequest(state, action) {
+        promoGetRequest(state) {
             return {
                 ...state,
                 loading: true
@@ -109,7 +109,7 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
-        promoEditRequest(state, action) {
+        promoEditRequest(state) {
             return {
                 ...state,
                 loading: true
@@ -130,7 +130,7 @@ const websiteSlice = createSlice({
                 error: action.payload
             }
         },
-        pgcntntGetRequets(state, action){
+        pgcntntGetRequets(state){
             return{
                 ...state,
                 loading:true,
@@ -151,7 +151,7 @@ const websiteSlice = createSlice({
                 error:action.payload
             }
         },
-        pgcntntEditRequets(state, action){
+        pgcntntEditRequets(state){
             return{
                 ...state,
                 loading:true,
