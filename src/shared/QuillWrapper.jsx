@@ -10,16 +10,14 @@
 
 
 
+import  { forwardRef } from 'react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
+const QuillWrapper = forwardRef((props, ref) => {
+  return <ReactQuill ref={ref} {...props} />;
+});
 
-// import  { forwardRef } from 'react';
-// import ReactQuill from 'react-quill';
-// import 'react-quill/dist/quill.snow.css';
+QuillWrapper.displayName = 'QuillWrapper';
 
-// const QuillWrapper = forwardRef((props, ref) => {
-//   return <ReactQuill ref={ref} {...props} />;
-// });
-
-// QuillWrapper.displayName = 'QuillWrapper';
-
-// export default QuillWrapper;
+export default QuillWrapper;
