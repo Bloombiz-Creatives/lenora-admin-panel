@@ -33,14 +33,10 @@ import 'react-quill/dist/quill.snow.css';
 import PropTypes from 'prop-types';
 
 
-const EditProduct = ({ id }) => {
+const EditProduct = ({ id,open,handleClose }) => {
 
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
 
-    const handleClose = () => {
-        setOpen(false);
-    };
+    
     const dispatch = useDispatch();
 
     const [productData, setProductData] = useState({
@@ -108,7 +104,7 @@ const EditProduct = ({ id }) => {
 
     useEffect(() => {
         if (products?.products && id) {
-            const proToEdit = products.products.find((prod) => prod._id === id);
+            const proToEdit = products?.products.find((prod) => prod._id === id);
             console.log(proToEdit, 'ppppp');
 
             if (proToEdit) {
@@ -310,7 +306,6 @@ const EditProduct = ({ id }) => {
 
     return (
         <div>
-            <Edit fontSize="small" onClick={handleOpen} />
             <Dialog open={open} maxWidth="lg" fullWidth sx={{ borderRadius: "15px" }}>
                 <DialogTitle className="text-[24px] font-medium">
                     Edit Product
