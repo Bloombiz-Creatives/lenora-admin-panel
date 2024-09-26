@@ -140,7 +140,7 @@ const EditPromo = ({mode, id}) => {
 }
 
 EditPromo.propTypes = {
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string,
     mode: PropTypes.string.isRequired,
 };
 

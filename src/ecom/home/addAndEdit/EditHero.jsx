@@ -167,7 +167,7 @@ const EditHero = ({ mode, id }) => {
 
 EditHero.propTypes = {
     mode: PropTypes.string.isRequired,
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string,
 };
 
 export default EditHero

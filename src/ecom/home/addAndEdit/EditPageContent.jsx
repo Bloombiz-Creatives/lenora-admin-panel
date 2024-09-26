@@ -126,7 +126,7 @@ EditPageContent.propTypes = {
       _id: PropTypes.string.isRequired,
       heading: PropTypes.string,
       text: PropTypes.string,
-    }).isRequired,
+    }),
   };
 
 export default EditPageContent

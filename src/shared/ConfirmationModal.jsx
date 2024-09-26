@@ -30,9 +30,9 @@ const ConfirmationModal = ({ delOpen, delHandleClose, onDelete }) => {
 }
 
 ConfirmationModal.propTypes = {
-    delOpen: PropTypes.string.isRequired,
-    delHandleClose: PropTypes.string.isRequired,
-    onDelete: PropTypes.string.isRequired,
+    delOpen: PropTypes.bool.isRequired,  // Changed to boolean
+    delHandleClose: PropTypes.func.isRequired,  // Changed to function
+    onDelete: PropTypes.func.isRequired,  // Changed to function
 };
 
 export default ConfirmationModal;

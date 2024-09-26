@@ -166,7 +166,7 @@ const EditSubHero = ({mode, id}) => {
 
 
 EditSubHero.propTypes = {
-    id: PropTypes.string.isRequired,
+    id: PropTypes.string,
     mode: PropTypes.string.isRequired,
 };
 
