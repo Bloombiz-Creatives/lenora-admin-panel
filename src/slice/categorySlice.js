@@ -81,7 +81,33 @@ const categorySlice = createSlice({
                 ...state,
                 error:action.payload
             }
-        }
+        },
+        catNameSuccuss(state, action){
+            return {
+                ...state,
+                loading:false,
+                catnames:action.payload
+            }
+        },
+        catNameFail(state, action){
+            return {
+                ...state,
+                error:action.payload
+            }
+        },
+        updateCatNameSuccess(state, action){
+            return {
+                ...state,
+                loading:false,
+                cat:action.payload
+            }
+        },
+        updateCatNameFail(state, action){
+            return {
+                ...state,
+                error:action.payload
+            }
+        },
 
 
     }
@@ -99,6 +125,10 @@ export const {
     catGetAllSuccess,
     catGetAllFail,
     catDeleteSuccess,
-    catDeleteFail
+    catDeleteFail,
+    catNameSuccuss,
+    catNameFail,
+    updateCatNameSuccess,
+    updateCatNameFail,
 } = actions;
 export default reducer;

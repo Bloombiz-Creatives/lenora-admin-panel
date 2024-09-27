@@ -64,7 +64,7 @@ const productSlice = createSlice({
             return {
                 ...state,
                 loading:false,
-                distinctParentCategories:action.payload
+                distinctParent:action.payload
             }
         },
         getParent_catFail(state, action){
@@ -77,7 +77,8 @@ const productSlice = createSlice({
             return {
                 ...state,
                 loading:false,
-                categories:action.payload.categories,
+                // categories:action.payload.categories,
+                catnames: action.payload,
                 error: null,
             }
         },

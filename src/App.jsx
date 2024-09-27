@@ -19,6 +19,7 @@ import AttributeDetails from './attribute/AttributeDetails';
 import Color from './pages/Color';
 import Products from './pages/Products';
 import AddProduct from './products/addProducts/AddProduct';
+import CategoryDetails from './category/CategoryDetails';
 
 function App() {
   useEffect(() => {
@@ -60,6 +61,7 @@ function App() {
                     <Route path="colors" element={<Color />} />
                     <Route path="products" element={<Products/>} />
                     <Route path="products/add" element={<AddProduct/>} />
+                    <Route path="category-details/:id" element={<CategoryDetails />} />
                   </Routes>
                 </Box>
                 {/* <Footer /> */}

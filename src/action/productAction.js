@@ -71,7 +71,8 @@ export const addProducts = (formData) => {
 export const GetParentCat = () => {
     return async (dispatch) => {
         try {
-            const response = await globalGetService('/parent_cat');
+            // const response = await globalGetService('/parent_cat');
+            const response = await globalGetService('/parent_category');
             dispatch(getParent_catSuccess(response.data))
         } catch (error) {
             dispatch(getParent_catFail(error))
@@ -80,11 +81,24 @@ export const GetParentCat = () => {
 }
 
 
-export const getSub = (parent_category) => {
+// export const getSub = (parent_category) => {
+//     return async (dispatch) => {
+//         try {
+//             const encodedCategory = encodeURIComponent(parent_category);
+//             const response = await globalGetService(`/categories/by-parent?parent_category=${encodedCategory}`);
+//             dispatch(getSubSuccess(response.data));
+//         } catch (error) {
+//             dispatch(getSubFail(error));
+//             console.error('Error fetching subcategories:', error); 
+//         }
+//     }
+// };
+
+export const getSub = (id, name) => {
     return async (dispatch) => {
         try {
-            const encodedCategory = encodeURIComponent(parent_category);
-            const response = await globalGetService(`/categories/by-parent?parent_category=${encodedCategory}`);
+            // const encodedCategory = encodeURIComponent(parent_category);
+            const response = await globalGetService(`/cat/${id}/name`, {name});
             dispatch(getSubSuccess(response.data));
         } catch (error) {
             dispatch(getSubFail(error));
@@ -92,7 +106,6 @@ export const getSub = (parent_category) => {
         }
     }
 };
-
 
 export const fetchColors = () => {
     return async (dispatch) => {

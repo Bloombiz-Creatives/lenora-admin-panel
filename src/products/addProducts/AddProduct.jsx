@@ -81,7 +81,7 @@ const AddProduct = () => {
         if (name === 'parent_category') {
             setProductData(prevData => ({
                 ...prevData,
-                sub_category: '', // Reset sub_category when parent_category changes
+                sub_category: '',
             }));
             dispatch(getSub(value.trim()));
         }
@@ -176,8 +176,8 @@ const AddProduct = () => {
         dispatch(GetAttributeName())
     }, [dispatch])
 
-    const { distinctParentCategories, categories = [], color = [], distinctAttributeNames, AttributeValues = [] } = useSelector((state) => state.productState);
-    const parentCat = distinctParentCategories?.distinctParentCategories;
+    const { distinctParent, catnames = [], color = [], distinctAttributeNames, AttributeValues = [] } = useSelector((state) => state.productState);
+    const parentCat = distinctParent?.distinctParent;
 
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
@@ -190,8 +190,11 @@ const AddProduct = () => {
 
 
 
-    console.log('Processed AllAttributesValues:', AllAttributesValues);
+    const AllCategoryNames = (catnames?.catnames?._id === productData.parent_category)
+        ? catnames.catnames.name || []
+        : [];
 
+    console.log(AllCategoryNames, 'vvvv');
 
 
 
@@ -326,7 +329,7 @@ const AddProduct = () => {
                                     >
                                         <MenuItem value="" disabled>Select Parent Category</MenuItem>
                                         {parentCat && parentCat.map((category) => (
-                                            <MenuItem key={category} value={category}>{category}</MenuItem>
+                                            <MenuItem key={category._id} value={category._id}>{category.parent_category}</MenuItem>
                                         ))}
                                     </Select>
                                 </FormControl>
@@ -338,16 +341,31 @@ const AddProduct = () => {
                                         <InputLabel>Sub Category</InputLabel>
                                         <Select
                                             name="sub_category"
-                                            value={productData.sub_category}
+                                            value={productData.sub_category || []}
                                             onChange={handleChange}
                                             label="Sub Category"
                                             error={!!error.sub_category}
+                                            // renderValue={(selected) => selected.join(', ')}
                                             required
+
                                         >
                                             <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                            {categories && categories.map((cat) => (
-                                                <MenuItem key={cat.name} value={cat.name}>{cat.name}</MenuItem>
+                                            {/* {catnames && catnames.map((cat) => (
+                                                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
+                                            ))} */}
+                                            {/* {catnames && catnames?.map((val) => (
+                                                <MenuItem key={val} value={val}>{val}</MenuItem>
+                                            ))} */}
+
+                                            {/* {catnames.catnames && catnames.catnames.map((val) => (
+                                                <MenuItem key={val.name} value={val.name}>{val.name}</MenuItem>
+                                            ))} */}
+
+                                            {AllCategoryNames && AllCategoryNames?.map((val) => (
+                                                <MenuItem key={val} value={val}>{val}</MenuItem>
                                             ))}
+
+
                                         </Select>
                                     </FormControl>
                                 </Grid>

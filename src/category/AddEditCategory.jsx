@@ -1,15 +1,17 @@
-// import { useEffect, useState } from 'react'
-// import CustomButton from '../shared/CustomButton'
-// import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, ListItemText, TextField, Typography } from '@mui/material'
+
+// import { useEffect, useState } from 'react';
+// import CustomButton from '../shared/CustomButton';
+// import { Box, Button, Dialog, DialogActions, DialogContent, DialogTitle, Divider, IconButton, ListItemText, TextField, Typography } from '@mui/material';
 // import CloseIcon from '@mui/icons-material/Close';
 // import EditIcon from '@mui/icons-material/Edit';
 // import { addCategory, updateCategory } from '../action/categoryAction';
 // import { useSnackbar } from 'notistack';
 // import { useDispatch, useSelector } from 'react-redux';
-// import DropzoneImage from '../shared/DropzoneImage'
+// import DropzoneImage from '../shared/DropzoneImage';
+// import PropTypes from 'prop-types';
+
 
 // const AddEditCategory = ({ mode, id }) => {
-
 //     const [open, setOpen] = useState(false);
 //     const [data, setData] = useState({
 //         name: "",
@@ -35,7 +37,6 @@
 //                     parent_category: categoryToEdit.parent_category,
 //                     icon: null,
 //                     image: null,
-
 //                 });
 //                 setPreviewImage(categoryToEdit.image);
 //                 setPreviewIcon(categoryToEdit.icon);
@@ -43,10 +44,9 @@
 //         }
 //     }, [mode, id, category?.category]);
 
-
 //     const handleOpen = () => {
 //         setOpen(true);
-//     }
+//     };
 
 //     const handleClose = () => {
 //         setOpen(false);
@@ -55,8 +55,6 @@
 //         setPreviewIcon(null);
 //         setError({});
 //     };
-
-
 
 //     const handleFileInputChange = (event) => {
 //         const file = event.target.files[0];
@@ -78,16 +76,18 @@
 //         }
 //     };
 
-
-
-    
 //     const validateInput = () => {
-//         let validationErrors = {
-//             name: data.name ? "" : " name is required",
-//             image: data.image ? "" : " image is required",
-//             parent_category: data.parent_category ? "" : "parent category is required",
-//             icon: data.icon ? "" : "icon is required"
-//         };
+//         let validationErrors = {};
+
+//         // Only perform validation if in 'add' mode
+//         if (mode === 'add') {
+//             validationErrors = {
+//                 name: data.name ? "" : "Name is required",
+//                 image: data.image ? "" : "Image is required",
+//                 parent_category: data.parent_category ? "" : "Parent category is required",
+//                 icon: data.icon ? "" : "Icon is required",
+//             };
+//         }
 
 //         setError(validationErrors);
 //         return Object.values(validationErrors).every(value => !value);
@@ -125,7 +125,7 @@
 //                     }
 //                 }
 //                 handleClose();
-//             } catch (error) {
+//             } catch {
 //                 enqueueSnackbar("Failed to process category.", { variant: "error" });
 //             }
 //         }
@@ -136,18 +136,16 @@
 //         setError((prevError) => ({ ...prevError, [key]: "" }));
 //     };
 
-
-
 //     return (
 //         <div>
-//             {mode === "add" ?
+//             {mode === "add" ? (
 //                 <CustomButton onClick={handleOpen} mode={mode} />
-//                 :
-//                 <span onClick={handleOpen} className='flex cursor-pointer' >
+//             ) : (
+//                 <span onClick={handleOpen} className='flex cursor-pointer'>
 //                     <EditIcon className="mr-2" />
 //                     <ListItemText primary="Edit" />
 //                 </span>
-//             }
+//             )}
 
 //             <Dialog open={open} maxWidth="sm" fullWidth sx={{ borderRadius: '15px' }}>
 //                 <DialogTitle className='text-[24px] font-medium'>
@@ -162,7 +160,6 @@
 //                 </DialogTitle>
 //                 <Divider />
 //                 <DialogContent>
-
 //                     <Box component="form" autoComplete="off">
 //                         <h3 className='text-[15px]'>Parent Category</h3>
 //                         <TextField
@@ -192,7 +189,7 @@
 
 //                         <div className='flex gap-4 mt-4'>
 //                             <div className='block w-full'>
-//                             <p>Image</p>
+//                                 <p>Image (212×101)</p>
 //                                 <DropzoneImage
 //                                     onChange={handleFileInputChange}
 //                                     image={previewImage}
@@ -202,7 +199,7 @@
 //                             </div>
 
 //                             <div className='block w-full'>
-//                                 <p>Icon</p>
+//                                 <p>Icon (25×25)</p>
 //                                 <DropzoneImage
 //                                     onChange={handleFileInputChange1}
 //                                     image={previewIcon}
@@ -211,8 +208,6 @@
 //                                 {error.icon && <Typography color="error">{error.icon}</Typography>}
 //                             </div>
 //                         </div>
-
-
 //                     </Box>
 //                 </DialogContent>
 //                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', paddingTop: "10px", paddingBottom: "20px" }}>
@@ -225,17 +220,25 @@
 //                     </Button>
 //                     <Button
 //                         sx={{ color: '#525b39', borderColor: '#525b39', borderRadius: '10px', '&:hover': { borderColor: '#525b39' } }}
-//                         variant="outlined" onClick={handleClose}
+//                         variant="outlined"
+//                         onClick={handleClose}
 //                     >
 //                         Cancel
 //                     </Button>
 //                 </DialogActions>
 //             </Dialog>
 //         </div>
-//     )
-// }
+//     );
+// };
 
-// export default AddEditCategory
+// AddEditCategory.propTypes = {
+//     mode: PropTypes.string.isRequired,
+//     id: PropTypes.string,
+
+//   };
+
+// export default AddEditCategory;
+
 
 
 import { useEffect, useState } from 'react';
@@ -253,7 +256,7 @@ import PropTypes from 'prop-types';
 const AddEditCategory = ({ mode, id }) => {
     const [open, setOpen] = useState(false);
     const [data, setData] = useState({
-        name: "",
+        // name: "",
         image: "",
         parent_category: "",
         icon: "",
@@ -272,7 +275,7 @@ const AddEditCategory = ({ mode, id }) => {
             if (categoryToEdit) {
                 setData({
                     _id: categoryToEdit._id,
-                    name: categoryToEdit.name,
+                    // name: categoryToEdit.name,
                     parent_category: categoryToEdit.parent_category,
                     icon: null,
                     image: null,
@@ -289,7 +292,7 @@ const AddEditCategory = ({ mode, id }) => {
 
     const handleClose = () => {
         setOpen(false);
-        setData({ name: "", image: "", parent_category: "", icon: "" });
+        setData({  image: "", parent_category: "", icon: "" });
         setPreviewImage(null);
         setPreviewIcon(null);
         setError({});
@@ -321,7 +324,7 @@ const AddEditCategory = ({ mode, id }) => {
         // Only perform validation if in 'add' mode
         if (mode === 'add') {
             validationErrors = {
-                name: data.name ? "" : "Name is required",
+                // name: data.name ? "" : "Name is required",
                 image: data.image ? "" : "Image is required",
                 parent_category: data.parent_category ? "" : "Parent category is required",
                 icon: data.icon ? "" : "Icon is required",
@@ -337,7 +340,7 @@ const AddEditCategory = ({ mode, id }) => {
             try {
                 const formData = new FormData();
                 formData.append("parent_category", data.parent_category);
-                formData.append("name", data.name);
+                // formData.append("name", data.name);
 
                 if (data.image instanceof File) {
                     formData.append("image", data.image);
@@ -413,7 +416,7 @@ const AddEditCategory = ({ mode, id }) => {
                             helperText={error.parent_category}
                         />
 
-                        <h3 className='text-[15px]'>Name</h3>
+                        {/* <h3 className='text-[15px]'>Name</h3>
                         <TextField
                             autoFocus
                             margin="dense"
@@ -424,7 +427,7 @@ const AddEditCategory = ({ mode, id }) => {
                             onChange={(e) => onFieldChange("name", e.target.value)}
                             error={!!error.name}
                             helperText={error.name}
-                        />
+                        /> */}
 
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>

@@ -1,5 +1,5 @@
-import { catAddFail, catAddRequest, catAddSuccess, catDeleteFail, catDeleteSuccess, catEditFail, catEditRequets, catEditSuccess, catGetAllFail, catGetAllRequest, catGetAllSuccess } from "../slice/categorySlice";
-import { globalDeleteService, globalGetService, globalPostService, globalPutService } from "../utils/globalApiServices";
+import { catAddFail, catAddRequest, catAddSuccess, catDeleteFail, catDeleteSuccess, catEditFail, catEditRequets, catEditSuccess, catGetAllFail, catGetAllRequest, catGetAllSuccess, catNameFail, catNameSuccuss, updateCatNameFail, updateCatNameSuccess } from "../slice/categorySlice";
+import { globalDeleteService, globalGetService, globalPatchService, globalPostService, globalPutService } from "../utils/globalApiServices";
 
 
 export const addCategory = (formData) => {
@@ -55,3 +55,41 @@ export const deleteCategory = (id) => {
         }
     }
 }
+
+
+export const addCategoryNames = (id, name) => {
+    return async (dispatch) => {
+        try {
+            const response = await globalPostService(`/category/${id}/name`, {name});
+            dispatch(catNameSuccuss(response.data));
+            dispatch(fetchCategory())
+        } catch (error) {
+            dispatch(catNameFail(error))
+        }
+    }
+}
+
+export const deleteCategoryNames = (id, index) => {
+    return async (dispatch) => {
+        try {
+            const response = await globalDeleteService(`/category/${id}/name`, { index });
+            dispatch(catDeleteSuccess(response.data));
+            dispatch(fetchCategory());
+        } catch (error) {
+            dispatch(catDeleteFail(error));
+        }
+    };
+};
+
+
+export const updateCategoryName = (id, index, newValue) => {
+    return async (dispatch) =>{
+        try {
+            const response = await globalPatchService(`/category/${id}/name`, { index, newValue });
+            dispatch(updateCatNameSuccess(response.data));
+            dispatch(fetchCategory())
+        } catch (error) {
+            dispatch(updateCatNameFail(error))
+        }
+    }
+};

@@ -1,4 +1,4 @@
-import Edit from "@mui/icons-material/Edit";
+// import Edit from "@mui/icons-material/Edit";
 import {
     Box,
     Button,
@@ -33,10 +33,10 @@ import 'react-quill/dist/quill.snow.css';
 import PropTypes from 'prop-types';
 
 
-const EditProduct = ({ id,open,handleClose }) => {
+const EditProduct = ({ id, open, handleClose }) => {
 
 
-    
+
     const dispatch = useDispatch();
 
     const [productData, setProductData] = useState({
@@ -61,8 +61,8 @@ const EditProduct = ({ id,open,handleClose }) => {
 
 
     const {
-        distinctParentCategories,
-        categories = [],
+        distinctParent,
+        catnames = [],
         color = [],
         distinctAttributeNames,
         AttributeValues = [],
@@ -70,7 +70,7 @@ const EditProduct = ({ id,open,handleClose }) => {
     } = useSelector((state) => state.productState);
 
 
-    const parentCat = distinctParentCategories?.distinctParentCategories;
+    const parentCat = distinctParent?.distinctParent;
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
     const AllAttributes = distinctAttributeNames?.distinctAttributeNames;
@@ -78,7 +78,10 @@ const EditProduct = ({ id,open,handleClose }) => {
         ? AttributeValues.AttributeValues.value || []
         : [];
 
-    console.log(AllAttributesValues, 'check check');
+    const AllCategoryNames = (catnames?.catnames?._id === productData.parent_category)
+        ? catnames.catnames.name || []
+        : [];
+
 
 
     const [previewImageOne, setPreviewImageOne] = useState(null);
@@ -118,8 +121,10 @@ const EditProduct = ({ id,open,handleClose }) => {
                     attribute: proToEdit.attribute || "",
                     attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
                     color: proToEdit.color || "",
-                    parent_category: proToEdit.category || "",
+                    parent_category: proToEdit.parent_category || "",
                     sub_category: proToEdit.sub_category || "",
+                    // sub_category: Array.isArray(proToEdit.category) ? proToEdit.sub_category : [],
+
                 });
 
                 setPreviewImage(proToEdit.image || null);
@@ -140,10 +145,10 @@ const EditProduct = ({ id,open,handleClose }) => {
 
     useEffect(() => {
         if (productData.attribute) {
-           dispatch(GetAttributeValues(productData.attribute))
+            dispatch(GetAttributeValues(productData.attribute))
         }
-    }, [productData.attribute,dispatch]);
-    
+    }, [productData.attribute, dispatch]);
+
 
     console.log(productData, 'Product Data:');
     console.log(productData.attribute, 'Selected Attribute:');
@@ -193,7 +198,7 @@ const EditProduct = ({ id,open,handleClose }) => {
         if (name === 'parent_category') {
             setProductData(prevData => ({
                 ...prevData,
-                sub_category: '', // Reset sub_category when parent_category changes
+                sub_category: '', 
             }));
             dispatch(getSub(value.trim()));
         }
@@ -345,12 +350,16 @@ const EditProduct = ({ id,open,handleClose }) => {
                                     <MenuItem value="" disabled>
                                         Select Parent Category
                                     </MenuItem>
-                                    {parentCat &&
+                                    {/* {parentCat &&
                                         parentCat.map((category) => (
                                             <MenuItem key={category} value={category}>
                                                 {category}
                                             </MenuItem>
-                                        ))}
+                                        ))} */}
+
+                                    {parentCat && parentCat.map((category) => (
+                                        <MenuItem key={category._id} value={category._id}>{category.parent_category}</MenuItem>
+                                    ))}
                                 </Select>
                             </FormControl>
 
@@ -362,10 +371,14 @@ const EditProduct = ({ id,open,handleClose }) => {
                                     onChange={handleChange}
                                     label="Sub Category"
                                 >
-                                    {categories.map((cat) => (
+                                    {/* {categories.map((cat) => (
                                         <MenuItem key={cat.name} value={cat.name}>
                                             {cat.name}
                                         </MenuItem>
+                                    ))} */}
+
+                                    {AllCategoryNames && AllCategoryNames?.map((val) => (
+                                        <MenuItem key={val} value={val}>{val}</MenuItem>
                                     ))}
                                 </Select>
                             </FormControl>
@@ -458,7 +471,7 @@ const EditProduct = ({ id,open,handleClose }) => {
                                     multiple
                                     renderValue={(selected) => selected.join(', ')}
                                 >
-                                    {AllAttributesValues  && AllAttributesValues.map((attributeValue) => (
+                                    {AllAttributesValues && AllAttributesValues.map((attributeValue) => (
                                         <MenuItem key={attributeValue} value={attributeValue}>
                                             {attributeValue}
                                         </MenuItem>
@@ -547,6 +560,8 @@ const EditProduct = ({ id,open,handleClose }) => {
 
 EditProduct.propTypes = {
     id: PropTypes.string.isRequired,
+    open: PropTypes.string,
+    handleClose: PropTypes.string,
 };
 
 export default EditProduct;
