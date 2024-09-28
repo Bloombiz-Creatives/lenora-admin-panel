@@ -2,7 +2,7 @@ import axios from "axios";
 import { getLocalStore } from "./index";
 
 var axiosInstance = axios.create({});
-axiosInstance.defaults.baseURL = "http://localhost:5000/api"
+axiosInstance.defaults.baseURL = "https://api.lenora.ae/api"
 let token = getLocalStore('accessToken');
 
 
