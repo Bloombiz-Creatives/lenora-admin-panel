@@ -54,7 +54,7 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center w-full h-full px-2 mt-16 mb-16 md:mx-0 md:px-0 lg:mb-10 lg:items-center lg:justify-center">
       <div className="mt-[10vh] w-full max-w-full flex-col items-center md:pl-4 lg:pl-0 xl:max-w-[420px]">
-        <h4 className="mb-12 text-4xl font-bold text-center text-navy-700 dark:text-white">
+        <h4 className="mb-12 text-4xl font-bold text-center text-navy-700">
           Log In
         </h4>
         <InputField
