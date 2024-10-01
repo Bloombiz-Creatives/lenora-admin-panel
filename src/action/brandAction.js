@@ -40,3 +40,17 @@ export const deleteBrand = (id) => {
         }
     }
 }
+
+
+export const fetchAllBrand = () => {
+    return async (dispatch) => {
+        try {
+            dispatch(brandGetAllRequest());
+            const response = await globalGetService('/brand/all');
+            dispatch(brandGetAllSuccess(response.data));
+            return response.data;
+        } catch (error) {
+            dispatch(brandGetAllFail(error))
+        }
+    }
+}

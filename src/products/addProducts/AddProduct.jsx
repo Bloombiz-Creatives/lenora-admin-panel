@@ -6,8 +6,8 @@ import 'react-quill/dist/quill.snow.css';
 import DropzoneImage from '../../shared/DropzoneImage';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts, fetchColors, GetAttributeName, GetAttributeValues, GetParentCat, getSub } from '../../action/productAction';
-import { fetchBrand } from '../../action/brandAction';
+import { addProducts, fetchAllColors, GetAttributeName, GetAttributeValues, GetParentCat, getSub } from '../../action/productAction';
+import { fetchAllBrand } from '../../action/brandAction';
 
 const AddProduct = () => {
 
@@ -171,8 +171,8 @@ const AddProduct = () => {
 
     useEffect(() => {
         dispatch(GetParentCat())
-        dispatch(fetchBrand())
-        dispatch(fetchColors())
+        dispatch(fetchAllBrand())
+        dispatch(fetchAllColors())
         dispatch(GetAttributeName())
     }, [dispatch])
 

@@ -118,6 +118,17 @@ export const fetchColors = () => {
     }
 }
 
+export const fetchAllColors = () => {
+    return async (dispatch) => {
+        try {
+            const response = await globalGetService('/color/all');
+            dispatch(getColorsSuccess(response.data));
+        } catch (error) {
+            dispatch(getColorsFail(error))
+        }
+    }
+}
+
 export const GetAttributeName = () => {
     return async (dispatch) => {
         try {

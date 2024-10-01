@@ -20,14 +20,14 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useDispatch, useSelector } from "react-redux";
 import { useSnackbar } from "notistack";
 import {
-    fetchColors,
+    fetchAllColors,
     GetAttributeName,
     GetAttributeValues,
     GetParentCat,
     getSub,
     updateProducts,
 } from "../../action/productAction";
-import { fetchBrand } from "../../action/brandAction";
+import { fetchAllBrand } from "../../action/brandAction";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import PropTypes from 'prop-types';
@@ -54,8 +54,8 @@ const EditProduct = ({ id, open, handleClose }) => {
 
     useEffect(() => {
         dispatch(GetParentCat());
-        dispatch(fetchBrand());
-        dispatch(fetchColors());
+        dispatch(fetchAllBrand());
+        dispatch(fetchAllColors());
         dispatch(GetAttributeName());
     }, [dispatch]);
 
@@ -157,34 +157,7 @@ const EditProduct = ({ id, open, handleClose }) => {
 
 
 
-    // const handleChange = (e) => {
-    //     const { name, value } = e.target;
-
-    //     if (name === "attribute") {
-    //         setProductData(prevData => ({
-    //             ...prevData,
-    //             [name]: value,
-    //             attribute_value: []
-    //         }));
-    //         dispatch(GetAttributeValues(value));
-    //     } else if (name === "attribute_value") {
-    //         setProductData(prevData => ({
-    //             ...prevData,
-    //             [name]: Array.isArray(value) ? value : [value]
-    //         }));
-    //     } else if (name === "parent_category") {
-    //         setProductData(prevData => ({
-    //             ...prevData,
-    //             [name]: value
-    //         }));
-    //         dispatch(getSub(value.trim()));
-    //     } else {
-    //         setProductData(prevData => ({
-    //             ...prevData,
-    //             [name]: value
-    //         }));
-    //     }
-    // }
+ 
 
     const handleChange = (e) => {
         const { name, value } = e.target;
