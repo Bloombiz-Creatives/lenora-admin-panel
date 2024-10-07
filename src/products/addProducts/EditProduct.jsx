@@ -122,8 +122,9 @@ const EditProduct = ({ id, open, handleClose }) => {
                     attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
                     color: proToEdit.color || "",
                     parent_category: proToEdit.parent_category || "",
-                    sub_category: proToEdit.sub_category || "",
-                    // sub_category: Array.isArray(proToEdit.category) ? proToEdit.sub_category : [],
+                    // sub_category: proToEdit.sub_category || "",
+                    sub_category: Array.isArray(proToEdit.sub_category) ? proToEdit.sub_category : [],
+
 
                 });
 
@@ -134,8 +135,12 @@ const EditProduct = ({ id, open, handleClose }) => {
                 setPreviewImageFour(proToEdit.gallery4 || null);
                 setPreviewImageFive(proToEdit.gallery5 || null);
 
-                if (proToEdit.category) {
-                    dispatch(getSub(proToEdit.category));
+                // if (proToEdit.category) {
+                //     dispatch(getSub(proToEdit.category));
+                // }
+
+                if (proToEdit.parent_category) {
+                    dispatch(getSub(proToEdit.parent_category));
                 }
 
             }
