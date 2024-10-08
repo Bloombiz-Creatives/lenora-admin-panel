@@ -13,7 +13,6 @@ const VerifyOtp = () => {
     const { enqueueSnackbar } = useSnackbar();
 
     const email = location.state?.email;
-    console.log(email,'otpemail....');
 
     const handleSubmit = async (e) => {
         e.preventDefault();

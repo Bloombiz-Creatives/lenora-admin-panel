@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 
 
 const CustomButton = ({  onClick, mode, buttonText }) => {
-    console.log(mode)
 
   return (
     <Button

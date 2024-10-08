@@ -194,7 +194,6 @@ const AddProduct = () => {
         ? catnames.catnames.name || []
         : [];
 
-    console.log(AllCategoryNames, 'vvvv');
 
 
 

@@ -19,7 +19,6 @@ const ForgotPassword = () => {
 
     try {
       const response = await dispatch(ForgetPass(email));
-      console.log(response, 'jjjj');
       if (response && response.success) {
         enqueueSnackbar('OTP sent successfully!', {
           variant: 'success',

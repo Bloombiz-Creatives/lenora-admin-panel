@@ -1,4 +1,3 @@
-// import Edit from "@mui/icons-material/Edit";
 import {
     Box,
     Button,
@@ -34,8 +33,6 @@ import PropTypes from 'prop-types';
 
 
 const EditProduct = ({ id, open, handleClose }) => {
-
-
 
     const dispatch = useDispatch();
 
@@ -108,7 +105,6 @@ const EditProduct = ({ id, open, handleClose }) => {
     useEffect(() => {
         if (products?.products && id) {
             const proToEdit = products?.products?.find((prod) => prod._id === id);
-            console.log(proToEdit, 'ppppp');
 
             if (proToEdit) {
                 setDescription(proToEdit.description || '');
@@ -154,11 +150,6 @@ const EditProduct = ({ id, open, handleClose }) => {
         }
     }, [productData.attribute, dispatch]);
 
-
-    console.log(productData, 'Product Data:');
-    console.log(productData.attribute, 'Selected Attribute:');
-    console.log(productData.attribute_value, 'Selected Attribute Values:');
-    console.log(AllAttributesValues, 'All Attributes Values after fetch');
 
 
 
@@ -538,8 +529,8 @@ const EditProduct = ({ id, open, handleClose }) => {
 
 EditProduct.propTypes = {
     id: PropTypes.string.isRequired,
-    open: PropTypes.string,
-    handleClose: PropTypes.string,
+    open: PropTypes.bool,
+    handleClose: PropTypes.func,
 };
 
 export default EditProduct;

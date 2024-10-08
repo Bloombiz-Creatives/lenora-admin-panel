@@ -17,11 +17,9 @@ const Login = () => {
   const handleSubmit = async () => {
     try {
       const data = await adminLogin(credentials);
-      console.log(data, 'dasdsds');
       const success = checkApiStatus(data);
       if (success) {
         const token = data.token;
-        console.log(token, 'htoken');
         setLocalStore('email', credentials.email);
         storeToken(token);
         setTimeout(() => {
@@ -31,8 +29,7 @@ const Login = () => {
         const errorMessage = data.error || 'Invalid email or password';
         enqueueSnackbar(errorMessage, { variant: 'error', anchorOrigin: { vertical: 'top', horizontal: 'right' } });
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
       enqueueSnackbar('An error occurred. Please try again later.', { variant: 'error', anchorOrigin: { vertical: 'top', horizontal: 'right' } });
     }
   };

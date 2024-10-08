@@ -145,7 +145,6 @@ export const GetAttributeValues = (id) => {
     return async (dispatch) => {
         try {
             const response = await globalGetService(`/attributes/${id}/values`);
-            console.log(response.data, 'Fetched Data');
             dispatch(getAttriValueSuccess(response.data))
         } catch (error) {
             dispatch(getAttriValueFail(error))
