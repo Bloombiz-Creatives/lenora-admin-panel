@@ -29,10 +29,10 @@ const PageContent = () => {
 
                 <div className='flex flex-col gap-8 my-10 bg-white '>
                     <div className='bg-[#F7F7F7] flex justify-center rounded-[15px] '>
-                        <h3 className='text-[40px] font-bold text-black uppercase p-4'>{datas?.heading}</h3>
+                        <h3 className='lg:text-[40px] text-[30px] font-bold text-black uppercase p-4'>{datas?.heading}</h3>
                     </div>
                     <div className='bg-[#F7F7F7] flex justify-center item-center text-center rounded-[15px]'>
-                        <p className='2xl:text-[24px] text-[18px] p-10  text-black flex flex-col 2xl:w-[1115px] md:w-[870px] '>{datas?.text}</p>
+                        <p className='2xl:text-[24px] text-[18px] p-10  text-black flex flex-col 2xl:w-[1115px] md:w-[400px]  '>{datas?.text}</p>
                     </div>
                    
                 </div>

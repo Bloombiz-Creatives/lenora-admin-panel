@@ -173,14 +173,24 @@ const AllProducts = () => {
           </div>
 
           <Box display="flex">
-            <TableContainer component={Paper} sx={{ mr: 2 }}>
+            {/* <TableContainer component={Paper} sx={{ mr: 2 }}> */}
+            <TableContainer
+              component={Paper}
+              sx={{
+                mr: 2,
+                overflowX: { xs: "auto", md: "unset" },
+                  '@media (max-width: 834px)': {
+                    width: '400px',  
+                  },
+              }}
+            >
               <Table>
                 <TableHead>
                   <TableRow>
                     <TableCell align="center">#</TableCell>
                     <TableCell align="center">Name</TableCell>
                     <TableCell align="center"></TableCell>
-                    <TableCell align="center">Category</TableCell>
+                    {/* <TableCell align="center">Category</TableCell> */}
                     <TableCell align="center">Todays Deal</TableCell>
                     <TableCell align="center">Featured</TableCell>
                     <TableCell align="center">Options</TableCell>
@@ -207,7 +217,7 @@ const AllProducts = () => {
                         />
                       </TableCell>
                       <TableCell align="center">{row?.name}</TableCell>
-                      <TableCell align="center">{row?.category}</TableCell>
+                      {/* <TableCell align="center">{row?.parent_category}</TableCell> */}
                       <TableCell align="center">
                         <Switch
                           checked={
