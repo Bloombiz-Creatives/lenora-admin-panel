@@ -20,6 +20,11 @@ const EditHero = ({ mode, id }) => {
     const [previewImage1, setPreviewImage1] = useState(null);
     const [previewImage2, setPreviewImage2] = useState(null);
     const [previewImage3, setPreviewImage3] = useState(null);
+    const [previewImage4, setPreviewImage4] = useState(null);
+    const [previewImage5, setPreviewImage5] = useState(null);
+    const [previewImage6, setPreviewImage6] = useState(null);
+
+
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
 
@@ -27,6 +32,9 @@ const EditHero = ({ mode, id }) => {
         image1:"",
         image2:"",
         image3:"",
+        image4:"",
+        image5:"",
+        image6:"",
     })
 
     const hero = useSelector((state) => state.websiteState.hero);
@@ -37,6 +45,10 @@ const EditHero = ({ mode, id }) => {
             setPreviewImage1(heroData?.image1);
             setPreviewImage2(heroData?.image2);
             setPreviewImage3(heroData?.image3); 
+            setPreviewImage4(heroData?.image4); 
+            setPreviewImage5(heroData?.image5); 
+            setPreviewImage6(heroData?.image6); 
+
         }
     },[heroData])
 
@@ -74,6 +86,39 @@ const EditHero = ({ mode, id }) => {
         setData({ ...data, image3: file });
     };
 
+    const handleFileInputChange4 = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewImage4(reader.result);
+        };
+        reader.readAsDataURL(file);
+        setData({ ...data, image4: file });
+    };
+
+    const handleFileInputChange5 = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewImage5(reader.result);
+        };
+        reader.readAsDataURL(file);
+        setData({ ...data, image5: file });
+    };
+
+    const handleFileInputChange6 = (event) => {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPreviewImage6(reader.result);
+        };
+        reader.readAsDataURL(file);
+        setData({ ...data, image6: file });
+    };
+
 
     const handleSave = () => {
         const formData = new FormData();
@@ -88,6 +133,18 @@ const EditHero = ({ mode, id }) => {
 
         if (data.image3 instanceof File) {
             formData.append("image3", data.image3);
+        }
+
+        if (data.image4 instanceof File) {
+            formData.append("image4", data.image4);
+        }
+
+        if (data.image5 instanceof File) {
+            formData.append("image5", data.image5);
+        }
+
+        if (data.image6 instanceof File) {
+            formData.append("image6", data.image6);
         }
 
         dispatch(editHomeHero(id, formData)).then(()=>{
@@ -113,9 +170,7 @@ const EditHero = ({ mode, id }) => {
                 <Divider />
                 <DialogContent>
                     <Box component="form" autoComplete="off">
-
-            
-
+                        <div className="block">
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>
                                 <DropzoneImage
@@ -142,6 +197,32 @@ const EditHero = ({ mode, id }) => {
                             </div>
                         </div>
 
+                        <div className='flex gap-4 mt-4'>
+                            <div className='block w-full'>
+                                <DropzoneImage
+                                    onChange={handleFileInputChange4}
+                                    image={previewImage4}
+                                    id={data?._id}
+                                />
+                            </div>
+
+                            <div className='block w-full'>
+                                <DropzoneImage
+                                    onChange={handleFileInputChange5}
+                                    image={previewImage5}
+                                    id={data?._id}
+                                />
+                            </div>
+
+                            <div className='block w-full '>
+                                <DropzoneImage
+                                    onChange={handleFileInputChange6}
+                                    image={previewImage6}
+                                    id={data?._id}
+                                />
+                            </div>
+                        </div>
+                        </div>
 
                     </Box>
                 </DialogContent>

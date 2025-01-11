@@ -34,7 +34,17 @@ const Hero = () => {
         {
             image: heroData?.image3
         },
+        {
+            image: heroData?.image4
+        },
+        {
+            image: heroData?.image5
+        },
+        {
+            image: heroData?.image6
+        },
     ]
+
 
     return (
         <div>
