@@ -12,6 +12,13 @@ import {
     MenuItem,
     Select,
     TextField,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Paper,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import DropzoneImage from "../../shared/DropzoneImage";
@@ -115,13 +122,17 @@ const EditProduct = ({ id, open, handleClose }) => {
                     meta_title: proToEdit.meta_title || "",
                     meta_desc: proToEdit.meta_desc || "",
                     attribute: proToEdit.attribute || "",
-                    attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
+                    // attribute_value: Array.isArray(proToEdit.attribute_value) ? proToEdit.attribute_value : [],
+                    attribute_value: Array.isArray(proToEdit.attribute_value) 
+                    ? proToEdit.attribute_value.map(av => 
+                        typeof av === 'object' 
+                            ? av 
+                            : { value: av, additional_price: 0 }
+                    )
+                    : [],
                     color: proToEdit.color || "",
                     parent_category: proToEdit.parent_category || "",
-                    // sub_category: proToEdit.sub_category || "",
                     sub_category: Array.isArray(proToEdit.sub_category) ? proToEdit.sub_category : [],
-
-
                 });
 
                 setPreviewImage(proToEdit.image || null);
@@ -130,10 +141,6 @@ const EditProduct = ({ id, open, handleClose }) => {
                 setPreviewImageThree(proToEdit.gallery3 || null);
                 setPreviewImageFour(proToEdit.gallery4 || null);
                 setPreviewImageFive(proToEdit.gallery5 || null);
-
-                // if (proToEdit.category) {
-                //     dispatch(getSub(proToEdit.category));
-                // }
 
                 if (proToEdit.parent_category) {
                     dispatch(getSub(proToEdit.parent_category));
@@ -149,39 +156,72 @@ const EditProduct = ({ id, open, handleClose }) => {
             dispatch(GetAttributeValues(productData.attribute))
         }
     }, [productData.attribute, dispatch]);
-
-
-
-
  
+
+    // const handleChange = (e) => {
+    //     const { name, value } = e.target;
+
+    //     setProductData({
+    //         ...productData,
+    //         [name]: Array.isArray(value) ? value : value,
+    //     });
+
+
+    //     if (name === 'parent_category') {
+    //         setProductData(prevData => ({
+    //             ...prevData,
+    //             sub_category: '', 
+    //         }));
+    //         dispatch(getSub(value.trim()));
+    //     }
+
+    //     if (name === 'attribute') {
+    //         setProductData(prevData => ({
+    //             ...prevData,
+    //             [name]: value,
+    //             attribute_value: []
+    //         }));
+    //         dispatch(GetAttributeValues(value))
+    //     }
+    // };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        setProductData({
-            ...productData,
-            [name]: Array.isArray(value) ? value : value,
-        });
-
-
-        if (name === 'parent_category') {
-            setProductData(prevData => ({
-                ...prevData,
-                sub_category: '', 
+        if (name === 'attribute_value') {
+            const updatedValues = value.map(val => ({
+                value: val,
+                additional_price: 0
             }));
-            dispatch(getSub(value.trim()));
-        }
 
-        if (name === 'attribute') {
-            setProductData(prevData => ({
-                ...prevData,
-                [name]: value,
-                attribute_value: []
+            setProductData(prev => ({
+                ...prev,
+                attribute_value: updatedValues
             }));
-            dispatch(GetAttributeValues(value))
+        } else {
+            setProductData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+
+            if (name === 'parent_category') {
+                setProductData(prev => ({
+                    ...prev,
+                    sub_category: '',
+                }));
+                dispatch(getSub(value.trim()));
+            }
+
+            if (name === 'attribute') {
+                setProductData(prev => ({
+                    ...prev,
+                    [name]: value,
+                    attribute_value: []
+                }));
+                dispatch(GetAttributeValues(value));
+            }
         }
     };
-
 
 
     const handleFileImageChange = (event) => {
@@ -226,6 +266,16 @@ const EditProduct = ({ id, open, handleClose }) => {
         setDescription(value);
     };
 
+    const handlePriceChange = (attributeValue, price) => {
+        setProductData(prev => ({
+            ...prev,
+            attribute_value: prev.attribute_value.map(item => 
+                item.value === attributeValue 
+                    ? { ...item, additional_price: parseFloat(price) || 0 }
+                    : item
+            )
+        }));
+    };
 
     const handleSubmit = () => {
         const formData = new FormData();
@@ -264,9 +314,13 @@ const EditProduct = ({ id, open, handleClose }) => {
         }
 
 
-        productData?.attribute_value?.forEach((value) => {
-            formData.append('attribute_value', value);
-        });
+        // productData?.attribute_value?.forEach((value) => {
+        //     formData.append('attribute_value', value);
+        // });
+
+        if (productData.attribute_value.length > 0) {
+            formData.append('attribute_value', JSON.stringify(productData.attribute_value));
+        }
 
         productData?.color.forEach((color) => {
             formData.append('color', color);
@@ -277,6 +331,42 @@ const EditProduct = ({ id, open, handleClose }) => {
         })
         handleClose();
     }
+
+    const AttributeValuePriceTable = () => {
+        if (!productData.attribute_value || productData.attribute_value.length === 0) return null;
+
+        return (
+            <TableContainer component={Paper} sx={{ mt: 2 }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Attribute Value</TableCell>
+                            <TableCell align="right">Additional Price</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {productData.attribute_value.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{item.value}</TableCell>
+                                <TableCell align="right">
+                                    <TextField
+                                        type="number"
+                                        value={item.additional_price || 0}
+                                        onChange={(e) => handlePriceChange(item.value, e.target.value)}
+                                        InputProps={{
+                                            inputProps: { min: 0 }
+                                        }}
+                                        size="small"
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        );
+    };
+
 
     return (
         <div>
@@ -435,7 +525,8 @@ const EditProduct = ({ id, open, handleClose }) => {
                                     id="attribute_value"
                                     name="attribute_value"
                                     label="attribute_value"
-                                    value={productData.attribute_value || []}
+                                    // value={productData.attribute_value || []}
+                                    value={productData.attribute_value.map(item => item.value)}
                                     onChange={handleChange}
                                     multiple
                                     renderValue={(selected) => selected.join(', ')}
@@ -448,6 +539,9 @@ const EditProduct = ({ id, open, handleClose }) => {
                                 </Select>
                             </FormControl>
                         </div>
+
+                        <AttributeValuePriceTable />
+
 
                         <div className="mt-4">
                             <FormControl fullWidth >

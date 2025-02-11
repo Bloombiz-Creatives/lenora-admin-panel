@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box } from '@mui/material';
+import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
 import { Switch } from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
@@ -30,7 +30,6 @@ const AddProduct = () => {
         gallery4: '',
         gallery5: '',
     });
-
 
     const [previewImageOne, setPreviewImageOne] = useState(null);
     const [previewImageTwo, setPreviewImageTwo] = useState(null);
@@ -72,30 +71,55 @@ const AddProduct = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        setProductData({
-            ...productData,
-            [name]: Array.isArray(value) ? value : value,
-        });
+        if (name === 'attribute_value') {
+            const updatedValues = value.map(val => {
+                const existing = productData.attribute_value.find(item => item.value === val);
+                return {
+                    value: val,
+                    additional_price: existing ? existing.additional_price : 0
+                };
+            });
 
-
-        if (name === 'parent_category') {
-            setProductData(prevData => ({
-                ...prevData,
-                sub_category: '',
+            setProductData(prev => ({
+                ...prev,
+                attribute_value: updatedValues
             }));
-            dispatch(getSub(value.trim()));
-        }
-
-        if (name === 'attribute') {
-            setProductData(prevData => ({
-                ...prevData,
-                [name]: value,
-                attribute_value: []
+        } else {
+            setProductData(prev => ({
+                ...prev,
+                [name]: value
             }));
-            dispatch(GetAttributeValues(value))
+
+            if (name === 'parent_category') {
+                setProductData(prev => ({
+                    ...prev,
+                    sub_category: '',
+                }));
+                dispatch(getSub(value.trim()));
+            }
+
+            if (name === 'attribute') {
+                setProductData(prev => ({
+                    ...prev,
+                    [name]: value,
+                    attribute_value: []
+                }));
+                dispatch(GetAttributeValues(value));
+            }
         }
     };
 
+
+    const handlePriceChange = (attributeValue, price) => {
+        setProductData(prev => ({
+            ...prev,
+            attribute_value: prev.attribute_value.map(item => 
+                item.value === attributeValue 
+                    ? { ...item, additional_price: parseFloat(price) || 0 }
+                    : item
+            )
+        }));
+    };
 
     const handleFileImageChange = (event) => {
         const file = event.target.files[0];
@@ -182,7 +206,6 @@ const AddProduct = () => {
     const { brand = [] } = useSelector((state) => state.brandState);
     const AllBrands = brand?.brand;
     const AllAttributes = distinctAttributeNames?.distinctAttributeNames || [];
-    // const AllAttributesValues = AttributeValues?.AttributeValues || [];
 
     const AllAttributesValues = (AttributeValues?.AttributeValues?._id === productData.attribute)
         ? AttributeValues.AttributeValues.value || []
@@ -193,8 +216,6 @@ const AddProduct = () => {
     const AllCategoryNames = (catnames?.catnames?._id === productData.parent_category)
         ? catnames.catnames.name || []
         : [];
-
-
 
 
     const validateInput = () => {
@@ -230,7 +251,7 @@ const AddProduct = () => {
             meta_title: "",
             meta_desc: "",
             attribute: "",
-            attribute_value: "",
+            attribute_value:[],
             color: "",
         })
         setDescription(null);
@@ -270,10 +291,9 @@ const AddProduct = () => {
                     formData.append('attribute', productData.attribute);
                 }
 
-
-                productData.attribute_value.forEach((value) => {
-                    formData.append('attribute_value', value);
-                });
+                if (productData.attribute_value.length > 0) {
+                    formData.append('attribute_value', JSON.stringify(productData.attribute_value));
+                }
 
                 productData.color.forEach((color) => {
                     formData.append('color', color);
@@ -289,6 +309,41 @@ const AddProduct = () => {
         }
     };
 
+
+    const AttributeValuePriceTable = () => {
+        if (!productData.attribute_value || productData.attribute_value.length === 0) return null;
+
+        return (
+            <TableContainer component={Paper} sx={{ mt: 2 }}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Attribute Value</TableCell>
+                            <TableCell align="right">Additional Price</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {productData.attribute_value.map((item, index) => (
+                            <TableRow key={index}>
+                                <TableCell>{item.value}</TableCell>
+                                <TableCell align="right">
+                                    <TextField
+                                        type="number"
+                                        value={item.additional_price || 0}
+                                        onChange={(e) => handlePriceChange(item.value, e.target.value)}
+                                        InputProps={{
+                                            inputProps: { min: 0 }
+                                        }}
+                                        size="small"
+                                    />
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        );
+    };
 
     return (
         <div>
@@ -538,7 +593,8 @@ const AddProduct = () => {
                                         <InputLabel>Attribute Value</InputLabel>
                                         <Select
                                             name="attribute_value"
-                                            value={productData.attribute_value || []}
+                                            // value={productData.attribute_value || []}
+                                            value={productData.attribute_value.map(item => item.value)}
                                             onChange={handleChange}
                                             label="Attribute Value"
                                             multiple
@@ -554,8 +610,8 @@ const AddProduct = () => {
                                         </Select>
                                     </FormControl>
                                 )}
-
                             </Box>
+                            <AttributeValuePriceTable />
                         </Grid>
                     )}
 
