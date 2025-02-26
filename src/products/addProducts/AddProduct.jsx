@@ -1,16 +1,24 @@
-import { useEffect, useState } from 'react';
-import { Button, TextField, Grid, Card, Typography, FormControl, InputLabel, Select, MenuItem, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { Switch } from '@mui/material';
+import { useEffect, useState, useMemo, useCallback } from 'react';
+import {
+    Button, TextField, Grid, Card, Typography, FormControl,
+    InputLabel, Select, MenuItem, Box, Table, TableBody,
+    TableCell, TableContainer, TableHead, TableRow, Paper,
+    Switch, IconButton, Tooltip
+} from '@mui/material';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import DropzoneImage from '../../shared/DropzoneImage';
 import { useSnackbar } from 'notistack';
 import { useDispatch, useSelector } from 'react-redux';
-import { addProducts, fetchAllColors, GetAttributeName, GetAttributeValues, GetParentCat, getSub } from '../../action/productAction';
+import {
+    addProducts, fetchAllColors, GetAttributeName,
+    GetAttributeValues, GetParentCat, getSub
+} from '../../action/productAction';
 import { fetchAllBrand } from '../../action/brandAction';
+import DeleteIcon from '@mui/icons-material/Delete';
+import InfoIcon from '@mui/icons-material/Info';
 
 const AddProduct = () => {
-
     const [description, setDescription] = useState('');
     const [productData, setProductData] = useState({
         name: '',
@@ -18,9 +26,6 @@ const AddProduct = () => {
         brand: '',
         meta_title: '',
         meta_desc: '',
-        attribute: '',
-        attribute_value: [],
-        color: [],
         parent_category: '',
         sub_category: '',
         image: '',
@@ -31,28 +36,41 @@ const AddProduct = () => {
         gallery5: '',
     });
 
+    // State for attributes and variants
+    const [attributes, setAttributes] = useState([]);
+    const [variants, setVariants] = useState([]);
+    const [isAttributeEnabled, setIsAttributeEnabled] = useState(false);
+    const [isColorEnabled, setIsColorEnabled] = useState(false);
+    const [attributeOptions, setAttributeOptions] = useState({});
+
+    // Image previews
+    const [previewImage, setPreviewImage] = useState(null);
     const [previewImageOne, setPreviewImageOne] = useState(null);
     const [previewImageTwo, setPreviewImageTwo] = useState(null);
     const [previewImageThree, setPreviewImageThree] = useState(null);
     const [previewImageFour, setPreviewImageFour] = useState(null);
     const [previewImageFive, setPreviewImageFive] = useState(null);
 
-    const [isColorEnabled, setIsColorEnabled] = useState(false);
-    const [isAttributeEnabled, setIsAttributeEnabled] = useState(false);
-
-
-    const [previewImage, setPreviewImage] = useState();
     const [error, setError] = useState({});
     const { enqueueSnackbar } = useSnackbar();
     const dispatch = useDispatch();
 
-    useEffect(() => {
-        if (productData.attribute) {
-            dispatch(GetAttributeValues(productData.attribute));
-        }
-    }, [dispatch, productData.attribute]);
+    // Get data from Redux store
+    const { distinctParent, catnames = [], color = [], distinctAttributeNames, AttributeValues = [] } =
+        useSelector((state) => state.productState);
+    const { brand = [] } = useSelector((state) => state.brandState);
 
+    const parentCat = distinctParent?.distinctParent;
+    const AllBrands = brand?.brand;
+    const AllAttributes = distinctAttributeNames?.distinctAttributeNames || [];
 
+    const AllCategoryNames = useMemo(() => {
+        return (catnames?.catnames?._id === productData.parent_category)
+            ? catnames.catnames.name || []
+            : [];
+    }, [catnames, productData.parent_category]);
+
+    // Rich text editor options
     const toolbarOptions = [
         [{ 'header': '1' }, { 'header': '2' }, { 'font': [] }],
         [{ size: [] }],
@@ -62,7 +80,81 @@ const AddProduct = () => {
         ['clean']
     ];
 
+    // Initialize data
+    useEffect(() => {
+        dispatch(GetParentCat());
+        dispatch(fetchAllBrand());
+        dispatch(fetchAllColors());
+        dispatch(GetAttributeName());
+    }, [dispatch]);
 
+    // Update attribute values when attribute changes
+    useEffect(() => {
+        attributes.forEach(attr => {
+            if (attr.id && !attributeOptions[attr.id]) {
+                dispatch(GetAttributeValues(attr.id));
+            }
+        });
+    }, [dispatch, attributes, attributeOptions]);
+
+    // Update attribute options when new values are fetched
+    useEffect(() => {
+        if (AttributeValues?.AttributeValues) {
+            const { _id, value } = AttributeValues.AttributeValues;
+            if (_id && value) {
+                setAttributeOptions(prev => ({
+                    ...prev,
+                    [_id]: value
+                }));
+            }
+        }
+    }, [AttributeValues]);
+
+    // Memoized generate variants function
+    const generateVariants = useCallback(() => {
+        // Start with first attribute's values
+        if (attributes.length === 0 || attributes.some(attr => attr.values.length === 0)) {
+            setVariants([]);
+            return;
+        }
+
+        // Start with the first attribute's values
+        let combinations = attributes[0].values.map(value => ({
+            combination: value,
+            price: parseFloat(productData.price) || 0,
+            stock: 0,
+            sku: `${productData.name?.substring(0, 3).toUpperCase() || 'PRD'}-${value}`.replace(/\s+/g, '-')
+        }));
+
+        // For each subsequent attribute
+        for (let i = 1; i < attributes.length; i++) {
+            const newCombinations = [];
+
+            for (const existing of combinations) {
+                for (const value of attributes[i].values) {
+                    newCombinations.push({
+                        combination: `${existing.combination}-${value}`,
+                        price: existing.price,
+                        stock: existing.stock,
+                        sku: `${existing.sku}-${value}`.replace(/\s+/g, '-')
+                    });
+                }
+            }
+
+            combinations = newCombinations;
+        }
+
+        setVariants(combinations);
+    }, [attributes, productData.price, productData.name]);
+
+    // Generate variants when attributes change
+    useEffect(() => {
+        if (isAttributeEnabled && attributes.length > 0 && attributes.every(attr => attr.values.length > 0)) {
+            generateVariants();
+        } else if (!isAttributeEnabled) {
+            setVariants([]);
+        }
+    }, [attributes, isAttributeEnabled, generateVariants]);
 
     const handleDescriptionChange = (value) => {
         setDescription(value);
@@ -71,56 +163,56 @@ const AddProduct = () => {
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        if (name === 'attribute_value') {
-            const updatedValues = value.map(val => {
-                const existing = productData.attribute_value.find(item => item.value === val);
-                return {
-                    value: val,
-                    additional_price: existing ? existing.additional_price : 0
-                };
-            });
-
+        if (name === 'parent_category') {
             setProductData(prev => ({
                 ...prev,
-                attribute_value: updatedValues
+                [name]: value,
+                sub_category: '',
             }));
+            dispatch(getSub(value.trim()));
         } else {
             setProductData(prev => ({
                 ...prev,
                 [name]: value
             }));
-
-            if (name === 'parent_category') {
-                setProductData(prev => ({
-                    ...prev,
-                    sub_category: '',
-                }));
-                dispatch(getSub(value.trim()));
-            }
-
-            if (name === 'attribute') {
-                setProductData(prev => ({
-                    ...prev,
-                    [name]: value,
-                    attribute_value: []
-                }));
-                dispatch(GetAttributeValues(value));
-            }
         }
     };
 
-
-    const handlePriceChange = (attributeValue, price) => {
-        setProductData(prev => ({
-            ...prev,
-            attribute_value: prev.attribute_value.map(item => 
-                item.value === attributeValue 
-                    ? { ...item, additional_price: parseFloat(price) || 0 }
-                    : item
-            )
-        }));
+    // Handle attribute changes
+    const handleAttributeAdd = () => {
+        setAttributes([...attributes, { id: '', values: [] }]);
     };
 
+    const handleAttributeRemove = (index) => {
+        const newAttributes = [...attributes];
+        newAttributes.splice(index, 1);
+        setAttributes(newAttributes);
+    };
+
+    const handleAttributeChange = (index, field, value) => {
+        const newAttributes = [...attributes];
+
+        if (field === 'id') {
+            newAttributes[index] = { id: value, values: [] };
+            dispatch(GetAttributeValues(value));
+        } else if (field === 'values') {
+            newAttributes[index].values = value;
+        }
+
+        setAttributes(newAttributes);
+    };
+
+    // Handle variant changes
+    const handleVariantChange = (index, field, value) => {
+        const newVariants = [...variants];
+        newVariants[index] = {
+            ...newVariants[index],
+            [field]: field === 'price' || field === 'stock' ? parseFloat(value) : value
+        };
+        setVariants(newVariants);
+    };
+
+    // Handle image uploads
     const handleFileImageChange = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -131,7 +223,6 @@ const AddProduct = () => {
         reader.readAsDataURL(file);
         setProductData({ ...productData, image: file });
     };
-
 
     const handleFileGallery1Change = (event) => {
         const file = event.target.files[0];
@@ -144,7 +235,6 @@ const AddProduct = () => {
         setProductData({ ...productData, gallery1: file });
     };
 
-
     const handleFileGallery2Change = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -155,7 +245,6 @@ const AddProduct = () => {
         reader.readAsDataURL(file);
         setProductData({ ...productData, gallery2: file });
     };
-
 
     const handleFileGallery3Change = (event) => {
         const file = event.target.files[0];
@@ -168,7 +257,6 @@ const AddProduct = () => {
         setProductData({ ...productData, gallery3: file });
     };
 
-
     const handleFileGallery4Change = (event) => {
         const file = event.target.files[0];
         if (!file) return;
@@ -179,7 +267,6 @@ const AddProduct = () => {
         reader.readAsDataURL(file);
         setProductData({ ...productData, gallery4: file });
     };
-
 
     const handleFileGallery5Change = (event) => {
         const file = event.target.files[0];
@@ -192,32 +279,7 @@ const AddProduct = () => {
         setProductData({ ...productData, gallery5: file });
     };
 
-
-    useEffect(() => {
-        dispatch(GetParentCat())
-        dispatch(fetchAllBrand())
-        dispatch(fetchAllColors())
-        dispatch(GetAttributeName())
-    }, [dispatch])
-
-    const { distinctParent, catnames = [], color = [], distinctAttributeNames, AttributeValues = [] } = useSelector((state) => state.productState);
-    const parentCat = distinctParent?.distinctParent;
-
-    const { brand = [] } = useSelector((state) => state.brandState);
-    const AllBrands = brand?.brand;
-    const AllAttributes = distinctAttributeNames?.distinctAttributeNames || [];
-
-    const AllAttributesValues = (AttributeValues?.AttributeValues?._id === productData.attribute)
-        ? AttributeValues.AttributeValues.value || []
-        : [];
-
-
-
-    const AllCategoryNames = (catnames?.catnames?._id === productData.parent_category)
-        ? catnames.catnames.name || []
-        : [];
-
-
+    // Form validation
     const validateInput = () => {
         let validationErrors = {
             name: productData.name ? "" : "Name is required",
@@ -234,6 +296,7 @@ const AddProduct = () => {
         return Object.values(validationErrors).every(value => !value);
     };
 
+    // Reset form
     const handleClose = () => {
         setProductData({
             name: "",
@@ -245,15 +308,14 @@ const AddProduct = () => {
             brand: "",
             gallery1: "",
             gallery5: "",
-            gallery2: " ",
+            gallery2: "",
             gallery3: "",
             gallery4: "",
             meta_title: "",
             meta_desc: "",
-            attribute: "",
-            attribute_value:[],
-            color: "",
-        })
+        });
+        setAttributes([]);
+        setVariants([]);
         setDescription(null);
         setIsAttributeEnabled(false);
         setIsColorEnabled(false);
@@ -263,41 +325,53 @@ const AddProduct = () => {
         setPreviewImageThree(null);
         setPreviewImageTwo(null);
         setPreviewImageOne(null);
-    }
+    };
 
-
+    // Submit form
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (validateInput()) {
             try {
                 const formData = new FormData();
+
+                // Basic product data
                 formData.append('name', productData.name);
                 formData.append('price', productData.price);
                 formData.append('brand', productData.brand);
-                formData.append('meta_title', productData.meta_title);
-                formData.append('meta_desc', productData.meta_desc);
+                formData.append('meta_title', productData.meta_title || '');
+                formData.append('meta_desc', productData.meta_desc || '');
                 formData.append('parent_category', productData.parent_category);
                 formData.append('sub_category', productData.sub_category);
                 formData.append('description', description);
+
+                // Images
                 formData.append('image', productData.image);
-                formData.append('gallery1', productData.gallery1);
-                formData.append('gallery2', productData.gallery2);
-                formData.append('gallery3', productData.gallery3);
-                formData.append('gallery4', productData.gallery4);
-                formData.append('gallery5', productData.gallery5);
+                if (productData.gallery1) formData.append('gallery1', productData.gallery1);
+                if (productData.gallery2) formData.append('gallery2', productData.gallery2);
+                if (productData.gallery3) formData.append('gallery3', productData.gallery3);
+                if (productData.gallery4) formData.append('gallery4', productData.gallery4);
+                if (productData.gallery5) formData.append('gallery5', productData.gallery5);
 
-
-                if (productData.attribute) {
-                    formData.append('attribute', productData.attribute);
+                // Attributes
+                if (isAttributeEnabled && attributes.length > 0) {
+                    const attributesData = attributes.map(attr => ({
+                        attribute: attr.id,
+                        attribute_value: attr.values.map(v => ({ value: v }))
+                    }));
+                    formData.append('attributes', JSON.stringify(attributesData));
                 }
 
-                if (productData.attribute_value.length > 0) {
-                    formData.append('attribute_value', JSON.stringify(productData.attribute_value));
+                // Variants
+                if (isAttributeEnabled && variants.length > 0) {
+                    formData.append('variants', JSON.stringify(variants));
                 }
 
-                productData.color.forEach((color) => {
-                    formData.append('color', color);
-                });
+                // Colors
+                if (isColorEnabled && productData.color && productData.color.length > 0) {
+                    productData.color.forEach(color => {
+                        formData.append('color', color);
+                    });
+                }
 
                 dispatch(addProducts(formData));
                 enqueueSnackbar("Product added successfully", { variant: "success" });
@@ -307,42 +381,6 @@ const AddProduct = () => {
                 enqueueSnackbar("Cannot add product", { variant: "error" });
             }
         }
-    };
-
-
-    const AttributeValuePriceTable = () => {
-        if (!productData.attribute_value || productData.attribute_value.length === 0) return null;
-
-        return (
-            <TableContainer component={Paper} sx={{ mt: 2 }}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Attribute Value</TableCell>
-                            <TableCell align="right">Additional Price</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {productData.attribute_value.map((item, index) => (
-                            <TableRow key={index}>
-                                <TableCell>{item.value}</TableCell>
-                                <TableCell align="right">
-                                    <TextField
-                                        type="number"
-                                        value={item.additional_price || 0}
-                                        onChange={(e) => handlePriceChange(item.value, e.target.value)}
-                                        InputProps={{
-                                            inputProps: { min: 0 }
-                                        }}
-                                        size="small"
-                                    />
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-        );
     };
 
     return (
@@ -399,26 +437,13 @@ const AddProduct = () => {
                                             onChange={handleChange}
                                             label="Sub Category"
                                             error={!!error.sub_category}
-                                            // renderValue={(selected) => selected.join(', ')}
                                             required
 
                                         >
                                             <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                            {/* {catnames && catnames.map((cat) => (
-                                                <MenuItem key={cat} value={cat}>{cat}</MenuItem>
-                                            ))} */}
-                                            {/* {catnames && catnames?.map((val) => (
-                                                <MenuItem key={val} value={val}>{val}</MenuItem>
-                                            ))} */}
-
-                                            {/* {catnames.catnames && catnames.catnames.map((val) => (
-                                                <MenuItem key={val.name} value={val.name}>{val.name}</MenuItem>
-                                            ))} */}
-
                                             {AllCategoryNames && AllCategoryNames?.map((val) => (
                                                 <MenuItem key={val} value={val}>{val}</MenuItem>
                                             ))}
-
 
                                         </Select>
                                     </FormControl>
@@ -434,7 +459,7 @@ const AddProduct = () => {
                         }}>
                             <TextField
                                 fullWidth
-                                label="Price"
+                                label="Unit Price"
                                 name="price"
                                 value={productData.price}
                                 onChange={handleChange}
@@ -553,98 +578,170 @@ const AddProduct = () => {
                         />
                     </Grid>
 
-
+                    {/* Attributes Section */}
                     <Grid item xs={12}>
-                        <FormControl component="fieldset">
-                            <Typography component="legend">Enable Attribute</Typography>
+                        <Box display="flex" alignItems="center" mb={2}>
+                            <Typography variant="subtitle1">Enable Attributes & Variants</Typography>
                             <Switch
                                 checked={isAttributeEnabled}
                                 onChange={() => setIsAttributeEnabled(prev => !prev)}
-                                color="success"
+                                color="primary"
                             />
-                        </FormControl>
-                    </Grid>
-                    {isAttributeEnabled && (
+                            <Tooltip title="Attributes like Size, Weight, etc. will generate variants with different prices and stock">
+                                <IconButton size="small">
+                                    <InfoIcon fontSize="small" />
+                                </IconButton>
+                            </Tooltip>
+                        </Box>
 
-                        <Grid item xs={12}>
-                            <Box display="flex" justifyContent="center" gap="12px" sx={{
-                                flexDirection: { xs: 'column', md: 'row' },
-                            }}>
-                                <FormControl fullWidth >
-                                    <InputLabel>Attribute</InputLabel>
-                                    <Select
-                                        name="attribute"
-                                        value={productData.attribute}
-                                        onChange={handleChange}
-                                        label="Attribute"
-                                        error={!!error.attribute}
-                                        helperText={error.attribute}
-                                        required
+                        {isAttributeEnabled && (
+                            <Box sx={{ mb: 4 }}>
+                                {/* Attributes */}
+                                <Box sx={{ mb: 2 }}>
+                                    <Typography variant="subtitle2" gutterBottom>Attributes</Typography>
+
+                                    {attributes.map((attribute, index) => (
+                                        <Box key={index} sx={{ mb: 2, p: 2, border: '1px solid #eee', borderRadius: 1 }}>
+                                            <Grid container spacing={2} alignItems="center">
+                                                <Grid item xs={12} sm={5}>
+                                                    <FormControl fullWidth size="small">
+                                                        <InputLabel>Attribute</InputLabel>
+                                                        <Select
+                                                            value={attribute.id}
+                                                            onChange={(e) => handleAttributeChange(index, 'id', e.target.value)}
+                                                            label="Attribute"
+                                                        >
+                                                            <MenuItem value="" disabled>Select Attribute</MenuItem>
+                                                            {AllAttributes.map((attr) => (
+                                                                <MenuItem key={attr._id} value={attr._id}>{attr.name}</MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+
+                                                <Grid item xs={12} sm={6}>
+                                                    <FormControl fullWidth size="small">
+                                                        <InputLabel>Values</InputLabel>
+                                                        <Select
+                                                            multiple
+                                                            value={attribute.values}
+                                                            onChange={(e) => handleAttributeChange(index, 'values', e.target.value)}
+                                                            label="Values"
+                                                            renderValue={(selected) => selected.join(', ')}
+                                                            disabled={!attribute.id}
+                                                        >
+                                                            {attributeOptions[attribute.id]?.map((value) => (
+                                                                <MenuItem key={value} value={value}>{value}</MenuItem>
+                                                            ))}
+                                                        </Select>
+                                                    </FormControl>
+                                                </Grid>
+
+                                                <Grid item xs={12} sm={1}>
+                                                    <IconButton onClick={() => handleAttributeRemove(index)} color="error">
+                                                        <DeleteIcon />
+                                                    </IconButton>
+                                                </Grid>
+                                            </Grid>
+                                        </Box>
+                                    ))}
+
+                                    <Button
+                                        variant="outlined"
+                                        onClick={handleAttributeAdd}
+                                        startIcon={<span>+</span>}
+                                        size="small"
+                                        sx={{ mt: 1 }}
                                     >
-                                        <MenuItem value="" disabled>Select Attribute</MenuItem>
-                                        {AllAttributes && AllAttributes.map((att) => (
-                                            <MenuItem key={att._id} value={att._id}>{att.name}</MenuItem>
-                                        ))}
-                                    </Select>
-                                </FormControl>
+                                        Add Attribute
+                                    </Button>
+                                </Box>
 
-                                {productData.attribute && (
-                                    <FormControl fullWidth>
-                                        <InputLabel>Attribute Value</InputLabel>
-                                        <Select
-                                            name="attribute_value"
-                                            // value={productData.attribute_value || []}
-                                            value={productData.attribute_value.map(item => item.value)}
-                                            onChange={handleChange}
-                                            label="Attribute Value"
-                                            multiple
-                                            renderValue={(selected) => selected.join(', ')}
-
-                                        >
-                                            <MenuItem value="" disabled>Select Sub Category</MenuItem>
-                                            {AllAttributesValues && AllAttributesValues?.map((val) => (
-                                                <MenuItem key={val} value={val}>{val}</MenuItem>
-                                            ))}
-
-
-                                        </Select>
-                                    </FormControl>
+                                {/* Variants Table */}
+                                {variants.length > 0 && (
+                                    <Box sx={{ mt: 4 }}>
+                                        <Typography variant="subtitle2" gutterBottom>
+                                            Variants ({variants.length})
+                                        </Typography>
+                                        <TableContainer component={Paper}>
+                                            <Table size="small">
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Combination</TableCell>
+                                                        <TableCell align="right">Price</TableCell>
+                                                        <TableCell align="right">Stock</TableCell>
+                                                        <TableCell align="right">SKU</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {variants.map((variant, index) => (
+                                                        <TableRow key={index}>
+                                                            <TableCell>{variant.combination}</TableCell>
+                                                            <TableCell align="right">
+                                                                <TextField
+                                                                    type="number"
+                                                                    size="small"
+                                                                    value={variant.price}
+                                                                    onChange={(e) => handleVariantChange(index, 'price', e.target.value)}
+                                                                    InputProps={{ inputProps: { min: 0, step: '0.01' } }}
+                                                                    sx={{ width: '100px' }}
+                                                                />
+                                                            </TableCell>
+                                                            <TableCell align="right">
+                                                                <TextField
+                                                                    type="number"
+                                                                    size="small"
+                                                                    value={variant.stock}
+                                                                    onChange={(e) => handleVariantChange(index, 'stock', e.target.value)}
+                                                                    InputProps={{ inputProps: { min: 0 } }}
+                                                                    sx={{ width: '80px' }}
+                                                                />
+                                                            </TableCell>
+                                                            <TableCell align="right">
+                                                                <TextField
+                                                                    size="small"
+                                                                    value={variant.sku}
+                                                                    onChange={(e) => handleVariantChange(index, 'sku', e.target.value)}
+                                                                    sx={{ width: '150px' }}
+                                                                />
+                                                            </TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    </Box>
                                 )}
                             </Box>
-                            <AttributeValuePriceTable />
-                        </Grid>
-                    )}
+                        )}
+                    </Grid>
 
-
-
-
+                    {/* Colors Section */}
                     <Grid item xs={12}>
-                        <FormControl component="fieldset">
-                            <Typography component="legend">Enable Color</Typography>
+                        <Box display="flex" alignItems="center" mb={2}>
+                            <Typography variant="subtitle1">Enable Colors</Typography>
                             <Switch
                                 checked={isColorEnabled}
                                 onChange={() => setIsColorEnabled(prev => !prev)}
-                                color="success"
+                                color="primary"
                             />
-                        </FormControl>
-                    </Grid>
+                        </Box>
 
-                    {isColorEnabled && (
-                        <Grid item xs={12}>
-                            <FormControl fullWidth >
-                                <InputLabel>Color</InputLabel>
+                        {isColorEnabled && (
+                            <FormControl fullWidth>
+                                <InputLabel>Colors</InputLabel>
                                 <Select
-                                    label="Color"
+                                    label="Colors"
                                     name="color"
-                                    value={productData.color}
+                                    value={productData.color || []}
                                     onChange={handleChange}
                                     multiple
                                     renderValue={(selected) => selected.map(id => {
-                                        const selectedColor = color.color.find(co => co._id === id);
+                                        const selectedColor = color.color && color.color.find(co => co._id === id);
                                         return selectedColor ? selectedColor.name : '';
                                     }).join(', ')}
                                 >
-                                    {color && color?.color?.map((co) => (
+                                    {color && color.color && color.color.map((co) => (
                                         <MenuItem key={co._id} value={co._id}>
                                             <Box
                                                 sx={{
@@ -666,10 +763,11 @@ const AddProduct = () => {
                                     ))}
                                 </Select>
                             </FormControl>
-                        </Grid>
-                    )}
+                        )}
+                    </Grid>
 
-                    <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                    {/* Submit Button */}
+                    <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'flex-end', mt: 4 }}>
                         <Button
                             variant="contained"
                             color="primary"
@@ -679,7 +777,6 @@ const AddProduct = () => {
                             Add Product
                         </Button>
                     </Grid>
-
                 </Grid>
             </Card>
         </div>
@@ -687,4 +784,3 @@ const AddProduct = () => {
 };
 
 export default AddProduct;
-
