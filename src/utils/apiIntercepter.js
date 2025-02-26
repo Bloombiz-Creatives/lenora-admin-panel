@@ -5,7 +5,6 @@ var axiosInstance = axios.create({});
 axiosInstance.defaults.baseURL = "https://api.lenora.ae/api"
 // axiosInstance.defaults.baseURL = "http://localhost:5000/api"
 
-
 let token = getLocalStore('accessToken');
 
 
