@@ -7,7 +7,6 @@ axiosInstance.defaults.baseURL = "https://api.lenora.ae/api"
 
 let token = getLocalStore('accessToken');
 
-
 axiosInstance.interceptors.request.use(
   function (config) {
     if (token) {
