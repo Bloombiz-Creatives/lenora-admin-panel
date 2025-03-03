@@ -99,6 +99,7 @@ const EditPromo = ({mode, id}) => {
                     <Box component="form" autoComplete="off">    
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>
+                            <p>(628 × 319 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange1}
                                     image={previewImage1}
@@ -107,6 +108,7 @@ const EditPromo = ({mode, id}) => {
                             </div>
 
                             <div className='block w-full'>
+                            <p>(628 × 319 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange2}
                                     image={previewImage2}

@@ -173,6 +173,7 @@ const EditHero = ({ mode, id }) => {
                         <div className="block">
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>
+                            <p>(1296 × 555 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange1}
                                     image={previewImage1}
@@ -181,6 +182,7 @@ const EditHero = ({ mode, id }) => {
                             </div>
 
                             <div className='block w-full'>
+                                <p>(1296 × 555 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange2}
                                     image={previewImage2}
@@ -189,6 +191,7 @@ const EditHero = ({ mode, id }) => {
                             </div>
 
                             <div className='block w-full '>
+                            <p>(1296 × 555 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange3}
                                     image={previewImage3}
@@ -199,6 +202,7 @@ const EditHero = ({ mode, id }) => {
 
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>
+                            <p>(1296 × 555 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange4}
                                     image={previewImage4}
@@ -207,6 +211,7 @@ const EditHero = ({ mode, id }) => {
                             </div>
 
                             <div className='block w-full'>
+                            <p>(1296 × 555 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange5}
                                     image={previewImage5}
@@ -215,6 +220,7 @@ const EditHero = ({ mode, id }) => {
                             </div>
 
                             <div className='block w-full '>
+                            <p>(1296 × 555 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange6}
                                     image={previewImage6}

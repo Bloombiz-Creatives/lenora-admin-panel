@@ -115,6 +115,7 @@ const EditSubHero = ({mode, id}) => {
                     <Box component="form" autoComplete="off">    
                         <div className='flex gap-4 mt-4'>
                             <div className='block w-full'>
+                            <p>(416 × 250 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange1}
                                     image={previewImage1}
@@ -123,6 +124,7 @@ const EditSubHero = ({mode, id}) => {
                             </div>
 
                             <div className='block w-full'>
+                                <p>(416 × 250 px)</p>   
                                 <DropzoneImage
                                     onChange={handleFileInputChange2}
                                     image={previewImage2}
@@ -131,6 +133,7 @@ const EditSubHero = ({mode, id}) => {
                             </div>
 
                             <div className='block w-full '>
+                            <p>(416 × 250 px)</p>
                                 <DropzoneImage
                                     onChange={handleFileInputChange3}
                                     image={previewImage3}
@@ -138,8 +141,6 @@ const EditSubHero = ({mode, id}) => {
                                 />
                             </div>
                         </div>
-
-
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ display: 'flex', justifyContent: 'center', paddingTop: "10px", paddingBottom: "20px" }}>
